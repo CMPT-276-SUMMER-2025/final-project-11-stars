@@ -1,8 +1,11 @@
 function App() {
     return (
+        /*
         <>
             Empty :(
         </>
+        */
+        <></>
     )
 }
 
