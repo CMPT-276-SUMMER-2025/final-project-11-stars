@@ -1,11 +1,14 @@
-import "./App.css"
+import {Footer} from "./backend/view/footer.tsx"
+import {SiteContent} from "./backend/view/site-content.tsx";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {CssBaseline} from "@mui/material";
-import {GlobeContainer} from "./backend/view/globe_component.tsx";
 
 const darkTheme = createTheme({
     palette: {
         mode: 'dark',
+        background: {
+            default: "#000011"
+        }
     },
 });
 
@@ -13,17 +16,12 @@ function App() {
     return (<>
             <ThemeProvider theme={darkTheme}>
                 <CssBaseline/>
-                    <div style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: 'start',
-                        alignItems: 'center'
-                    }}>
-                        {GlobeContainer()}
-                    </div>
+                {SiteContent()}
+                {Footer()}
             </ThemeProvider>
         </>
     )
 }
+
 
 export default App
