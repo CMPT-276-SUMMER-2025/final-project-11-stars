@@ -26,9 +26,9 @@ export const LaunchDateRangePickersAndSubmitButton = ({setbasicLaunchData}: {
         const ISOEndDate = endDate.toISOString();
         try {
             const newDetailedLaunchData = await loadLaunchesOverTimePeriod(ISOStartDate, ISOEndDate);
-            console.log("handleClickSubmitButton, newDetailedLaunchData: ", newDetailedLaunchData)
+            console.log("handleClickSubmitButton, newDetailedLaunchData: ", newDetailedLaunchData) //todo - remove when done testing
             const newBasicLaunchData = extractBasicLaunchDataFromDetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]);
-            console.log("handleClickSubmitButton, newBasicLaunchData: ", newBasicLaunchData)
+            console.log("handleClickSubmitButton, newBasicLaunchData: ", newBasicLaunchData) //todo - remove when done testing
             setbasicLaunchData(newBasicLaunchData);
         } catch (error) {
             console.log("error getting/setting new launch data", error);

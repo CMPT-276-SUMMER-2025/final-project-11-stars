@@ -18,17 +18,16 @@ async function testLoadLaunchesOverTime(startDate: string, endDate: string) {
     let launchesFromAPI = result.data.results;
 
     if(launchesFromModel.length != launchesFromAPI.length) {
-        console.log("FAIL : The number of feteched launches are not equal.\n");
-        console.log(`launchesFromModel : ${launchesFromModel.length} and launchesFromAPI : ${launchesFromAPI.length}\n`)
+        console.log("FAIL : The number of feteched launches are not equal.");
+        console.log(`launchesFromModel : ${launchesFromModel.length} and launchesFromAPI : ${launchesFromAPI.length}`)
         return false;
     }
 
-    for(let i = 0; i < launchesFromModel; i++) {
+    for(let i = 0; i < launchesFromModel.length; i++) {
         if (launchesFromModel[i].id != launchesFromAPI[i].id) {
-            console.log("FAIL : The ids of launches do not match.\n");
+            console.log(`FAIL : The ids of launches do not match. ${launchesFromModel[i].id} != ${launchesFromAPI[i].id}`);
+            console.log(`${launchesFromModel[i].id} != ${launchesFromAPI[i].id}`);
             return false;
-        } else {
-            console.log(`${launchesFromModel.id} same as ${launchesFromAPI.id}\n`);
         }
     }
     console.log("SUCCESS");
@@ -58,7 +57,7 @@ function testSetFieldsWithNoDataToNull(mockLaunchObject, message) {
             } else if(Array.isArray(mockLaunchObject[key])) {
                 // if field if an array
                 if(mockLaunchObject[key].length == 0) {
-                    console.log("FAIL : The object has a field that is an empty array that was not set to null.\n")
+                    console.log("FAIL : The object has a field that is an empty array that was not set to null.")
                     return false;
                 }
 
@@ -70,7 +69,7 @@ function testSetFieldsWithNoDataToNull(mockLaunchObject, message) {
 
             } else if(invalidFields.includes(mockLaunchObject[key])) {
                 // field is a primitive 
-                console.log("FAIL : The object has an invalid field (undefined, Unknown, empty string) that was not set to null.\n")
+                console.log("FAIL : The object has an invalid field (undefined, Unknown, empty string) that was not set to null.")
                 return false;            
             }
         }
@@ -107,9 +106,6 @@ function printFieldsOfObject(object, prefix) {
         }
     }
 }
-
-
-
 
 async function main () {
     const start = '2024-07-19T02:54:00Z';
