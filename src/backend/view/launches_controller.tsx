@@ -56,7 +56,8 @@ export const LaunchDateRangePickersAndSubmitButton = (
                 setLoading(false);
             }
         })();
-    }, [launchSearchStartDate, launchSearchEndDate]);
+    }, []);
+
     const [loading, setLoading] = useState(false); // Show loading icon when making API calls
     const handleClickSubmitButton = async (launchSearchStartDate: dayjs.Dayjs, launchSearchEndDate: dayjs.Dayjs) => {
         setLoading(true);
