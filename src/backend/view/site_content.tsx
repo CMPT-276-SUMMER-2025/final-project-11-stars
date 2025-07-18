@@ -1,30 +1,19 @@
 import {GlobeContainer} from "./globe_component.tsx";
 import {LaunchDateRangePickersAndSubmitButton} from "./launches_controller.tsx";
 import React from "react";
-import type {basicLaunchDataInterface} from "../model/interfaces.ts";
+import type {basicLaunchDataInterface, detailedLaunchDataInterface} from "../model/interfaces.ts";
+import {Dayjs as type_dayjs} from "dayjs"
 
-const SideContainer = ({setbasicLaunchData}: {
-    setbasicLaunchData: React.Dispatch<React.SetStateAction<basicLaunchDataInterface[]>>
-}) => {
-    return (<>
-        <div style={{
-            width: window.innerWidth * (2 / 5),
-            height: window.innerHeight,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "start",
-            gap: "1rem",
-            padding: "1rem",
-        }}>
-            {LaunchDateRangePickersAndSubmitButton({setbasicLaunchData})}
-        </div>
-    </>)
-}
-
-export const SiteContent = ({basicLaunchData, setbasicLaunchData}: {
+export const SiteContent = (
+    launchSearchStartDate: type_dayjs,
+    setlaunchSearchStartDate: React.Dispatch<React.SetStateAction<type_dayjs>>,
+    launchSearchEndDate: type_dayjs,
+    setlaunchSearchEndDate: React.Dispatch<React.SetStateAction<type_dayjs>>,
     basicLaunchData: basicLaunchDataInterface[],
-    setbasicLaunchData: React.Dispatch<React.SetStateAction<basicLaunchDataInterface[]>>
-}) => {
+    setbasicLaunchData: React.Dispatch<React.SetStateAction<basicLaunchDataInterface[]>>,
+    _detailedLaunchData: detailedLaunchDataInterface[], //todo - remove _ when used
+    setdetailedLaunchData: React.Dispatch<React.SetStateAction<detailedLaunchDataInterface[]>>
+) => {
     return (
         <div style={{
             display: "flex",
@@ -33,7 +22,25 @@ export const SiteContent = ({basicLaunchData, setbasicLaunchData}: {
             alignItems: 'center'
         }}>
             {GlobeContainer({basicLaunchData})}
-            {SideContainer({setbasicLaunchData})}
+            <>
+                <div style={{
+                    width: window.innerWidth * (2 / 5),
+                    height: window.innerHeight,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "start",
+                    gap: "1rem",
+                    padding: "1rem",
+                }}>
+                    {LaunchDateRangePickersAndSubmitButton(
+                        launchSearchStartDate,
+                        setlaunchSearchStartDate,
+                        launchSearchEndDate,
+                        setlaunchSearchEndDate,
+                        setbasicLaunchData,
+                        setdetailedLaunchData)}
+                </div>
+            </>
         </div>
     )
 }
