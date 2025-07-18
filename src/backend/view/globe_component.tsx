@@ -1,38 +1,33 @@
-import {useEffect, useState} from "react";
-import Globe from "react-globe.gl";
-import type {basicLaunchDataInterface} from "../model/interfaces.ts";
+import {Footer} from "./backend/view/footer.tsx"
+import {SiteContent} from "./backend/view/site_content.tsx";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {CssBaseline} from "@mui/material";
+import {LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {useState} from "react";
+import type {basicLaunchDataInterface} from "./backend/model/interfaces.ts";
 
-export const GlobeContainer = ({ basicLaunchData }: { basicLaunchData: basicLaunchDataInterface[] }) => {
-    const basicLaunchDataClone = [...basicLaunchData] // data is cloned to prevent any mutation-related issues
-    const [dimensions, setDimensions] = useState({
-        width: window.innerWidth * 3 / 5,
-        height: window.innerHeight
-    });
-    useEffect(() => {
-        const handleResize = () => {
-            setDimensions({
-                width: window.innerWidth * 3 / 5,
-                height: window.innerHeight
-            });
-        };
+const darkTheme = createTheme({
+    palette: {
+        mode: 'dark',
+        background: {
+            default: "#000011"
+        }
+    },
+});
 
-        window.addEventListener('resize', handleResize);
-    }, []);
-    return (
-        <div>
-            <Globe
-                width={dimensions.width}
-                height={dimensions.height}
-                animateIn={true}
-                globeImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg"
-                pointsData={basicLaunchDataClone}
-                pointAltitude={0.02}
-                pointColor={() => 'red'}
-                pointRadius={0.5}
-                onPointClick={() => {
-                    console.log("test");
-                }}
-            />
-        </div>
-    );
-};
+function App() {
+    const [basicLaunchData, setbasicLaunchData] = useState<basicLaunchDataInterface[]>([]);
+    return (<>
+            <ThemeProvider theme={darkTheme}>
+                <CssBaseline/>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    {SiteContent({basicLaunchData, setbasicLaunchData})}
+                    {Footer()}
+                </LocalizationProvider>
+            </ThemeProvider>
+        </>
+    )
+}
+
+export default App
