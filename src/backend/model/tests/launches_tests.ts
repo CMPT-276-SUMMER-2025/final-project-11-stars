@@ -51,17 +51,13 @@ function testSetFieldsWithNoDataToNull(mockLaunchObject, message) {
 
     for (let key in mockLaunchObject) {
         if (mockLaunchObject.hasOwnProperty(key)){
-            if (mockLaunchObject[key] === null) {
-                continue;
-
-            } else if(Array.isArray(mockLaunchObject[key])) {
+            if(Array.isArray(mockLaunchObject[key])) {
                 // if field if an array
                 if(mockLaunchObject[key].length == 0) {
                     console.log("FAIL : The object has a field that is an empty array that was not set to null.")
                     return false;
                 }
-
-            } else if(typeof mockLaunchObject[key] === "object") {
+            } else if(typeof mockLaunchObject[key] === "object" && mockLaunchObject[key] != null) {
                 // if field is an object
                 if(!testSetFieldsWithNoDataToNull(mockLaunchObject[key], "child object")) {
                     return false;
@@ -86,18 +82,14 @@ function printFieldsOfObject(object, prefix) {
 
     for(let key in object) {
         if (object.hasOwnProperty(key)) {
-
-            if(object[key] === null) {
-                console.log(`${prefix}${key} : ${String(object[key])}`);
-            
-            } else if(Array.isArray(object[key])) {
+            if(Array.isArray(object[key])) {
                 let str = "";
                 for(let element of object[key]) {
                     str += ` ${element}`;
                 }
                 console.log(`${prefix}${key} : ${str}`);
 
-            } else if (typeof object[key] === "object") {
+            } else if (typeof object[key] === "object" && object[key] != null) {
                 printFieldsOfObject(object[key], "\t");
 
             } else {

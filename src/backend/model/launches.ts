@@ -66,13 +66,9 @@ const loadLaunchesOverTime = async (startDate: string, endDate: string) => {
                     manufacturer: launchRocketConfig.manufacturer.name
                 }
             };
-            /*
-            // TODO - fix setFieldsWithNoDataToNull - currently sets filteredLaunchObject to nested arrays with nothing in them
-            const filteredLaunchObject = setFieldsWithNoDataToNull(detailedLaunchDataArray);
+            const filteredLaunchObject = setFieldsWithNoDataToNull(launchObject);
             console.log(filteredLaunchObject);
             return filteredLaunchObject;
-            */
-            return launchObject;
         });
     return detailedLaunchDataArray;
 
@@ -103,7 +99,6 @@ const getLaunchById = (launchId: string) => {
  * NOTE: This function is dependent on the Launch Library 2 /launches endpoint. May not work for other objects.
  */
 const setFieldsWithNoDataToNull = (launchObject: any) => { //todo - set typing. maybe detailedLaunchDataInterface?
-
     let invalidPrimitives = [
         "Unknown", undefined, ""
     ]
@@ -116,8 +111,8 @@ const setFieldsWithNoDataToNull = (launchObject: any) => { //todo - set typing. 
                     launchObject[key] = null;
                 }
 
-            } else if (typeof launchObject[key] === "object") {
-                // if field is an object
+            } else if (typeof launchObject[key] === "object" && typeof launchObject[key] != null) {
+                // if field is an object and not null
                 setFieldsWithNoDataToNull(launchObject[key])
 
             } else if (invalidPrimitives.includes(launchObject[key])) {
