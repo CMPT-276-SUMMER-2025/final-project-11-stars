@@ -110,8 +110,7 @@ const setFieldsWithNoDataToNull = (launchObject) => {
                 if(launchObject[key].length == 0) {
                     launchObject[key] = null;
                 }
-
-            } else if(typeof launchObject[key] === "object") {
+            } else if(typeof launchObject[key] === "object" && launchObject[key] != null) {
                 // if field is an object
                 setFieldsWithNoDataToNull(launchObject[key])
 
