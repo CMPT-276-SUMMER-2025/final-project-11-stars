@@ -1,7 +1,7 @@
 import * as launchesC from "../../controllers/launches_controller.js";
 import * as launches from "../launches.js"
+
 import axios from "axios";
-// TODO - add proper typing and remove @ts-ignore
 
 /**
  * File for unit testing model in relation to api-1-feature-1/2.
@@ -38,7 +38,6 @@ async function testLoadLaunchesOverTime(startDate: string, endDate: string) {
  * Testing @setFieldsWithNoDataToNull in launches.js.
  * @param message Used to indicate child object was tested.
  */
-//@ts-ignore
 function testSetFieldsWithNoDataToNull(mockLaunchObject, message) {
     // test function directly in launches.js 
 
@@ -52,13 +51,17 @@ function testSetFieldsWithNoDataToNull(mockLaunchObject, message) {
 
     for (let key in mockLaunchObject) {
         if (mockLaunchObject.hasOwnProperty(key)){
-            if(Array.isArray(mockLaunchObject[key])) {
+            if (mockLaunchObject[key] === null) {
+                continue;
+
+            } else if(Array.isArray(mockLaunchObject[key])) {
                 // if field if an array
                 if(mockLaunchObject[key].length == 0) {
                     console.log("FAIL : The object has a field that is an empty array that was not set to null.")
                     return false;
                 }
-            } else if(typeof mockLaunchObject[key] === "object" && mockLaunchObject[key] != null) {
+
+            } else if(typeof mockLaunchObject[key] === "object") {
                 // if field is an object
                 if(!testSetFieldsWithNoDataToNull(mockLaunchObject[key], "child object")) {
                     return false;
@@ -79,19 +82,22 @@ function testSetFieldsWithNoDataToNull(mockLaunchObject, message) {
 /**
  * Used to prints the fields of the object after the "no data" fields have been set to null.
  */
-//@ts-ignore
 function printFieldsOfObject(object, prefix) {
 
     for(let key in object) {
         if (object.hasOwnProperty(key)) {
-            if(Array.isArray(object[key])) {
+
+            if(object[key] === null) {
+                console.log(`${prefix}${key} : ${String(object[key])}`);
+            
+            } else if(Array.isArray(object[key])) {
                 let str = "";
                 for(let element of object[key]) {
                     str += ` ${element}`;
                 }
                 console.log(`${prefix}${key} : ${str}`);
 
-            } else if (typeof object[key] === "object" && object[key] != null) {
+            } else if (typeof object[key] === "object") {
                 printFieldsOfObject(object[key], "\t");
 
             } else {
