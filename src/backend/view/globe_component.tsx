@@ -1,37 +1,33 @@
-import {useEffect, useState} from "react";
-import Globe from "react-globe.gl";
+import {Footer} from "./backend/view/footer.tsx"
+import {SiteContent} from "./backend/view/site_content.tsx";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {CssBaseline} from "@mui/material";
+import {LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {useState} from "react";
+import type {basicLaunchDataInterface} from "./backend/model/interfaces.ts";
 
-export const GlobeContainer = () => {
-    /*
-        The Globe container only accepts width/height values in px,
-        so the width and height need to be recalculated manually
-        every time the user zooms.
-    */
-    const [dimensions, setDimensions] = useState({
-        width: window.innerWidth * 3 / 5,
-        height: window.innerHeight
-    });
+const darkTheme = createTheme({
+    palette: {
+        mode: 'dark',
+        background: {
+            default: "#000011"
+        }
+    },
+});
 
-    useEffect(() => {
-        const handleResize = () => {
-            setDimensions({
-                width: window.innerWidth * 3 / 5,
-                height: window.innerHeight
-            });
-        };
+function App() {
+    const [basicLaunchData, setbasicLaunchData] = useState<basicLaunchDataInterface[]>([]);
+    return (<>
+            <ThemeProvider theme={darkTheme}>
+                <CssBaseline/>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    {SiteContent({basicLaunchData, setbasicLaunchData})}
+                    {Footer()}
+                </LocalizationProvider>
+            </ThemeProvider>
+        </>
+    )
+}
 
-        // Whenever the user resizes the page, call the handleResize function
-        window.addEventListener('resize', handleResize);
-    }, []);
-
-    return (
-        <div>
-            <Globe
-                width={dimensions.width}
-                height={dimensions.height}
-                animateIn={true}
-                globeImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg"
-            />
-        </div>
-    );
-};
+export default App
