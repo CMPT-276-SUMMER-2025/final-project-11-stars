@@ -133,6 +133,8 @@ async function main () {
     await testLoadLaunchesOverTime(start,end);
     
     testSetFieldsWithNoDataToNull(mockLaunchObject, "parent object");
+    
+    // following code is not necessary for testing, simply to print out the fields of the object for visual guarantees of success
     console.log("\n");
     printFieldsOfObject(mockLaunchObject, "");
     console.log("\n");
