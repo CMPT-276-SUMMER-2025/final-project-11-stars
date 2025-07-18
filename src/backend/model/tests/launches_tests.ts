@@ -1,7 +1,7 @@
 import * as launchesC from "../../controllers/launches_controller.js";
 import * as launches from "../launches.js"
-
 import axios from "axios";
+// TODO - add proper typing and remove @ts-ignore
 
 /**
  * File for unit testing model in relation to api-1-feature-1/2.
@@ -38,6 +38,7 @@ async function testLoadLaunchesOverTime(startDate: string, endDate: string) {
  * Testing @setFieldsWithNoDataToNull in launches.js.
  * @param message Used to indicate child object was tested.
  */
+//@ts-ignore
 function testSetFieldsWithNoDataToNull(mockLaunchObject, message) {
     // test function directly in launches.js 
 
@@ -78,6 +79,7 @@ function testSetFieldsWithNoDataToNull(mockLaunchObject, message) {
 /**
  * Used to prints the fields of the object after the "no data" fields have been set to null.
  */
+//@ts-ignore
 function printFieldsOfObject(object, prefix) {
 
     for(let key in object) {
