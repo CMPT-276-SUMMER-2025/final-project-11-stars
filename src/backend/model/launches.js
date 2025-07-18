@@ -66,7 +66,7 @@ const loadLaunchesOverTime = async (startDate, endDate) => {
                 }
 
             };
-            launchObject = setFieldsWithNoDataToNull(launches);
+            launchObject = setFieldsWithNoDataToNull(launchObject);
             return launchObject; 
         });
 
