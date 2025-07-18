@@ -17,7 +17,6 @@ const darkTheme = createTheme({
 });
 
 function App() {
-
     const [basicLaunchData, setbasicLaunchData] = useState<basicLaunchDataInterface[]>([]);
     return (<>
             <ThemeProvider theme={darkTheme}>
@@ -30,6 +29,5 @@ function App() {
         </>
     )
 }
-
 
 export default App
