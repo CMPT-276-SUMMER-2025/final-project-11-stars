@@ -1,4 +1,4 @@
-import * as launchesC from "../../controllers/launchesController.js";
+import * as launchesC from "../../controllers/launches_controller.js";
 import * as launches from "../launches.js"
 
 import axios from "axios";
@@ -7,14 +7,14 @@ import axios from "axios";
  * File for unit testing model in relation to api-1-feature-1/2.
  */
 
-async function testLoadLaunchesOverTime(start, end) {
+async function testLoadLaunchesOverTime(startDate: string, endDate: string) {
     // test through controller 
 
-    await launchesC.loadLaunchesOverTimePeriod(start, end);
+    await launchesC.loadLaunchesOverTimePeriod(startDate, endDate);
 
     let launchesFromModel = launchesC.getLaunches();
 
-    let result = await axios.get(`https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${start}&window_start__lte=${end}&mode=detailed`);
+    let result = await axios.get(`https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`);
     let launchesFromAPI = result.data.results;
 
     if(launchesFromModel.length != launchesFromAPI.length) {
