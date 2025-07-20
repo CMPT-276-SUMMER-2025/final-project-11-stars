@@ -8,6 +8,7 @@ export const GlobeContainer = ({ basicLaunchData }: { basicLaunchData: basicLaun
         width: window.innerWidth * 3 / 5,
         height: window.innerHeight
     });
+
     useEffect(() => {
         const handleResize = () => {
             setDimensions({
@@ -30,7 +31,7 @@ export const GlobeContainer = ({ basicLaunchData }: { basicLaunchData: basicLaun
                 pointColor={() => 'red'}
                 pointRadius={0.5}
                 onPointClick={() => {
-                    console.log("test");
+                    console.log("test"); //TODO - remove when feature #2 frontend added
                 }}
             />
         </div>

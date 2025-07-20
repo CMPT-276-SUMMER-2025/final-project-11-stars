@@ -5,6 +5,7 @@ import React, {useEffect, useState} from "react";
 import type {basicLaunchDataInterface, detailedLaunchDataInterface} from "../model/interfaces.ts";
 import {extractBasicLaunchDataFromDetailedLaunchData} from "../model/launches.ts"
 import {loadLaunchesOverTimePeriod} from "../controllers/launches_controller.ts";
+import {loadNewsFeedData} from "../model/events.ts";
 
 const InvalidDateRangeAlert = () => (
     <Alert severity="error" style={{width: "45%"}}>
@@ -49,6 +50,7 @@ export const LaunchDateRangePickersAndSubmitButton = (
     // Create default data using as soon as the component mounts.
     useEffect(() => {
         (async () => {
+            await loadNewsFeedData()
             setLoading(true);
             try {
                 await setNewLaunchData(launchSearchStartDate, launchSearchEndDate, setbasicLaunchData, setdetailedLaunchData)
@@ -78,7 +80,7 @@ export const LaunchDateRangePickersAndSubmitButton = (
             gap: "1rem"
         }}>
             <Typography variant={"h5"}>
-                Select a new date range for the launch display
+                Globe Launch Search
             </Typography>
             <div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-evenly"}}>
                 <div style={{width: "45%"}}>
