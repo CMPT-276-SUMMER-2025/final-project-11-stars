@@ -34,17 +34,22 @@ export interface detailedLaunchDataInterface {
         image: any;
         infoURL: any;
         wikiURL: any;
-
         totalSuccessfulLaunches: any;
         totalLaunches: any;
-
         height: any;
         diameter: any;
         launchMass: any;
         launchCost: any;
-
         isReusable: any;
-
         manufacturer: any;
     };
+}
+
+export interface newsFeedDataInterface {
+  imageURL: string;
+  sourceURL: string;
+  headline: string;
+  eventType: string;
+  date: string;
+  bodyText: string;
 }

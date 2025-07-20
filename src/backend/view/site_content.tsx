@@ -9,7 +9,7 @@ export const SiteContent = (
     setlaunchSearchStartDate: React.Dispatch<React.SetStateAction<type_dayjs>>,
     launchSearchEndDate: type_dayjs,
     setlaunchSearchEndDate: React.Dispatch<React.SetStateAction<type_dayjs>>,
-    basicLaunchData: basicLaunchDataInterface[],
+    basicLaunchDataArray: basicLaunchDataInterface[],
     setbasicLaunchData: React.Dispatch<React.SetStateAction<basicLaunchDataInterface[]>>,
     _detailedLaunchData: detailedLaunchDataInterface[], //todo - remove _ when used
     setdetailedLaunchData: React.Dispatch<React.SetStateAction<detailedLaunchDataInterface[]>>
@@ -21,7 +21,7 @@ export const SiteContent = (
             justifyContent: 'start',
             alignItems: 'center'
         }}>
-            {GlobeContainer({basicLaunchData})}
+            {GlobeContainer({basicLaunchData: basicLaunchDataArray})}
             <>
                 <div style={{
                     width: window.innerWidth * (2 / 5),
@@ -37,6 +37,7 @@ export const SiteContent = (
                         setlaunchSearchStartDate,
                         launchSearchEndDate,
                         setlaunchSearchEndDate,
+                        basicLaunchDataArray,
                         setbasicLaunchData,
                         setdetailedLaunchData)}
                 </div>

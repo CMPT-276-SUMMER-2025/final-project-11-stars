@@ -5,10 +5,17 @@ import React, {useEffect, useState} from "react";
 import type {basicLaunchDataInterface, detailedLaunchDataInterface} from "../model/interfaces.ts";
 import {extractBasicLaunchDataFromDetailedLaunchData} from "../model/launches.ts"
 import {loadLaunchesOverTimePeriod} from "../controllers/launches_controller.ts";
+import {loadNewsFeedData} from "../model/events.ts";
 
 const InvalidDateRangeAlert = () => (
     <Alert severity="error" style={{width: "45%"}}>
-        End date must be the same or after the start date.
+        Start date cannot be after end date.
+    </Alert>
+);
+
+const NoDataForRangeAlert = () => (
+    <Alert severity="warning" style={{width: "45%"}}>
+        No launches available for this date range.
     </Alert>
 );
 
@@ -43,12 +50,14 @@ export const LaunchDateRangePickersAndSubmitButton = (
     setlaunchSearchStartDate: React.Dispatch<React.SetStateAction<type_dayjs>>,
     launchSearchEndDate: type_dayjs,
     setlaunchSearchEndDate: React.Dispatch<React.SetStateAction<type_dayjs>>,
+    basicLaunchDataArray: basicLaunchDataInterface[],
     setbasicLaunchData: React.Dispatch<React.SetStateAction<basicLaunchDataInterface[]>>,
     setdetailedLaunchData: React.Dispatch<React.SetStateAction<detailedLaunchDataInterface[]>>
 ) => {
     // Create default data using as soon as the component mounts.
     useEffect(() => {
         (async () => {
+            await loadNewsFeedData()
             setLoading(true);
             try {
                 await setNewLaunchData(launchSearchStartDate, launchSearchEndDate, setbasicLaunchData, setdetailedLaunchData)
@@ -78,7 +87,7 @@ export const LaunchDateRangePickersAndSubmitButton = (
             gap: "1rem"
         }}>
             <Typography variant={"h5"}>
-                Select a new date range for the launch display
+                Globe Launch Search
             </Typography>
             <div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-evenly"}}>
                 <div style={{width: "45%"}}>
@@ -86,6 +95,7 @@ export const LaunchDateRangePickersAndSubmitButton = (
                         views={['year', 'month']}
                         label="Start Date"
                         value={launchSearchStartDate}
+                        disabled={loading}
                         onChange={(newValue) => {
                             if (newValue && newValue != launchSearchStartDate) {
                                 setlaunchSearchStartDate(newValue.startOf('month'))
@@ -104,6 +114,7 @@ export const LaunchDateRangePickersAndSubmitButton = (
                         views={['year', 'month']}
                         label="End Date"
                         value={launchSearchEndDate}
+                        disabled={loading}
                         onChange={(newValue) => {
                             if (newValue && newValue != launchSearchEndDate) {
                                 setlaunchSearchEndDate(newValue.endOf('month'))
@@ -119,12 +130,13 @@ export const LaunchDateRangePickersAndSubmitButton = (
                 </div>
             </div>
             <div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-evenly"}}>
-                {launchSearchStartDate && launchSearchEndDate ? (
-                    launchSearchEndDate.endOf('month').isBefore(launchSearchStartDate.startOf('month'))
-                        ? <InvalidDateRangeAlert/>
-                        : <ValidDateRangeAlert/>
-                ) : null}
-
+                launchSearchEndDate.endOf('month').isBefore(launchSearchStartDate.startOf('month')) ? (
+                    <InvalidDateRangeAlert/>
+                ) : (!loading && basicLaunchDataArray.length === 0) ? (
+                    <NoDataForRangeAlert/>
+                ) : (
+                    <ValidDateRangeAlert/>
+                )
                 <div style={{display: "flex", width: "45%"}}>
                     <Button
                         variant="contained"
