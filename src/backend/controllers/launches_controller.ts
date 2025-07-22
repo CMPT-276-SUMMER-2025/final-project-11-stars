@@ -1,4 +1,4 @@
-import {loadLaunchesOverTime, getLaunchesAsList, getLaunchById} from "../model/launches.js"
+import { loadLaunchesOverTime, getLaunchesAsList, getLaunchById } from "../model/launches";
 
 /**
  * Dates are expected to be in ISO 8601 format.

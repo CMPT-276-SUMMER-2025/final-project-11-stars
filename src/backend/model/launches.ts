@@ -8,6 +8,10 @@ import type {basicLaunchDataInterface, detailedLaunchDataInterface} from './inte
 
 let detailedLaunchDataArray: detailedLaunchDataInterface[];
 
+const setDetailedLaunchDataArray = (data: detailedLaunchDataInterface[]) => {
+    detailedLaunchDataArray = data;
+  };
+
 /**
  * This method is expected to be called before any other method in this module.
  * @param startDate Expected to be ISO 8601 format.
@@ -145,5 +149,6 @@ export {
     getLaunchesAsList,
     getLaunchById,
     setFieldsWithNoDataToNull,
-    extractBasicLaunchDataFromDetailedLaunchData
+    extractBasicLaunchDataFromDetailedLaunchData,
+    setDetailedLaunchDataArray
 }
