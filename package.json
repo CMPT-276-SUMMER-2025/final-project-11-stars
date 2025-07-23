@@ -2,13 +2,17 @@
   "name": "final-project-11-stars",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://github.com/CMPT-276-SUMMER-2025/final-project-11-stars.git",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "predeploy": "vite build",
+    "deploy": "gh-pages -d dist -b production/build/gh-pages",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest"
+    
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
