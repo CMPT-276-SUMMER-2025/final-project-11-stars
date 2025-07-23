@@ -1,0 +1,184 @@
+{
+    "id": 80,
+    "url": "https://lldev.thespacedevs.com/2.3.0/pads/80/",
+    "active": true,
+    "agencies": [{
+        "response_mode": "normal",
+        "id": 121,
+        "url": "https://lldev.thespacedevs.com/2.3.0/agencies/121/",
+        "name": "SpaceX",
+        "abbrev": "SpX",
+        "type": {
+            "id": 3,
+            "name": "Commercial"
+        },
+        "featured": true,
+        "country": [{
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        }],
+        "description": "Space Exploration Technologies Corp., known as SpaceX, is an American aerospace manufacturer and space transport services company headquartered in Hawthorne, California. It was founded in 2002 by entrepreneur Elon Musk with the goal of reducing space transportation costs and enabling the colonization of Mars. SpaceX operates from many pads, on the East Coast of the US they operate from SLC-40 at Cape Canaveral Space Force Station and historic LC-39A at Kennedy Space Center. They also operate from SLC-4E at Vandenberg Space Force Base, California, usually for polar launches. Another launch site is being developed at Boca Chica, Texas.",
+        "administrator": "CEO: Elon Musk",
+        "founding_year": 2002,
+        "launchers": "Falcon | Starship",
+        "spacecraft": "Dragon",
+        "parent": null,
+        "image": {
+            "id": 29,
+            "name": "[AUTO] SpaceX - image",
+            "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/spacex_image_20190207032501.jpeg",
+            "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305184704.jpeg",
+            "credit": null,
+            "license": {
+                "id": 1,
+                "name": "Unknown",
+                "priority": 9,
+                "link": null
+            },
+            "single_use": true,
+            "variants": []
+        },
+        "logo": {
+            "id": 186,
+            "name": "[AUTO] SpaceX - logo",
+            "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/spacex_logo_20220826094919.png",
+            "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305185138.png",
+            "credit": null,
+            "license": {
+                "id": 1,
+                "name": "Unknown",
+                "priority": 9,
+                "link": null
+            },
+            "single_use": true,
+            "variants": []
+        },
+        "social_logo": {
+            "id": 94,
+            "name": "[AUTO] SpaceX - social_logo",
+            "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/spacex_nation_20230531064544.jpg",
+            "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305184848.jpeg",
+            "credit": null,
+            "license": {
+                "id": 1,
+                "name": "Unknown",
+                "priority": 9,
+                "link": null
+            },
+            "single_use": true,
+            "variants": []
+        }
+    }],
+    "name": "Space Launch Complex 40",
+    "image": {
+        "id": 2113,
+        "name": "F9 liftoff from SLC-40 (SES-24)",
+        "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/f9_liftoff_from_image_20240621050513.jpeg",
+        "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/f9_liftoff_from_image_thumbnail_20240621050514.jpeg",
+        "credit": "SpaceX",
+        "license": {
+            "id": 5,
+            "name": "CC BY-NC 2.0",
+            "priority": 1,
+            "link": "https://creativecommons.org/licenses/by-nc/2.0/"
+        },
+        "single_use": false,
+        "variants": []
+    },
+    "description": "",
+    "info_url": null,
+    "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Air_Force_Station_Space_Launch_Complex_40",
+    "map_url": "https://www.google.com/maps?q=28.56194122,-80.57735736",
+    "latitude": 28.56194122,
+    "longitude": -80.57735736,
+    "country": {
+        "id": 2,
+        "name": "United States of America",
+        "alpha_2_code": "US",
+        "alpha_3_code": "USA",
+        "nationality_name": "American",
+        "nationality_name_composed": "Americano"
+    },
+    "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_80_20200803143323.jpg",
+    "total_launch_count": 319,
+    "orbital_launch_attempt_count": 319,
+    "fastest_turnaround": "P2DT8H31M10S",
+    "location": {
+        "response_mode": "normal",
+        "id": 12,
+        "url": "https://lldev.thespacedevs.com/2.3.0/locations/12/",
+        "name": "Cape Canaveral SFS, FL, USA",
+        "celestial_body": {
+            "response_mode": "normal",
+            "id": 1,
+            "name": "Earth",
+            "type": {
+                "id": 1,
+                "name": "Planet"
+            },
+            "diameter": 12742000.0,
+            "mass": 5.972168e+24,
+            "gravity": 9.80655,
+            "length_of_day": "1 00:00:00",
+            "atmosphere": true,
+            "image": {
+                "id": 2040,
+                "name": "Earth (Apollo 17)",
+                "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/earth_2528apol_image_20240402194304.jpeg",
+                "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/earth_2528apol_image_thumbnail_20240402194305.jpeg",
+                "credit": "NASA",
+                "license": {
+                    "id": 4,
+                    "name": "NASA Image and Media Guidelines",
+                    "priority": 0,
+                    "link": "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+                },
+                "single_use": true,
+                "variants": []
+            },
+            "description": "Earth is the third planet from the Sun and the only astronomical object known to harbor life.",
+            "wiki_url": "https://en.wikipedia.org/wiki/Earth",
+            "total_attempted_launches": 7207,
+            "successful_launches": 6662,
+            "failed_launches": 545,
+            "total_attempted_landings": 1143,
+            "successful_landings": 1098,
+            "failed_landings": 45
+        },
+        "active": true,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "description": "Cape Canaveral Space Force Station (CCSFS) is an installation of the United States Space Force's Space Launch Delta 45, located on Cape Canaveral in Brevard County, Florida.",
+        "image": {
+            "id": 2200,
+            "name": "Cape Canaveral & KSC seen from orbit (STS-43)",
+            "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/cape_canaveral__image_20240918151615.jpg",
+            "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/cape_canaveral__image_thumbnail_20240918151616.jpeg",
+            "credit": "NASA",
+            "license": {
+                "id": 4,
+                "name": "NASA Image and Media Guidelines",
+                "priority": 0,
+                "link": "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+            },
+            "single_use": true,
+            "variants": []
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/location_12_20200803142519.jpg",
+        "longitude": -80.577778,
+        "latitude": 28.488889,
+        "timezone_name": "America/New_York",
+        "total_launch_count": 1036,
+        "total_landing_count": 65
+    }
+}
