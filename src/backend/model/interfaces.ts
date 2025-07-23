@@ -52,10 +52,13 @@ export interface newsFeedDataInterface {
   eventType: string;
   date: string;
   bodyText: string;
+<<<<<<< HEAD
 }
 
 //todo - remove two end strings
 export interface newsOrLaunchDataSidePanelDataInterface {
   contentType: "loading" | "newsFeed" | "launchDetails";
   content: "" | newsFeedDataInterface[] | detailedLaunchDataInterface| "testLaunchDetails";
+=======
+>>>>>>> origin/api-1-feature-2-extra-launch-info
 }
