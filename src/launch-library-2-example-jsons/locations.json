@@ -1,0 +1,895 @@
+{
+    "response_mode": "detailed",
+    "id": 12,
+    "url": "https://lldev.thespacedevs.com/2.3.0/locations/12/",
+    "name": "Cape Canaveral SFS, FL, USA",
+    "celestial_body": {
+        "response_mode": "normal",
+        "id": 1,
+        "name": "Earth",
+        "type": {
+            "id": 1,
+            "name": "Planet"
+        },
+        "diameter": 12742000.0,
+        "mass": 5.972168e+24,
+        "gravity": 9.80655,
+        "length_of_day": "1 00:00:00",
+        "atmosphere": true,
+        "image": {
+            "id": 2040,
+            "name": "Earth (Apollo 17)",
+            "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/earth_2528apol_image_20240402194304.jpeg",
+            "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/earth_2528apol_image_thumbnail_20240402194305.jpeg",
+            "credit": "NASA",
+            "license": {
+                "id": 4,
+                "name": "NASA Image and Media Guidelines",
+                "priority": 0,
+                "link": "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+            },
+            "single_use": true,
+            "variants": []
+        },
+        "description": "Earth is the third planet from the Sun and the only astronomical object known to harbor life.",
+        "wiki_url": "https://en.wikipedia.org/wiki/Earth",
+        "total_attempted_launches": 7207,
+        "successful_launches": 6662,
+        "failed_launches": 545,
+        "total_attempted_landings": 1143,
+        "successful_landings": 1098,
+        "failed_landings": 45
+    },
+    "active": true,
+    "country": {
+        "id": 2,
+        "name": "United States of America",
+        "alpha_2_code": "US",
+        "alpha_3_code": "USA",
+        "nationality_name": "American",
+        "nationality_name_composed": "Americano"
+    },
+    "description": "Cape Canaveral Space Force Station (CCSFS) is an installation of the United States Space Force's Space Launch Delta 45, located on Cape Canaveral in Brevard County, Florida.",
+    "image": {
+        "id": 2200,
+        "name": "Cape Canaveral & KSC seen from orbit (STS-43)",
+        "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/cape_canaveral__image_20240918151615.jpg",
+        "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/cape_canaveral__image_thumbnail_20240918151616.jpeg",
+        "credit": "NASA",
+        "license": {
+            "id": 4,
+            "name": "NASA Image and Media Guidelines",
+            "priority": 0,
+            "link": "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+        },
+        "single_use": true,
+        "variants": []
+    },
+    "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/location_12_20200803142519.jpg",
+    "longitude": -80.577778,
+    "latitude": 28.488889,
+    "timezone_name": "America/New_York",
+    "total_launch_count": 1036,
+    "total_landing_count": 65,
+    "pads": [{
+        "id": 1,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/1/",
+        "active": true,
+        "agencies": [],
+        "name": "Space Launch Complex 17B",
+        "image": {
+            "id": 2247,
+            "name": "Delta II 7925H-9.5 from SLC-17B (Dawn)",
+            "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/delta_ii_7925h-_image_20240922115412.jpg",
+            "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/delta_ii_7925h-_image_thumbnail_20240922115412.jpeg",
+            "credit": "NASA/Regina Mitchell-Ryall & Jerry Cannon",
+            "license": {
+                "id": 4,
+                "name": "NASA Image and Media Guidelines",
+                "priority": 0,
+                "link": "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+            },
+            "single_use": false,
+            "variants": []
+        },
+        "description": "",
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Space_Launch_Complex_17",
+        "map_url": "https://www.google.com/maps?q=28.4458,-80.5657",
+        "latitude": 28.4458,
+        "longitude": -80.5657,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_1_20200803143208.jpg",
+        "total_launch_count": 132,
+        "orbital_launch_attempt_count": 132,
+        "fastest_turnaround": "P20DT2H40M34S"
+    }, {
+        "id": 14,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/14/",
+        "active": true,
+        "agencies": [],
+        "name": "Space Launch Complex 17A",
+        "image": {
+            "id": 2246,
+            "name": "Delta II liftoff from SLC-17A (Swift)",
+            "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/delta_ii_liftof_image_20240922114900.jpg",
+            "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/delta_ii_liftof_image_thumbnail_20240922114900.jpeg",
+            "credit": "NASA/KSC",
+            "license": {
+                "id": 4,
+                "name": "NASA Image and Media Guidelines",
+                "priority": 0,
+                "link": "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+            },
+            "single_use": false,
+            "variants": []
+        },
+        "description": "",
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Space_Launch_Complex_17",
+        "map_url": "https://www.google.com/maps?q=28.4472,-80.565",
+        "latitude": 28.4472,
+        "longitude": -80.565,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_14_20200803143451.jpg",
+        "total_launch_count": 145,
+        "orbital_launch_attempt_count": 145,
+        "fastest_turnaround": "P14DT5H46M"
+    }, {
+        "id": 27,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/27/",
+        "active": true,
+        "agencies": [],
+        "name": "Space Launch Complex 46",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Spaceport_Florida_Launch_Complex_46",
+        "map_url": "https://www.google.com/maps?q=28.4584,-80.5284",
+        "latitude": 28.4584,
+        "longitude": -80.5284,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_27_20200803143319.jpg",
+        "total_launch_count": 6,
+        "orbital_launch_attempt_count": 5,
+        "fastest_turnaround": "P121DT21H43M"
+    }, {
+        "id": 19,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/19/",
+        "active": true,
+        "agencies": [],
+        "name": "Launch Complex 34",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Air_Force_Station_Launch_Complex_34",
+        "map_url": "https://www.google.com/maps?q=28.521811,-80.56113",
+        "latitude": 28.521811,
+        "longitude": -80.56113,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_19_20200803143428.jpg",
+        "total_launch_count": 9,
+        "orbital_launch_attempt_count": 3,
+        "fastest_turnaround": "P132DT2H26M53S"
+    }, {
+        "id": 18,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/18/",
+        "active": true,
+        "agencies": [],
+        "name": "Launch Complex 19",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Air_Force_Station_Launch_Complex_19",
+        "map_url": "https://www.google.com/maps?q=28.506898,-80.554169",
+        "latitude": 28.506898,
+        "longitude": -80.554169,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_18_20200803143356.jpg",
+        "total_launch_count": 12,
+        "orbital_launch_attempt_count": 11,
+        "fastest_turnaround": "P10DT18H7M23S"
+    }, {
+        "id": 38,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/38/",
+        "active": true,
+        "agencies": [],
+        "name": "Space Launch Complex 37B",
+        "image": {
+            "id": 2032,
+            "name": "SLC-37B",
+            "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/slc-37b_image_20240329083424.jpeg",
+            "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/slc-37b_image_thumbnail_20240329083424.jpeg",
+            "credit": "United Launch Alliance",
+            "license": {
+                "id": 10,
+                "name": "ULA Image Use Policy",
+                "priority": 3,
+                "link": "https://www.ulalaunch.com/terms-and-conditions"
+            },
+            "single_use": true,
+            "variants": []
+        },
+        "description": "",
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Air_Force_Station_Space_Launch_Complex_37",
+        "map_url": "https://www.google.com/maps?q=28.5317,-80.56495",
+        "latitude": 28.5317,
+        "longitude": -80.56495,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_38_20200803143515.jpg",
+        "total_launch_count": 40,
+        "orbital_launch_attempt_count": 40,
+        "fastest_turnaround": "P66DT5H24M59S"
+    }, {
+        "id": 92,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/92/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 161,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/161/",
+            "name": "United States Air Force",
+            "abbrev": "USAF",
+            "type": {
+                "id": 1,
+                "name": "Government"
+            }
+        }],
+        "name": "Launch Complex 16",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Air_Force_Station_Launch_Complex_16",
+        "map_url": "https://www.google.com/maps?q=28.501626,-80.5518",
+        "latitude": 28.501626,
+        "longitude": -80.5518,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_92_20200803143523.jpg",
+        "total_launch_count": 1,
+        "orbital_launch_attempt_count": 1,
+        "fastest_turnaround": null
+    }, {
+        "id": 116,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/116/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 161,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/161/",
+            "name": "United States Air Force",
+            "abbrev": "USAF",
+            "type": {
+                "id": 1,
+                "name": "Government"
+            }
+        }],
+        "name": "Launch Complex 11",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Launch_Complex_11",
+        "map_url": "https://www.google.com/maps?q=28.4755556,-80.5427496",
+        "latitude": 28.4755556,
+        "longitude": -80.5427496,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_116_20200803143216.jpg",
+        "total_launch_count": 1,
+        "orbital_launch_attempt_count": 1,
+        "fastest_turnaround": null
+    }, {
+        "id": 29,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/29/",
+        "active": true,
+        "agencies": [],
+        "name": "Space Launch Complex 41",
+        "image": {
+            "id": 1394,
+            "name": "Atlas V 541 on the pad (Mars 2020/Perseverance rover & Ingenuity helicopter)",
+            "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/atlas2520v252_image_20200729144937.jpg",
+            "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_thumbnail_20240305192627.jpeg",
+            "credit": "United Launch Alliance",
+            "license": {
+                "id": 10,
+                "name": "ULA Image Use Policy",
+                "priority": 3,
+                "link": "https://www.ulalaunch.com/terms-and-conditions"
+            },
+            "single_use": false,
+            "variants": []
+        },
+        "description": "",
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Air_Force_Station_Space_Launch_Complex_41",
+        "map_url": "https://www.google.com/maps?q=28.58341025,-80.58303644",
+        "latitude": 28.58341025,
+        "longitude": -80.58303644,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_29_20200803143528.jpg",
+        "total_launch_count": 116,
+        "orbital_launch_attempt_count": 116,
+        "fastest_turnaround": "P15DT22H26M17S"
+    }, {
+        "id": 117,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/117/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 161,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/161/",
+            "name": "United States Air Force",
+            "abbrev": "USAF",
+            "type": {
+                "id": 1,
+                "name": "Government"
+            }
+        }],
+        "name": "Space Launch Complex 13",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Launch_Complex_13",
+        "map_url": "https://www.google.com/maps?q=28.4859,-80.546594",
+        "latitude": 28.4859,
+        "longitude": -80.546594,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_117_20200803143223.jpg",
+        "total_launch_count": 21,
+        "orbital_launch_attempt_count": 21,
+        "fastest_turnaround": "P73DT13H23M"
+    }, {
+        "id": 97,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/97/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 161,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/161/",
+            "name": "United States Air Force",
+            "abbrev": "USAF",
+            "type": {
+                "id": 1,
+                "name": "Government"
+            }
+        }],
+        "name": "Launch Complex 26B",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Air_Force_Station_Launch_Complex_26",
+        "map_url": "https://www.google.com/maps?q=28.4433,-80.5712",
+        "latitude": 28.4433,
+        "longitude": -80.5712,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_97_20200803143224.jpg",
+        "total_launch_count": 6,
+        "orbital_launch_attempt_count": 6,
+        "fastest_turnaround": "P27DT5H31M27S"
+    }, {
+        "id": 118,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/118/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 166,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/166/",
+            "name": "US Navy",
+            "abbrev": "USN",
+            "type": {
+                "id": 1,
+                "name": "Government"
+            }
+        }],
+        "name": "Launch Complex 18A",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Launch_Complex_18",
+        "map_url": "https://www.google.com/maps?q=28.4493,-80.564494",
+        "latitude": 28.4493,
+        "longitude": -80.564494,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_118_20200803143338.jpg",
+        "total_launch_count": 18,
+        "orbital_launch_attempt_count": 11,
+        "fastest_turnaround": "P10DT2H1M6S"
+    }, {
+        "id": 17,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/17/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 1048,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/1048/",
+            "name": "Stoke Space",
+            "abbrev": "Stoke",
+            "type": {
+                "id": 5,
+                "name": "Private"
+            }
+        }],
+        "name": "Space Launch Complex 14",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Air_Force_Station_Launch_Complex_14",
+        "map_url": "https://www.google.com/maps?q=28.49103,-80.54687",
+        "latitude": 28.49103,
+        "longitude": -80.54687,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_17_20200803143405.jpg",
+        "total_launch_count": 20,
+        "orbital_launch_attempt_count": 16,
+        "fastest_turnaround": "P14DT23H44M59S"
+    }, {
+        "id": 80,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/80/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 121,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/121/",
+            "name": "SpaceX",
+            "abbrev": "SpX",
+            "type": {
+                "id": 3,
+                "name": "Commercial"
+            }
+        }],
+        "name": "Space Launch Complex 40",
+        "image": {
+            "id": 2113,
+            "name": "F9 liftoff from SLC-40 (SES-24)",
+            "image_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/f9_liftoff_from_image_20240621050513.jpeg",
+            "thumbnail_url": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/images/f9_liftoff_from_image_thumbnail_20240621050514.jpeg",
+            "credit": "SpaceX",
+            "license": {
+                "id": 5,
+                "name": "CC BY-NC 2.0",
+                "priority": 1,
+                "link": "https://creativecommons.org/licenses/by-nc/2.0/"
+            },
+            "single_use": false,
+            "variants": []
+        },
+        "description": "",
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Air_Force_Station_Space_Launch_Complex_40",
+        "map_url": "https://www.google.com/maps?q=28.56194122,-80.57735736",
+        "latitude": 28.56194122,
+        "longitude": -80.57735736,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_80_20200803143323.jpg",
+        "total_launch_count": 319,
+        "orbital_launch_attempt_count": 319,
+        "fastest_turnaround": "P2DT8H31M10S"
+    }, {
+        "id": 99,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/99/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 161,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/161/",
+            "name": "United States Air Force",
+            "abbrev": "USAF",
+            "type": {
+                "id": 1,
+                "name": "Government"
+            }
+        }],
+        "name": "Launch Complex 12",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Air_Force_Station_Launch_Complex_12",
+        "map_url": "https://www.google.com/maps?q=28.480607,-80.541938",
+        "latitude": 28.480607,
+        "longitude": -80.541938,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_99_20200803143435.jpg",
+        "total_launch_count": 23,
+        "orbital_launch_attempt_count": 21,
+        "fastest_turnaround": "P32DT4H32M2S"
+    }, {
+        "id": 123,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/123/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 161,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/161/",
+            "name": "United States Air Force",
+            "abbrev": "USAF",
+            "type": {
+                "id": 1,
+                "name": "Government"
+            }
+        }],
+        "name": "Launch Complex 5",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Launch_Complex_5",
+        "map_url": "https://www.google.com/maps?q=28.43942,-80.573301",
+        "latitude": 28.43942,
+        "longitude": -80.573301,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_123_20200803143235.jpg",
+        "total_launch_count": 13,
+        "orbital_launch_attempt_count": 7,
+        "fastest_turnaround": "P28DT2H15M"
+    }, {
+        "id": 193,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/193/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 161,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/161/",
+            "name": "United States Air Force",
+            "abbrev": "USAF",
+            "type": {
+                "id": 1,
+                "name": "Government"
+            }
+        }],
+        "name": "Launch Complex 26A",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Air_Force_Station_Launch_Complex_26",
+        "map_url": "https://www.google.com/maps?q=28.4433,-80.5712",
+        "latitude": 28.4433,
+        "longitude": -80.5712,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_space_launch_complex_26a_20210830170946.jpg",
+        "total_launch_count": 3,
+        "orbital_launch_attempt_count": 3,
+        "fastest_turnaround": "P20DT23H10M4S"
+    }, {
+        "id": 206,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/206/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 1030,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/1030/",
+            "name": "Long Wall",
+            "abbrev": "ABL",
+            "type": {
+                "id": 3,
+                "name": "Commercial"
+            }
+        }],
+        "name": "Space Launch Complex 15",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Launch_Complex_15",
+        "map_url": "https://www.google.com/maps?q=28.4963,-80.5493",
+        "latitude": 28.4963,
+        "longitude": -80.5493,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_space_launch_complex_15_20230308080759.jpg",
+        "total_launch_count": 0,
+        "orbital_launch_attempt_count": 0,
+        "fastest_turnaround": null
+    }, {
+        "id": 23,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/23/",
+        "active": false,
+        "agencies": [],
+        "name": "Space Launch Complex 37A",
+        "image": null,
+        "description": "",
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Air_Force_Station_Space_Launch_Complex_37",
+        "map_url": "https://www.google.com/maps?q=28.533482,-80.568101",
+        "latitude": 28.533482,
+        "longitude": -80.568101,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_23_20200803143434.jpg",
+        "total_launch_count": 1,
+        "orbital_launch_attempt_count": 1,
+        "fastest_turnaround": null
+    }, {
+        "id": 72,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/72/",
+        "active": true,
+        "agencies": [],
+        "name": "Unknown Pad",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "",
+        "map_url": "https://www.google.com/maps?q=28.458,-80.528",
+        "latitude": 28.458,
+        "longitude": -80.528,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_72_20200803143403.jpg",
+        "total_launch_count": 0,
+        "orbital_launch_attempt_count": 0,
+        "fastest_turnaround": null
+    }, {
+        "id": 119,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/119/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 161,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/161/",
+            "name": "United States Air Force",
+            "abbrev": "USAF",
+            "type": {
+                "id": 1,
+                "name": "Government"
+            }
+        }],
+        "name": "Launch Complex 18B",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Launch_Complex_18",
+        "map_url": "https://www.google.com/maps?q=28.4493,-80.564494",
+        "latitude": 28.4493,
+        "longitude": -80.564494,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_119_20200803143226.jpg",
+        "total_launch_count": 1,
+        "orbital_launch_attempt_count": 1,
+        "fastest_turnaround": null
+    }, {
+        "id": 120,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/120/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 161,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/161/",
+            "name": "United States Air Force",
+            "abbrev": "USAF",
+            "type": {
+                "id": 1,
+                "name": "Government"
+            }
+        }],
+        "name": "Space Launch Complex 20",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Space_Launch_Complex_20",
+        "map_url": "https://www.google.com/maps?q=28.5122222,-80.5588607",
+        "latitude": 28.5122222,
+        "longitude": -80.5588607,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_120_20200803143230.jpg",
+        "total_launch_count": 4,
+        "orbital_launch_attempt_count": 4,
+        "fastest_turnaround": "P62DT22H25M32S"
+    }, {
+        "id": 121,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/121/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 161,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/161/",
+            "name": "United States Air Force",
+            "abbrev": "USAF",
+            "type": {
+                "id": 1,
+                "name": "Government"
+            }
+        }],
+        "name": "Launch Complex 36A",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Launch_Complex_36",
+        "map_url": "https://www.google.com/maps?q=28.4705556,-80.542194",
+        "latitude": 28.4705556,
+        "longitude": -80.542194,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_121_20200803143231.jpg",
+        "total_launch_count": 69,
+        "orbital_launch_attempt_count": 69,
+        "fastest_turnaround": "P46DT2H55M"
+    }, {
+        "id": 122,
+        "url": "https://lldev.thespacedevs.com/2.3.0/pads/122/",
+        "active": true,
+        "agencies": [{
+            "response_mode": "list",
+            "id": 161,
+            "url": "https://lldev.thespacedevs.com/2.3.0/agencies/161/",
+            "name": "United States Air Force",
+            "abbrev": "USAF",
+            "type": {
+                "id": 1,
+                "name": "Government"
+            }
+        }],
+        "name": "Launch Complex 36B",
+        "image": null,
+        "description": null,
+        "info_url": null,
+        "wiki_url": "https://en.wikipedia.org/wiki/Cape_Canaveral_Launch_Complex_36",
+        "map_url": "https://www.google.com/maps?q=28.4705556,-80.542194",
+        "latitude": 28.4705556,
+        "longitude": -80.542194,
+        "country": {
+            "id": 2,
+            "name": "United States of America",
+            "alpha_2_code": "US",
+            "alpha_3_code": "USA",
+            "nationality_name": "American",
+            "nationality_name_composed": "Americano"
+        },
+        "map_image": "https://thespacedevs-prod.nyc3.digitaloceanspaces.com/media/map_images/pad_122_20200803143232.jpg",
+        "total_launch_count": 76,
+        "orbital_launch_attempt_count": 76,
+        "fastest_turnaround": "P50DT6H10M56S"
+    }]
+}
