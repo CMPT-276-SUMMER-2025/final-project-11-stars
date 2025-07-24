@@ -1,9 +1,13 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Globe from "react-globe.gl";
-import type {basicLaunchDataInterface} from "../model/interfaces.ts";
+import type {
+    basicLaunchDataInterface,
+    detailedLaunchDataInterface,
+    newsOrLaunchDataSidePanelDataInterface
+} from "../model/interfaces.ts";
 
-export const GlobeContainer = ({ basicLaunchData }: { basicLaunchData: basicLaunchDataInterface[] }) => {
-    const basicLaunchDataClone = [...basicLaunchData] // data is cloned to prevent any mutation-related issues
+export const GlobeContainer = (basicLaunchDataArray: basicLaunchDataInterface[], detailedLaunchDataArray: detailedLaunchDataInterface[], setnewsOrLaunchDataSidePanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>) => {
+    const basicLaunchDataArrayClone = [...basicLaunchDataArray] // data is cloned to prevent any mutation-related issues TODO - might be able to delete, test first
     const [dimensions, setDimensions] = useState({
         width: window.innerWidth * 3 / 5,
         height: window.innerHeight
@@ -26,12 +30,24 @@ export const GlobeContainer = ({ basicLaunchData }: { basicLaunchData: basicLaun
                 height={dimensions.height}
                 animateIn={true}
                 globeImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg"
-                pointsData={basicLaunchDataClone}
+                pointsData={basicLaunchDataArrayClone}
                 pointAltitude={0.02}
                 pointColor={() => 'red'}
                 pointRadius={0.5}
-                onPointClick={() => {
-                    console.log("test"); //TODO - remove when feature #2 frontend added
+                onPointClick={(point) => {
+                    // Fix for IDE/linter rroneously assuming that point does not have an "id" member
+                    // @ts-ignore
+                    const pointID = point.id;
+                    const matchingDetailedLaunchDataObject = detailedLaunchDataArray.find((detailedObject) => (detailedObject.id === pointID));
+                    if (matchingDetailedLaunchDataObject) {
+                        setnewsOrLaunchDataSidePanelData({
+                            contentType: "launchDetails",
+                            content: matchingDetailedLaunchDataObject
+                        })
+                    } else {
+                        console.log("error: no detailed launch info found for id:", pointID);
+                        //todo - display this to the user isntead of console logging it
+                    }
                 }}
             />
         </div>

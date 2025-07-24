@@ -57,5 +57,14 @@ export interface newsFeedDataInterface {
 //todo - remove two end strings
 export interface newsOrLaunchDataSidePanelDataInterface {
   contentType: "loading" | "newsFeed" | "launchDetails";
-  content: "" | newsFeedDataInterface[] | detailedLaunchDataInterface| "testLaunchDetails";
+  content: "" | newsFeedDataInterface[] | detailedLaunchDataInterface;
+}
+
+// todo - remove globePointInterface because it might not be needed
+export interface globePointInterface {
+  id: string;
+  name: string;
+  lng: number;
+  lat: number;
+  __threeObjPoint?: any; // irerelevant but required
 }
