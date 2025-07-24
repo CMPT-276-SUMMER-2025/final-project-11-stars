@@ -9,7 +9,13 @@ import {loadNewsFeedData} from "../model/events.ts";
 
 const InvalidDateRangeAlert = () => (
     <Alert severity="error" style={{width: "45%"}}>
-        End date must be the same or after the start date.
+        Start date cannot be after end date.
+    </Alert>
+);
+
+const NoDataForRangeAlert = () => (
+    <Alert severity="warning" style={{width: "45%"}}>
+        No launches available for this date range.
     </Alert>
 );
 
@@ -18,7 +24,7 @@ const ValidDateRangeAlert = () => (
         Date range is valid.
     </Alert>
 );
-
+//
 export const setNewLaunchData = async (
     launchSearchStartDate: type_dayjs,
     launchSearchEndDate: type_dayjs,
@@ -44,6 +50,7 @@ export const LaunchDateRangePickersAndSubmitButton = (
     setlaunchSearchStartDate: React.Dispatch<React.SetStateAction<type_dayjs>>,
     launchSearchEndDate: type_dayjs,
     setlaunchSearchEndDate: React.Dispatch<React.SetStateAction<type_dayjs>>,
+    basicLaunchDataArray: basicLaunchDataInterface[],
     setbasicLaunchData: React.Dispatch<React.SetStateAction<basicLaunchDataInterface[]>>,
     setdetailedLaunchData: React.Dispatch<React.SetStateAction<detailedLaunchDataInterface[]>>
 ) => {
@@ -88,6 +95,7 @@ export const LaunchDateRangePickersAndSubmitButton = (
                         views={['year', 'month']}
                         label="Start Date"
                         value={launchSearchStartDate}
+                        disabled={loading}
                         onChange={(newValue) => {
                             if (newValue && newValue != launchSearchStartDate) {
                                 setlaunchSearchStartDate(newValue.startOf('month'))
@@ -106,6 +114,7 @@ export const LaunchDateRangePickersAndSubmitButton = (
                         views={['year', 'month']}
                         label="End Date"
                         value={launchSearchEndDate}
+                        disabled={loading}
                         onChange={(newValue) => {
                             if (newValue && newValue != launchSearchEndDate) {
                                 setlaunchSearchEndDate(newValue.endOf('month'))
@@ -121,12 +130,13 @@ export const LaunchDateRangePickersAndSubmitButton = (
                 </div>
             </div>
             <div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-evenly"}}>
-                {launchSearchStartDate && launchSearchEndDate ? (
-                    launchSearchEndDate.endOf('month').isBefore(launchSearchStartDate.startOf('month'))
-                        ? <InvalidDateRangeAlert/>
-                        : <ValidDateRangeAlert/>
-                ) : null}
-
+                launchSearchEndDate.endOf('month').isBefore(launchSearchStartDate.startOf('month')) ? (
+                    <InvalidDateRangeAlert/>
+                ) : (!loading && basicLaunchDataArray.length === 0) ? (
+                    <NoDataForRangeAlert/>
+                ) : (
+                    <ValidDateRangeAlert/>
+                )
                 <div style={{display: "flex", width: "45%"}}>
                     <Button
                         variant="contained"
