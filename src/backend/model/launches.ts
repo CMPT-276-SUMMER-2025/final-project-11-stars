@@ -1,5 +1,8 @@
 import axios from 'axios';
 import type {basicLaunchDataInterface, detailedLaunchDataInterface} from './interfaces.ts';
+import {Dayjs as type_dayjs} from "dayjs";
+import React from "react";
+import {loadLaunchesOverTimePeriod} from "../controllers/launches_controller.ts";
 
 /**
  * Handles business logic and access to data in relation to orbital launches.
@@ -74,7 +77,7 @@ const loadLaunchesOverTime = async (startDate: string, endDate: string) => {
             */
             return launchObject;
         });
-    return detailedLaunchDataArray;
+        return detailedLaunchDataArray;
 
     } catch (error) {
         console.error('Error fetching launches', error);
@@ -140,10 +143,31 @@ function extractBasicLaunchDataFromDetailedLaunchData(
     }));
 }
 
+const setLaunchData = async (
+    launchSearchStartDate: type_dayjs,
+    launchSearchEndDate: type_dayjs,
+    setbasicLaunchData: React.Dispatch<React.SetStateAction<basicLaunchDataInterface[]>>,
+    setdetailedLaunchData: React.Dispatch<React.SetStateAction<detailedLaunchDataInterface[]>>
+) => {
+    const ISOStartDate = launchSearchStartDate.toISOString();
+    const ISOEndDate = launchSearchEndDate.toISOString();
+    try {
+        const newDetailedLaunchData = await loadLaunchesOverTimePeriod(ISOStartDate, ISOEndDate);
+        setdetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]);
+        console.log("handleClickSubmitButton, newDetailedLaunchData: ", newDetailedLaunchData) //todo - remove when done testing
+        const newBasicLaunchData = extractBasicLaunchDataFromDetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]);
+        console.log("handleClickSubmitButton, newBasicLaunchData: ", newBasicLaunchData) //todo - remove when done testing
+        setbasicLaunchData(newBasicLaunchData);
+    } catch (error) {
+        console.log("error getting/setting new launch data", error);
+    }
+}
+
 export {
     loadLaunchesOverTime,
     getLaunchesAsList,
     getLaunchById,
     setFieldsWithNoDataToNull,
-    extractBasicLaunchDataFromDetailedLaunchData
+    extractBasicLaunchDataFromDetailedLaunchData,
+    setLaunchData
 }

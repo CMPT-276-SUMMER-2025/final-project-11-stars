@@ -7,7 +7,8 @@ export const Footer = () => {
             width: "100%",
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-between", pointerEvents: "none",
+            justifyContent: "space-between",
+            pointerEvents: "none",
         }}>
             <div>
                 © Anton, Bidisha, Paul & Sadab (Group 11 - "Stars") | 2025

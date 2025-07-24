@@ -1,4 +1,8 @@
-import {loadLaunchesOverTime, getLaunchesAsList, getLaunchById} from "../model/launches.js"
+import {
+    loadLaunchesOverTime,
+    getLaunchesAsList
+} from "../model/launches.js"
+
 
 /**
  * Dates are expected to be in ISO 8601 format.
@@ -16,8 +20,11 @@ const getLaunches = () => {
     return getLaunchesAsList();
 }
 
+/*
+// Unused ATM - if readding, don't forget to re-add to exports
 const getLaunch = (id: string) => {
     return getLaunchById(id);
 }
+ */
 
-export {loadLaunchesOverTimePeriod, getLaunches, getLaunch}
+export {loadLaunchesOverTimePeriod, getLaunches}

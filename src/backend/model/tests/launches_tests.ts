@@ -1,8 +1,7 @@
 import * as launchesC from "../../controllers/launches_controller.js";
 import * as launches from "../launches.js"
-
 import axios from "axios";
-
+// TODO - remove @ts-ignore and add proper typing
 /**
  * File for unit testing model in relation to api-1-feature-1/2.
  */
@@ -36,8 +35,11 @@ async function testLoadLaunchesOverTime(startDate: string, endDate: string) {
 
 /**
  * Testing @setFieldsWithNoDataToNull in launches.js.
+ * @param mockLaunchObject
  * @param message Used to indicate child object was tested.
  */
+
+//@ts-ignore
 function testSetFieldsWithNoDataToNull(mockLaunchObject, message) {
     // test function directly in launches.js 
 
@@ -51,10 +53,8 @@ function testSetFieldsWithNoDataToNull(mockLaunchObject, message) {
 
     for (let key in mockLaunchObject) {
         if (mockLaunchObject.hasOwnProperty(key)){
-            if (mockLaunchObject[key] === null) {
-                continue;
-
-            } else if(Array.isArray(mockLaunchObject[key])) {
+            // if the key is null, it should stay that way
+            if(Array.isArray(mockLaunchObject[key])) {
                 // if field if an array
                 if(mockLaunchObject[key].length == 0) {
                     console.log("FAIL : The object has a field that is an empty array that was not set to null.")
@@ -82,6 +82,7 @@ function testSetFieldsWithNoDataToNull(mockLaunchObject, message) {
 /**
  * Used to prints the fields of the object after the "no data" fields have been set to null.
  */
+//@ts-ignore
 function printFieldsOfObject(object, prefix) {
 
     for(let key in object) {
