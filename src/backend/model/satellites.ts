@@ -1,7 +1,8 @@
+// @ts-ignore
 import axios from "axios";
 import type {satelliteTLEInterface} from "./interfaces.ts";
-import React from "react";
 import * as satellite from "satellite.js";
+import celestrak from "../../example-jsons/celestrak.json"
 
 export function parseRawTLEStringIntoTLEObjectArray(
     rawTLEString: string
@@ -26,11 +27,9 @@ export function parseRawTLEStringIntoTLEObjectArray(
     return parsedTLEObjectArray;
 }
 
-export const load100BrightestSatellites = async (
-    setsatelliteTLEArray: React.Dispatch<React.SetStateAction<satelliteTLEInterface[]>>
-) => {
-    const CELESTRAK_URL =
-        "https://www.celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle";
+export const load100BrightestSatellites = async (): Promise<satelliteTLEInterface[]> => {
+    /*
+    const CELESTRAK_URL = "https://www.celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle";
     try {
         const response = await axios.get(CELESTRAK_URL);
         if (response.status !== 200) {
@@ -39,11 +38,12 @@ export const load100BrightestSatellites = async (
         const parsedTLEObjectArray = parseRawTLEStringIntoTLEObjectArray(
             response.data
         );
-        console.log(parsedTLEObjectArray);
-        setsatelliteTLEArray(parsedTLEObjectArray);
-    } catch (error) {
+        } catch (error) {
         console.error("Error fetching launches", error);
     }
+     */
+    // USE JSON DATA TO AVOID GETTING IP BANNED LOL
+    return parseRawTLEStringIntoTLEObjectArray(celestrak[0].data);
 };
 
 export const getSatellitePositionAtTime = (
@@ -72,27 +72,27 @@ export const getSatellitePositionAtTime = (
 }
 
 export const getPositionsFromTLEArray = (
-  tleArray: satelliteTLEInterface[],
-  time: Date
+    tleArray: satelliteTLEInterface[],
+    time: Date
 ) => {
-  // Map each satellite TLE to a position object or null if unavailable
-  const positionsOrNull = tleArray.map((satellite) => {
-    const position = getSatellitePositionAtTime(satellite.line1, satellite.line2, time);
+    // Map each satellite TLE to a position object or null if unavailable
+    const positionsOrNull = tleArray.map((satellite) => {
+        const position = getSatellitePositionAtTime(satellite.line1, satellite.line2, time);
 
-    if (!position) {
-      // Could not compute position for this satellite -> set to null.
-      // This is filtered out before the getPositionsFromTLEArray return.
-      return null;
-    }
+        if (!position) {
+            // Could not compute position for this satellite -> set to null.
+            // This is filtered out before the getPositionsFromTLEArray return.
+            return null;
+        }
 
-    return {
-      ...position,
-      id: satellite.name,
-      name: satellite.name,
-    };
-  });
+        return {
+            ...position,
+            id: satellite.name,
+            name: satellite.name,
+        };
+    });
 
-  // Filter out all nulls
-  return positionsOrNull.filter(pos => pos !== null);
+    // Filter out all nulls
+    return positionsOrNull.filter(pos => pos !== null);
 };
 

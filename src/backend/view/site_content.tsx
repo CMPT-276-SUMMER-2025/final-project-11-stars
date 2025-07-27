@@ -101,8 +101,8 @@ export const SiteContent = (
     basicLaunchDataArray: basicLaunchDataInterface[], setbasicLaunchDataArray: React.Dispatch<React.SetStateAction<basicLaunchDataInterface[]>>,
     newsFeedDataArray: newsFeedDataInterface[], setnewsFeedDataArray: React.Dispatch<React.SetStateAction<newsFeedDataInterface[]>>,
     newsOrLaunchDataSidePanelData: newsOrLaunchDataSidePanelDataInterface, setnewsOrLaunchDataSidePanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>,
-    _satelliteTLEArray: satelliteTLEInterface[], _setsatelliteTLEArray: React.Dispatch<React.SetStateAction<satelliteTLEInterface[]>>
-    ) => {
+    satelliteTLEArray: satelliteTLEInterface[], setsatelliteTLEArray: React.Dispatch<React.SetStateAction<satelliteTLEInterface[]>>
+) => {
     return (
         <div style={{
             display: "flex",
@@ -112,7 +112,7 @@ export const SiteContent = (
             width: "100%",
             height: "100%"
         }}>
-            {GlobeContainer(basicLaunchDataArray, detailedLaunchDataArray, setnewsOrLaunchDataSidePanelData)}
+            {GlobeContainer(basicLaunchDataArray, detailedLaunchDataArray, satelliteTLEArray, setsatelliteTLEArray, setnewsOrLaunchDataSidePanelData)}
             <>
                 <div style={{
                     width: window.innerWidth * (2 / 5),
