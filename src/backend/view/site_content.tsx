@@ -5,7 +5,8 @@ import type {
     basicLaunchDataInterface,
     detailedLaunchDataInterface,
     newsFeedDataInterface,
-    newsOrLaunchDataSidePanelDataInterface
+    newsOrLaunchDataSidePanelDataInterface,
+    satelliteTLEInterface
 } from "../model/interfaces.ts";
 import {Dayjs as type_dayjs} from "dayjs"
 import {AnimatePresence, motion} from "framer-motion";
@@ -100,7 +101,8 @@ export const SiteContent = (
     basicLaunchDataArray: basicLaunchDataInterface[], setbasicLaunchDataArray: React.Dispatch<React.SetStateAction<basicLaunchDataInterface[]>>,
     newsFeedDataArray: newsFeedDataInterface[], setnewsFeedDataArray: React.Dispatch<React.SetStateAction<newsFeedDataInterface[]>>,
     newsOrLaunchDataSidePanelData: newsOrLaunchDataSidePanelDataInterface, setnewsOrLaunchDataSidePanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>,
-) => {
+    _satelliteTLEArray: satelliteTLEInterface[], _setsatelliteTLEArray: React.Dispatch<React.SetStateAction<satelliteTLEInterface[]>>
+    ) => {
     return (
         <div style={{
             display: "flex",
