@@ -7,8 +7,9 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {useState} from "react";
 import type {
     basicLaunchDataInterface,
-    detailedLaunchDataInterface, newsFeedDataInterface,
-    newsOrLaunchDataSidePanelDataInterface
+    detailedLaunchDataInterface,
+    newsFeedDataInterface, newsOrLaunchDataSidePanelDataInterface,
+    satelliteTLEInterface
 } from "./backend/model/interfaces.ts";
 import dayjs, {Dayjs as type_dayjs} from "dayjs"
 
@@ -31,6 +32,7 @@ const App = () => {
         contentType: "loading",
         content: ""
     });
+    const [satelliteTLEArray, setsatelliteTLEArray] = useState<satelliteTLEInterface[]>([]);
 
     return (<>
             <ThemeProvider theme={darkTheme}>
@@ -41,7 +43,8 @@ const App = () => {
                         detailedLaunchDataArray, setdetailedLaunchDataArray,
                         basicLaunchDataArray, setbasicLaunchDataArray,
                         newsFeedDataArray, setnewsFeedDataArray,
-                        newsOrLaunchDataSidePanelData, setnewsOrLaunchDataSidePanelData)}
+                        newsOrLaunchDataSidePanelData, setnewsOrLaunchDataSidePanelData,
+                        satelliteTLEArray, setsatelliteTLEArray)}
                     {Footer()}
                 </LocalizationProvider>
             </ThemeProvider>

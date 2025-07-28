@@ -1,5 +1,5 @@
-import * as launchesC from "../../controllers/launches_controller.js";
-import * as launches from "../launches.js"
+import * as launchesC from "../../../controllers/launches_controller.js";
+import * as launches from "../../launches.js"
 import axios from "axios";
 // TODO - remove @ts-ignore and add proper typing
 /**
