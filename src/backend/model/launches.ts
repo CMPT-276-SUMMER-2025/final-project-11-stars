@@ -4,6 +4,8 @@ import {Dayjs as type_dayjs} from "dayjs";
 import React from "react";
 import {loadLaunchesOverTimePeriod} from "../controllers/launches_controller.ts";
 
+const isDevMode = import.meta.env.VITE_CUSTOM_DEV_MODE === "true";
+
 /**
  * Handles business logic and access to data in relation to orbital launches.
  */
@@ -17,71 +19,78 @@ let detailedLaunchDataArray: detailedLaunchDataInterface[];
  * @param endDate Expected to be ISO 8601 format.
  */
 const loadLaunchesOverTime = async (startDate: string, endDate: string) => {
-    const LAUNCHES_URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`;
-    try {
-        let response = await axios.get(LAUNCHES_URL)
+    const REAL_LAUNCHES_URL = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`;
+    const BACKUP_LAUNCHES_URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`;
+    let response;
 
-        detailedLaunchDataArray = response.data.results.map((launch: any) => { //todo - figure out typing for launch variable because auto-typing might not work properly.
-            let launchServiceProvider = launch.launch_service_provider;
-            let launchRocketConfig = launch.rocket.configuration;
-
-            let launchObject = {
-                id: launch.id,
-                launchName: launch.name,
-                imageURL: launch.image.image_url,
-                launchStatus: launch.status.abbrev,
-                launchDate: (launch.window_start == null) ? "Not Launched Yet" : launch.window_start,
-
-                // launch location is just location of pad
-                location: {
-                    longitude: launch.pad.longitude,
-                    latitude: launch.pad.latitude
-                },
-
-                pad: {
-                    name: launch.pad.name,
-                    image: launch.pad.image.image_url
-                },
-
-                agency: {
-                    name: launchServiceProvider.name,
-                    description: launchServiceProvider.description,
-                    logo: launchServiceProvider.logo.image_url,
-                    link: launchServiceProvider.info_url
-                },
-
-                launcherConfiguration: {
-                    name: launchRocketConfig.full_name,
-                    image: launchRocketConfig.image.image_url,
-                    infoURL: launchRocketConfig.info_url,
-                    wikiURL: launchRocketConfig.wiki_url,
-
-                    totalSuccessfulLaunches: launchRocketConfig.successful_launches,
-                    totalLaunches: launchRocketConfig.total_launch_count,
-
-                    height: launchRocketConfig.length,
-                    diameter: launchRocketConfig.diameter,
-                    launchMass: launchRocketConfig.launch_mass,
-                    launchCost: launchRocketConfig.launch_cost,
-
-                    isReusable: launchRocketConfig.reusable,
-
-                    manufacturer: launchRocketConfig.manufacturer.name
-                }
-            };
-            /*
-            // TODO - fix setFieldsWithNoDataToNull - currently sets filteredLaunchObject to nested arrays with nothing in them
-            const filteredLaunchObject = setFieldsWithNoDataToNull(detailedLaunchDataArray);
-            console.log(filteredLaunchObject);
-            return filteredLaunchObject;
-            */
-            return launchObject;
-        });
-        return detailedLaunchDataArray;
-
-    } catch (error) {
-        console.error('Error fetching launches', error);
+    if (isDevMode) {
+        // If we're in dev mode, skip calling the real API.
+        response = await axios.get(BACKUP_LAUNCHES_URL);
+    } else {
+        try {
+            response = await axios.get(REAL_LAUNCHES_URL);
+        } catch (error) {
+            console.warn("Failed to load from LL2 Launches API. Falling back to dev/backup API.", error);
+            response = await axios.get(BACKUP_LAUNCHES_URL);
+        }
     }
+    detailedLaunchDataArray = response.data.results.map((launch: any) => { //todo - figure out typing for launch variable because auto-typing might not work properly.
+        let launchServiceProvider = launch.launch_service_provider;
+        let launchRocketConfig = launch.rocket.configuration;
+
+        let launchObject = {
+            id: launch.id,
+            launchName: launch.name,
+            imageURL: launch.image.image_url,
+            launchStatus: launch.status.abbrev,
+            launchDate: (launch.window_start == null) ? "Not Launched Yet" : launch.window_start,
+
+            // launch location is just location of pad
+            location: {
+                longitude: launch.pad.longitude,
+                latitude: launch.pad.latitude
+            },
+
+            pad: {
+                name: launch.pad.name,
+                image: launch.pad.image.image_url
+            },
+
+            agency: {
+                name: launchServiceProvider.name,
+                description: launchServiceProvider.description,
+                logo: launchServiceProvider.logo.image_url,
+                link: launchServiceProvider.info_url
+            },
+
+            launcherConfiguration: {
+                name: launchRocketConfig.full_name,
+                image: launchRocketConfig.image.image_url,
+                infoURL: launchRocketConfig.info_url,
+                wikiURL: launchRocketConfig.wiki_url,
+
+                totalSuccessfulLaunches: launchRocketConfig.successful_launches,
+                totalLaunches: launchRocketConfig.total_launch_count,
+
+                height: launchRocketConfig.length,
+                diameter: launchRocketConfig.diameter,
+                launchMass: launchRocketConfig.launch_mass,
+                launchCost: launchRocketConfig.launch_cost,
+
+                isReusable: launchRocketConfig.reusable,
+
+                manufacturer: launchRocketConfig.manufacturer.name
+            }
+        };
+        /*
+        // TODO - fix setFieldsWithNoDataToNull - currently sets filteredLaunchObject to nested arrays with nothing in them
+        const filteredLaunchObject = setFieldsWithNoDataToNull(detailedLaunchDataArray);
+        console.log(filteredLaunchObject);
+        return filteredLaunchObject;
+        */
+        return launchObject;
+    });
+    return detailedLaunchDataArray;
 }
 
 const getLaunchesAsList = () => {

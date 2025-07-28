@@ -1,8 +1,24 @@
 import type {newsFeedDataInterface} from "../../model/interfaces.ts";
 import dayjs from "dayjs";
 import Image from "mui-image";
-import {LinearProgress, Link, Typography} from "@mui/material";
+import {Alert, LinearProgress, Link, Typography} from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
+
+const NoNewsAlert = () => {
+    return (
+        <div style={{
+            display: "flex",
+            width: '100%',
+            height: "100%",
+            justifyContent: "center",
+            alignItems: "center"
+        }}>
+            <Alert severity="error" style={{width: "100%"}}>
+                News is currently unavailable - check in later.
+            </Alert>
+        </div>
+    );
+}
 
 const newsFeedItem = (content: newsFeedDataInterface) => {
     const formattedDate = dayjs(content.date).format('MMMM Do, YYYY');
@@ -78,9 +94,15 @@ export const NewsFeed = (content: newsFeedDataInterface[]) => {
         height: "100%",
         gap: "1rem"
     }}>
-        <Typography variant={"h5"} align={"center"}>News Feed</Typography>
-        {newsFeedItem(content[0])}
-        {newsFeedItem(content[1])}
-        {newsFeedItem(content[2])}
+        {content == undefined || content.length < 3 ? (
+            <NoNewsAlert/>
+        ) : (
+            <>
+                <Typography variant={"h5"} align={"center"}>News Feed</Typography>
+                {newsFeedItem(content[0])}
+                {newsFeedItem(content[1])}
+                {newsFeedItem(content[2])}
+            </>
+        )}
     </div>)
 }
