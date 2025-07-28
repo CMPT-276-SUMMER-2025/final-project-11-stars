@@ -29,6 +29,7 @@ export function parseRawTLEStringIntoTLEObjectArray(
 
 export const load100BrightestSatellites = async (): Promise<satelliteTLEInterface[]> => {
     /*
+    // Real API Call
     const CELESTRAK_URL = "https://www.celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle";
     try {
         const response = await axios.get(CELESTRAK_URL);
@@ -42,7 +43,7 @@ export const load100BrightestSatellites = async (): Promise<satelliteTLEInterfac
         console.error("Error fetching launches", error);
     }
      */
-    // USE JSON DATA TO AVOID GETTING IP BANNED LOL
+    // Example Data from JSON file
     return parseRawTLEStringIntoTLEObjectArray(celestrak[0].data);
 };
 
