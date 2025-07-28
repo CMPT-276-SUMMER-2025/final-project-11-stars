@@ -154,9 +154,9 @@ const setLaunchData = async (
     try {
         const newDetailedLaunchData = await loadLaunchesOverTimePeriod(ISOStartDate, ISOEndDate);
         setdetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]);
-        console.log("handleClickSubmitButton, newDetailedLaunchData: ", newDetailedLaunchData) //todo - remove when done testing
+        // console.log("handleClickSubmitButton, newDetailedLaunchData: ", newDetailedLaunchData) //todo - remove when done testing
         const newBasicLaunchData = extractBasicLaunchDataFromDetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]);
-        console.log("handleClickSubmitButton, newBasicLaunchData: ", newBasicLaunchData) //todo - remove when done testing
+        // console.log("handleClickSubmitButton, newBasicLaunchData: ", newBasicLaunchData) //todo - remove when done testing
         setbasicLaunchData(newBasicLaunchData);
     } catch (error) {
         console.log("error getting/setting new launch data", error);

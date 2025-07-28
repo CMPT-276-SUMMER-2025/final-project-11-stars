@@ -46,16 +46,29 @@ export interface detailedLaunchDataInterface {
 }
 
 export interface newsFeedDataInterface {
-  imageURL: string;
-  sourceURL: string;
-  headline: string;
-  eventType: string;
-  date: string;
-  bodyText: string;
+    imageURL: string;
+    sourceURL: string;
+    headline: string;
+    eventType: string;
+    date: string;
+    bodyText: string;
 }
 
 export interface newsOrLaunchDataSidePanelDataInterface {
-  contentType: "loading" | "newsFeed" | "launchDetails";
-  content: "" | newsFeedDataInterface[] | detailedLaunchDataInterface;
+    contentType: "loading" | "newsFeed" | "launchDetails";
+    content: "" | newsFeedDataInterface[] | detailedLaunchDataInterface;
 }
 
+export interface satelliteTLEInterface {
+    name: string;
+    line1: string;
+    line2: string;
+}
+
+export interface satellitePositionInterface {
+    lat: number;
+    lng: number;
+    alt: number;
+    id: string;
+    name: string;
+}
