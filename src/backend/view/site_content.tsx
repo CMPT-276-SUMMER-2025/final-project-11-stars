@@ -28,13 +28,13 @@ const SidePanelWithAnimatedTransitions = (
     useEffect(() => {
         (async () => {
             setPanelData({contentType: "loading", content: ""});
-            let newsFeedDataAsArray;
+            let newsFeedDataIntermediateArray;
             try {
-                // I have to use an intermediate variable or the code breaks - Anton TODO - look into this
-                newsFeedDataAsArray = await loadNewsFeedData()
-                setnewsFeedDataArray(await loadNewsFeedData());
+                // Use of an intermediate variable is required here, as the state doesn't get updated internally.
+                newsFeedDataIntermediateArray = await loadNewsFeedData()
+                setnewsFeedDataArray(newsFeedDataIntermediateArray);
             } finally {
-                setPanelData({contentType: "newsFeed", content: newsFeedDataAsArray});
+                setPanelData({contentType: "newsFeed", content: newsFeedDataIntermediateArray});
             }
         })();
     }, []);

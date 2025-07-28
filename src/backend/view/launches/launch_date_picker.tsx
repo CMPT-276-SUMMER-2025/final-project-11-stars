@@ -8,7 +8,6 @@ import type {
     newsOrLaunchDataSidePanelDataInterface
 } from "../../model/interfaces.ts";
 import {setLaunchData} from "../../model/launches.ts"
-import {loadNewsFeedData} from "../../model/events.ts";
 
 const APIErrorAlert = () => (
     // TODO - implement in the alert box section.
@@ -79,7 +78,6 @@ export const LaunchDateRangePicker = (
     // Create default data as soon as the component mounts.
     useEffect(() => {
         (async () => {
-            await loadNewsFeedData() // this should really be moved up, coz it doesn't belong in this function. actually, all the data-loading stuff should be refactored out of here
             seterrorLoadingLaunchDataFromAPI(false);
             setisloadingLaunchDataFromAPI(true);
             try {
