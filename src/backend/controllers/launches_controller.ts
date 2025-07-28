@@ -27,4 +27,7 @@ const getLaunch = (id: string) => {
 }
  */
 
-export {loadLaunchesOverTimePeriod, getLaunches}
+export {
+    loadLaunchesOverTimePeriod, 
+    getLaunches
+}

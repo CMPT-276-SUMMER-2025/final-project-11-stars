@@ -33,4 +33,6 @@ const loadNewsFeedData = async () => {
     }
 }
 
-export {loadNewsFeedData}
+export {
+    loadNewsFeedData
+}
