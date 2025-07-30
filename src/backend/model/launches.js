@@ -39,7 +39,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setLaunchData = exports.setFieldsWithNoDataToNull = exports.getLaunchById = exports.getLaunchesAsList = exports.loadLaunchesOverTime = void 0;
 exports.extractBasicLaunchDataFromDetailedLaunchData = extractBasicLaunchDataFromDetailedLaunchData;
 var axios_1 = require("axios");
-var launches_controller_ts_1 = require("../controllers/launches_controller.ts");
 /**
  * Handles business logic and access to data in relation to orbital launches.
  */
@@ -100,13 +99,9 @@ var loadLaunchesOverTime = function (startDate, endDate) { return __awaiter(void
                             manufacturer: launchRocketConfig.manufacturer.name
                         }
                     };
-                    /*
-                    // TODO - fix setFieldsWithNoDataToNull - currently sets filteredLaunchObject to nested arrays with nothing in them
-                    const filteredLaunchObject = setFieldsWithNoDataToNull(detailedLaunchDataArray);
+                    var filteredLaunchObject = setFieldsWithNoDataToNull(launchObject);
                     console.log(filteredLaunchObject);
                     return filteredLaunchObject;
-                    */
-                    return launchObject;
                 });
                 return [2 /*return*/, detailedLaunchDataArray];
             case 3:
@@ -152,8 +147,8 @@ var setFieldsWithNoDataToNull = function (launchObject) {
                     launchObject[key] = null;
                 }
             }
-            else if (typeof launchObject[key] === "object") {
-                // if field is an object
+            else if (typeof launchObject[key] === "object" && launchObject[key] != null) {
+                // if field is an object but not null
                 setFieldsWithNoDataToNull(launchObject[key]);
             }
             else if (invalidPrimitives.includes(launchObject[key])) {
@@ -186,13 +181,12 @@ var setLaunchData = function (launchSearchStartDate, launchSearchEndDate, setbas
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, (0, launches_controller_ts_1.loadLaunchesOverTimePeriod)(ISOStartDate, ISOEndDate)];
+                return [4 /*yield*/, loadLaunchesOverTime(ISOStartDate, ISOEndDate)];
             case 2:
                 newDetailedLaunchData = _a.sent();
                 setdetailedLaunchData(newDetailedLaunchData);
-                console.log("handleClickSubmitButton, newDetailedLaunchData: ", newDetailedLaunchData); //todo - remove when done testing
                 newBasicLaunchData = extractBasicLaunchDataFromDetailedLaunchData(newDetailedLaunchData);
-                console.log("handleClickSubmitButton, newBasicLaunchData: ", newBasicLaunchData); //todo - remove when done testing
+                // console.log("handleClickSubmitButton, newBasicLaunchData: ", newBasicLaunchData) //todo - remove when done testing
                 setbasicLaunchData(newBasicLaunchData);
                 return [3 /*break*/, 4];
             case 3:

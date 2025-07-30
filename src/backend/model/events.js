@@ -36,36 +36,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBasicDataFromLaunches = exports.getLaunches = exports.loadLaunchesOverTimePeriod = void 0;
-var launches_1 = require("../model/launches");
-/**
- * Dates are expected to be in ISO 8601 format.
- * Will load all the launches to be within a certain time frame.
- *
- * IMPORTANT : Must use 'await' when calling this method such as (await loadLaunchesOverTimePeriod),
- * otherwise, if @getLaunch is called immediately after, the launches may not have been loaded yet,
- * therefore @getLaunch will return an empty list.
- */
-var loadLaunchesOverTimePeriod = function (startDate, endDate) { return __awaiter(void 0, void 0, void 0, function () {
+exports.loadNewsFeedData = void 0;
+var axios_1 = require("axios");
+var loadNewsFeedData = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var EVENTS_URL, response, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, launches_1.loadLaunchesOverTime)(startDate, endDate)];
-            case 1: return [2 /*return*/, _a.sent()];
+            case 0:
+                EVENTS_URL = "https://lldev.thespacedevs.com/2.3.0/events/?limit=3&?ordering=-last_updated";
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, axios_1.default.get(EVENTS_URL)];
+            case 2:
+                response = _a.sent();
+                return [2 /*return*/, response.data.results.map(function (event) {
+                        var URL;
+                        if (event.vid_urls.length != 0) {
+                            URL = event.vid_urls[0];
+                        }
+                        else if (event.info_urls.length != 0) {
+                            URL = event.info_urls[0];
+                        }
+                        else {
+                            URL = null;
+                        }
+                        var eventObject = {
+                            bodyText: event.description,
+                            date: event.date,
+                            eventType: event.type.name,
+                            headline: event.name,
+                            imageURL: event.image.image_url,
+                            sourceURL: URL
+                        };
+                        // todo - filter data like in launches.ts
+                        return eventObject;
+                    })];
+            case 3:
+                error_1 = _a.sent();
+                console.error('Error fetching events', error_1);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
-exports.loadLaunchesOverTimePeriod = loadLaunchesOverTimePeriod;
-var getLaunches = function () {
-    return (0, launches_1.getLaunchesAsList)();
-};
-exports.getLaunches = getLaunches;
-/*
-// Unused ATM - if readding, don't forget to re-add to exports
-const getLaunch = (id: string) => {
-    return getLaunchById(id);
-}
- */
-var getBasicDataFromLaunches = function () {
-    return (0, launches_1.extractBasicLaunchDataFromDetailedLaunchData)((0, launches_1.getLaunchesAsList)());
-};
-exports.getBasicDataFromLaunches = getBasicDataFromLaunches;
+exports.loadNewsFeedData = loadNewsFeedData;

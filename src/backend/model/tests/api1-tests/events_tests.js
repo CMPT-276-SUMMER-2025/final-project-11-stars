@@ -36,36 +36,54 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBasicDataFromLaunches = exports.getLaunches = exports.loadLaunchesOverTimePeriod = void 0;
-var launches_1 = require("../model/launches");
-/**
- * Dates are expected to be in ISO 8601 format.
- * Will load all the launches to be within a certain time frame.
- *
- * IMPORTANT : Must use 'await' when calling this method such as (await loadLaunchesOverTimePeriod),
- * otherwise, if @getLaunch is called immediately after, the launches may not have been loaded yet,
- * therefore @getLaunch will return an empty list.
- */
-var loadLaunchesOverTimePeriod = function (startDate, endDate) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, launches_1.loadLaunchesOverTime)(startDate, endDate)];
-            case 1: return [2 /*return*/, _a.sent()];
-        }
+var eventsC = require("../../events");
+var axios_1 = require("axios");
+function testLoadNews() {
+    return __awaiter(this, void 0, void 0, function () {
+        var eventsFromModel, URL, result, eventsFromAPI, errorMessage, i, eventModel, eventAPI;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, eventsC.loadNewsFeedData()];
+                case 1:
+                    eventsFromModel = _a.sent();
+                    URL = "https://lldev.thespacedevs.com/2.3.0/events/?limit=3&?ordering=-last_updated";
+                    return [4 /*yield*/, axios_1.default.get(URL)];
+                case 2:
+                    result = (_a.sent());
+                    eventsFromAPI = result.data.results;
+                    errorMessage = "";
+                    if (eventsFromAPI.length != eventsFromModel.length) {
+                        errorMessage = "FAIL, the number of feteched events are not equal. Lengths were ".concat(eventsFromModel.length, " and ").concat(eventsFromAPI.length);
+                        console.log(errorMessage);
+                        return [2 /*return*/, false];
+                    }
+                    for (i = 0; i < eventsFromModel.length; i++) {
+                        eventModel = eventsFromModel[i];
+                        eventAPI = eventsFromAPI[i];
+                        if (eventModel.headline != eventAPI.name) {
+                            errorMessage = "The headlines of events do not match. Headlines were \"".concat(eventModel.event.name, "\" and \"").concat(eventAPI.headline, "\"");
+                            console.log(errorMessage);
+                            return [2 /*return*/, false];
+                        }
+                    }
+                    return [2 /*return*/, true];
+            }
+        });
     });
-}); };
-exports.loadLaunchesOverTimePeriod = loadLaunchesOverTimePeriod;
-var getLaunches = function () {
-    return (0, launches_1.getLaunchesAsList)();
-};
-exports.getLaunches = getLaunches;
-/*
-// Unused ATM - if readding, don't forget to re-add to exports
-const getLaunch = (id: string) => {
-    return getLaunchById(id);
 }
- */
-var getBasicDataFromLaunches = function () {
-    return (0, launches_1.extractBasicLaunchDataFromDetailedLaunchData)((0, launches_1.getLaunchesAsList)());
-};
-exports.getBasicDataFromLaunches = getBasicDataFromLaunches;
+function main() {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _b = (_a = console).log;
+                    return [4 /*yield*/, testLoadNews()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+main();

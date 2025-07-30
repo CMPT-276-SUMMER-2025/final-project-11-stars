@@ -1,7 +1,8 @@
 import {
     loadLaunchesOverTime,
-    getLaunchesAsList
-} from "../model/launches.js"
+    getLaunchesAsList,
+    extractBasicLaunchDataFromDetailedLaunchData
+} from "../model/launches"
 
 
 /**
@@ -27,7 +28,12 @@ const getLaunch = (id: string) => {
 }
  */
 
+const getBasicDataFromLaunches = () => {
+    return extractBasicLaunchDataFromDetailedLaunchData(getLaunchesAsList());
+}
+
 export {
     loadLaunchesOverTimePeriod, 
-    getLaunches
+    getLaunches,
+    getBasicDataFromLaunches
 }

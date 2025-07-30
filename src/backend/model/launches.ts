@@ -1,8 +1,7 @@
 import axios from 'axios';
-import type {basicLaunchDataInterface, detailedLaunchDataInterface} from './interfaces.ts';
+import type {basicLaunchDataInterface, detailedLaunchDataInterface} from './interfaces';
 import {Dayjs as type_dayjs} from "dayjs";
-import React from "react";
-import {loadLaunchesOverTimePeriod} from "../controllers/launches_controller.ts";
+import * as React from "react";
 
 /**
  * Handles business logic and access to data in relation to orbital launches.
@@ -69,13 +68,9 @@ const loadLaunchesOverTime = async (startDate: string, endDate: string) => {
                     manufacturer: launchRocketConfig.manufacturer.name
                 }
             };
-            /*
-            // TODO - fix setFieldsWithNoDataToNull - currently sets filteredLaunchObject to nested arrays with nothing in them
-            const filteredLaunchObject = setFieldsWithNoDataToNull(detailedLaunchDataArray);
+            const filteredLaunchObject = setFieldsWithNoDataToNull(launchObject);
             console.log(filteredLaunchObject);
             return filteredLaunchObject;
-            */
-            return launchObject;
         });
         return detailedLaunchDataArray;
 
@@ -118,9 +113,8 @@ const setFieldsWithNoDataToNull = (launchObject: any) => { //todo - set typing. 
                 if (launchObject[key].length == 0) {
                     launchObject[key] = null;
                 }
-
-            } else if (typeof launchObject[key] === "object") {
-                // if field is an object
+            } else if (typeof launchObject[key] === "object" && launchObject[key] != null) {
+                // if field is an object but not null
                 setFieldsWithNoDataToNull(launchObject[key])
 
             } else if (invalidPrimitives.includes(launchObject[key])) {
@@ -145,14 +139,14 @@ function extractBasicLaunchDataFromDetailedLaunchData(
 
 const setLaunchData = async (
     launchSearchStartDate: type_dayjs,
-    launchSearchEndDate: type_dayjs,
+    launchSearchEndDate: type_dayjs, 
     setbasicLaunchData: React.Dispatch<React.SetStateAction<basicLaunchDataInterface[]>>,
     setdetailedLaunchData: React.Dispatch<React.SetStateAction<detailedLaunchDataInterface[]>>
 ) => {
     const ISOStartDate = launchSearchStartDate.toISOString();
     const ISOEndDate = launchSearchEndDate.toISOString();
     try {
-        const newDetailedLaunchData = await loadLaunchesOverTimePeriod(ISOStartDate, ISOEndDate);
+        const newDetailedLaunchData = await loadLaunchesOverTime(ISOStartDate, ISOEndDate);
         setdetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]);
         // console.log("handleClickSubmitButton, newDetailedLaunchData: ", newDetailedLaunchData) //todo - remove when done testing
         const newBasicLaunchData = extractBasicLaunchDataFromDetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]);
