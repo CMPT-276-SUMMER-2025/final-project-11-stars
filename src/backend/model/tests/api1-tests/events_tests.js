@@ -77,9 +77,12 @@ function main() {
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
+                    console.log("events tests");
+                    // each function returns T/F, can remove these print statements if necessary
                     _b = (_a = console).log;
                     return [4 /*yield*/, testLoadNews()];
                 case 1:
+                    // each function returns T/F, can remove these print statements if necessary
                     _b.apply(_a, [_c.sent()]);
                     return [2 /*return*/];
             }

@@ -29,6 +29,9 @@ async function testLoadNews() {
 }
 
 async function main() {
+    console.log("events tests");
+
+    // each function returns T/F, can remove these print statements if necessary
     console.log(await testLoadNews());
 }
 

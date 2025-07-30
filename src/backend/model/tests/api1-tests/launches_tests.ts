@@ -78,9 +78,28 @@ function testSetFieldsWithNoDataToNull(launchObject) {
     return true;
 }
 
+async function testExtractBasicLaunchDataFromDetailedLaunchData() {
+    let launchesFromModel = await launchesC.getLaunches();
+    const newBasicLaunchData = launches.extractBasicLaunchDataFromDetailedLaunchData(launchesFromModel);
+    // check to make sure each object has the 4 basic required fields
+    for(let i = 0; i < newBasicLaunchData.length; i++) {
+        let launchObject = newBasicLaunchData[i];
+        if(!("id" in launchObject)) {
+            return false;
+        } else if(!("name" in launchObject)) {
+            return false;
+        } else if (!("lng" in launchObject)) {
+            return false;
+        } else if(!("lat" in launchObject)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 async function main () {
-    console.log("hello");
+    console.log("launches tests");
 
     // TEST : testLoadLaunchesOverTime
     // dates for launches
@@ -107,6 +126,7 @@ async function main () {
     // each function returns T/F, can remove these print statements if necessary
     console.log(await testLoadLaunchesOverTime(start,end));
     console.log(testSetFieldsWithNoDataToNull(objectWithUnwantedFields));
+    console.log(await testExtractBasicLaunchDataFromDetailedLaunchData());
 }
 
 main();

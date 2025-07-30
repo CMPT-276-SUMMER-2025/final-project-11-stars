@@ -115,13 +115,43 @@ function testSetFieldsWithNoDataToNull(launchObject) {
     }
     return true;
 }
+function testExtractBasicLaunchDataFromDetailedLaunchData() {
+    return __awaiter(this, void 0, void 0, function () {
+        var launchesFromModel, newBasicLaunchData, i, launchObject;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, launchesC.getLaunches()];
+                case 1:
+                    launchesFromModel = _a.sent();
+                    newBasicLaunchData = launches.extractBasicLaunchDataFromDetailedLaunchData(launchesFromModel);
+                    // check to make sure each object has the 4 basic required fields
+                    for (i = 0; i < newBasicLaunchData.length; i++) {
+                        launchObject = newBasicLaunchData[i];
+                        if (!("id" in launchObject)) {
+                            return [2 /*return*/, false];
+                        }
+                        else if (!("name" in launchObject)) {
+                            return [2 /*return*/, false];
+                        }
+                        else if (!("lng" in launchObject)) {
+                            return [2 /*return*/, false];
+                        }
+                        else if (!("lat" in launchObject)) {
+                            return [2 /*return*/, false];
+                        }
+                    }
+                    return [2 /*return*/, true];
+            }
+        });
+    });
+}
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var start, end, objectWithUnwantedFields, _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var start, end, objectWithUnwantedFields, _a, _b, _c, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
-                    console.log("hello");
+                    console.log("launches tests");
                     start = '2024-07-19T02:54:00Z';
                     end = '2024-08-04T15:02:53Z';
                     objectWithUnwantedFields = {
@@ -141,8 +171,12 @@ function main() {
                     return [4 /*yield*/, testLoadLaunchesOverTime(start, end)];
                 case 1:
                     // each function returns T/F, can remove these print statements if necessary
-                    _b.apply(_a, [_c.sent()]);
+                    _b.apply(_a, [_e.sent()]);
                     console.log(testSetFieldsWithNoDataToNull(objectWithUnwantedFields));
+                    _d = (_c = console).log;
+                    return [4 /*yield*/, testExtractBasicLaunchDataFromDetailedLaunchData()];
+                case 2:
+                    _d.apply(_c, [_e.sent()]);
                     return [2 /*return*/];
             }
         });

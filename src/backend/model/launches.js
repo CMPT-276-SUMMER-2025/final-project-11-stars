@@ -100,7 +100,6 @@ var loadLaunchesOverTime = function (startDate, endDate) { return __awaiter(void
                         }
                     };
                     var filteredLaunchObject = setFieldsWithNoDataToNull(launchObject);
-                    console.log(filteredLaunchObject);
                     return filteredLaunchObject;
                 });
                 return [2 /*return*/, detailedLaunchDataArray];

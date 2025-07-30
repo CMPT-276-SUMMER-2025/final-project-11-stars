@@ -69,7 +69,6 @@ const loadLaunchesOverTime = async (startDate: string, endDate: string) => {
                 }
             };
             const filteredLaunchObject = setFieldsWithNoDataToNull(launchObject);
-            console.log(filteredLaunchObject);
             return filteredLaunchObject;
         });
         return detailedLaunchDataArray;
