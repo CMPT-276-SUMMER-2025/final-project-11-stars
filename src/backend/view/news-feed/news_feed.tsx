@@ -22,6 +22,22 @@ const NoNewsAlert = () => {
 }
 
 const newsFeedItem = (content: newsFeedDataInterface) => {
+    const truncateToNearestSentenceOrWord = (str: string) => {
+        let returnString;
+        const slicedAt150Chars = str.slice(0, 150); // Slice the string at 150 characters to start with
+        const periodIndex = slicedAt150Chars.lastIndexOf('.'); // Get the index, if it exsits, of the last period in the string
+        const spaceIndex = slicedAt150Chars.lastIndexOf(' '); // Get the index, if it exsits, of the last space in the string
+        // lastIndexOf(STRING) returns -1 if there is no such character in STRING
+        if (periodIndex > -1) {
+            returnString = slicedAt150Chars.slice(0, periodIndex) + '…' // Prefer period truncations
+        } else if (spaceIndex > -1) {
+            returnString = slicedAt150Chars.slice(0, periodIndex) + '…' // Fall back to space truncations
+        } else {
+            returnString = slicedAt150Chars; // Incredibly unlikely, but kept in case of non-standard space chracters
+        }
+        return returnString;
+    };
+    const truncatedBodyText = truncateToNearestSentenceOrWord(content.bodyText);
     const formattedDate = dayjs(content.date).format('MMMM Do, YYYY');
     return (
         <div
@@ -63,12 +79,12 @@ const newsFeedItem = (content: newsFeedDataInterface) => {
                 <Tooltip
                     title={content.bodyText}>
                     <Typography
-                        sx={{
+                        style={{
                             overflow: 'hidden',
-                            textOverflow: 'ellipsis',
+                            textOverflow: 'ellipsis'
                         }}
                     >
-                        {content.bodyText}
+                        {truncatedBodyText}
                     </Typography>
                 </Tooltip>
             </div>
