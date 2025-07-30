@@ -111,7 +111,7 @@ export const NewsFeed = (content: newsFeedDataInterface[]) => {
             <>
                 <Typography variant={"h5"} align={"center"}>News Feed
                     <Tooltip
-                        title={<>The three most recent space-related events known to Launch Library II are
+                        title={<>The three nearest upcoming space-related events known to are
                             shown. <br/> If a news description is cut off, hover over it to see the full text.</>}
                         arrow>
                         <IconButton size="small" sx={{ml: 0.5}}>
