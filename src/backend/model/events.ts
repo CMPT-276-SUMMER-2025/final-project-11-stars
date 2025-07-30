@@ -4,8 +4,8 @@ import type {newsFeedDataInterface} from "./interfaces.ts";
 const isDevMode = import.meta.env.VITE_CUSTOM_DEV_MODE === "true";
 
 const loadNewsFeedData = async () => {
-    const BACKUP_EVENTS_URL = `https://lldev.thespacedevs.com/2.3.0/events/?limit=3&?ordering=-last_updated`; // Backup development API with no rate-limiting
-    const REAL_EVENTS_URL = `https://ll.thespacedevs.com/2.3.0/events/?limit=3&?ordering=-last_updated`; // Real API with rate-limiting
+    const BACKUP_EVENTS_URL = `https://lldev.thespacedevs.com/2.3.0/events/upcoming/?limit=3&?ordering=date`; // Backup development API with no rate-limiting
+    const REAL_EVENTS_URL = `https://ll.thespacedevs.com/2.3.0/events/upcoming/?limit=3&?ordering=date`; // Real API with rate-limiting
     let response;
 
     if (isDevMode) {
@@ -19,7 +19,6 @@ const loadNewsFeedData = async () => {
             response = await axios.get(BACKUP_EVENTS_URL);
         }
     }
-
     return response.data.results.map((event: any) => {
         let URL;
 

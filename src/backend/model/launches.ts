@@ -158,14 +158,15 @@ const setLaunchData = async (
     setbasicLaunchData: React.Dispatch<React.SetStateAction<basicLaunchDataInterface[]>>,
     setdetailedLaunchData: React.Dispatch<React.SetStateAction<detailedLaunchDataInterface[]>>
 ) => {
+    // Convert dayjs objects to ISO8601 date strings
     const ISOStartDate = launchSearchStartDate.toISOString();
     const ISOEndDate = launchSearchEndDate.toISOString();
     try {
-        const newDetailedLaunchData = await loadLaunchesOverTimePeriod(ISOStartDate, ISOEndDate);
+        // Make launches API call with date range parameters and set detailed data (parsed to cut out unimportant data, but not mutated)
+        const newDetailedLaunchData = await loadLaunchesOverTimePeriod(ISOStartDate, ISOEndDate); //
         setdetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]);
-        // console.log("handleClickSubmitButton, newDetailedLaunchData: ", newDetailedLaunchData) //todo - remove when done testing
-        const newBasicLaunchData = extractBasicLaunchDataFromDetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]);
-        // console.log("handleClickSubmitButton, newBasicLaunchData: ", newBasicLaunchData) //todo - remove when done testing
+        // Extract and set basic data relevent for globe display (not mutated either)
+        const newBasicLaunchData = extractBasicLaunchDataFromDetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]); //
         setbasicLaunchData(newBasicLaunchData);
     } catch (error) {
         console.log("error getting/setting new launch data", error);

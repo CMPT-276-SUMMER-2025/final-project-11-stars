@@ -1,4 +1,4 @@
-import {Alert, Box, Button, LinearProgress, Typography} from "@mui/material";
+import {Alert, Box, Button, IconButton, LinearProgress, Tooltip, Typography} from "@mui/material";
 import {DatePicker} from "@mui/x-date-pickers";
 import dayjs, {Dayjs as type_dayjs} from "dayjs";
 import React, {useEffect, useState} from "react";
@@ -8,7 +8,7 @@ import type {
     newsOrLaunchDataSidePanelDataInterface
 } from "../../model/interfaces.ts";
 import {setLaunchData} from "../../model/launches.ts"
-
+import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 const APIErrorAlert = () => (
     // TODO - implement in the alert box section.
     // Alert for when there's some sort of error with the API during fetching/setting data that we can't do anything about.
@@ -122,6 +122,11 @@ export const LaunchDateRangePicker = (
         }}>
             <Typography variant={"h5"}>
                 Launch Search
+                <Tooltip title="To optimize visibility, only up to 10 launches are shown, limited to the most recent one per location." arrow>
+                    <IconButton size="small" sx={{ml: 0.5}}>
+                        <InfoOutlineIcon fontSize="small"/>
+                    </IconButton>
+                </Tooltip>
             </Typography>
             <div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-evenly"}}>
                 <div style={{width: "45%"}}>
@@ -183,7 +188,7 @@ export const LaunchDateRangePicker = (
                                 <LinearProgress color="inherit"/>
                             </Box>
                         ) : (
-                            'Search For New Launches'
+                            'Apply New Date Range'
                         )}
                     </Button>
                 </div>

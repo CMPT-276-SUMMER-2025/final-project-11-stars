@@ -1,8 +1,9 @@
 import type {newsFeedDataInterface} from "../../model/interfaces.ts";
 import dayjs from "dayjs";
 import Image from "mui-image";
-import {Alert, LinearProgress, Link, Typography} from "@mui/material";
+import {Alert, IconButton, LinearProgress, Link, Tooltip, Typography} from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
+import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
 
 const NoNewsAlert = () => {
     return (
@@ -42,7 +43,9 @@ const newsFeedItem = (content: newsFeedDataInterface) => {
                     gap: "0.5rem",
                     height: "100%",
                     width: "100%",
-                    justifyContent: "start"
+                    justifyContent: "start",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis"
                 }}
             >
                 <Link
@@ -57,9 +60,17 @@ const newsFeedItem = (content: newsFeedDataInterface) => {
                 <Typography color="gray" variant="h6">
                     {content.eventType} on {formattedDate}
                 </Typography>
-                <Typography color="primary" variant="body2">
-                    {content.bodyText}
-                </Typography>
+                <Tooltip
+                    title={content.bodyText}>
+                    <Typography
+                        sx={{
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                        }}
+                    >
+                        {content.bodyText}
+                    </Typography>
+                </Tooltip>
             </div>
         </div>
     );
@@ -98,7 +109,16 @@ export const NewsFeed = (content: newsFeedDataInterface[]) => {
             <NoNewsAlert/>
         ) : (
             <>
-                <Typography variant={"h5"} align={"center"}>News Feed</Typography>
+                <Typography variant={"h5"} align={"center"}>News Feed
+                    <Tooltip
+                        title={<>The three most recent space-related events known to Launch Library II are
+                            shown. <br/> If a news description is cut off, hover over it to see the full text.</>}
+                        arrow>
+                        <IconButton size="small" sx={{ml: 0.5}}>
+                            <InfoOutlineIcon fontSize="small"/>
+                        </IconButton>
+                    </Tooltip>
+                </Typography>
                 {newsFeedItem(content[0])}
                 {newsFeedItem(content[1])}
                 {newsFeedItem(content[2])}
