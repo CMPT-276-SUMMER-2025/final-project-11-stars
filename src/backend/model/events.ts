@@ -7,7 +7,6 @@ const loadNewsFeedData = async () => {
     const BACKUP_EVENTS_URL = `https://lldev.thespacedevs.com/2.3.0/events/upcoming/?limit=3&?ordering=date`; // Backup development API with no rate-limiting
     const REAL_EVENTS_URL = `https://ll.thespacedevs.com/2.3.0/events/upcoming/?limit=3&?ordering=date`; // Real API with rate-limiting
     let response;
-
     if (isDevMode) {
         // If we're in dev mode, skip calling the real API.
         response = await axios.get(BACKUP_EVENTS_URL);
@@ -39,6 +38,7 @@ const loadNewsFeedData = async () => {
             sourceURL: URL
         };
         // todo - filter data like in launches.ts
+
         return eventObject;
     });
 }

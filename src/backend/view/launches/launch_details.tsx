@@ -21,6 +21,7 @@ const getabsoluteLaunchDaysHoursDifference = (dateStr: string): { hours: number;
 
     return {days: days, hours: hours};
 }
+
 const formatDateToText = (date: string): string => {
     const launchDate = dayjs(date);
     const formattedDate = launchDate.format("MMMM DD, YYYY - HH:mm");
@@ -32,107 +33,129 @@ const formatDateToText = (date: string): string => {
 
     return `${formattedDate} ${timeZoneAbbr}`.toUpperCase();
 }
+
 const launchText = (launchName: string, infoURL: string | null, wikiURL: string | null) => {
     const [topText, bottomText] = launchName.split(" | ");
-    const URL = infoURL ?? wikiURL;
-
-    const content = (
-        <div style={{height: "100%", width: "100%", display: "flex", flexDirection: "column"}}>
-            <Typography variant="h3" align="center">
-                {topText}
-            </Typography>
-            <Typography variant="h3" align="center">
-                {bottomText}
-            </Typography>
-        </div>
-    );
+    const URL = infoURL || wikiURL;
 
     return (
         <div style={{display: "flex", width: "100%", flexDirection: "column", alignItems: "center"}}>
             {URL ? (
-                <Link href={URL} underline="hover">
-                    {content} <LinkIcon/>
+                <Link href={URL} underline="hover" style={{display: "flex", flexDirection: "row", width: "100%"}}>
+                    <div style={{height: "100%", width: "100%", display: "flex", flexDirection: "column"}}>
+                        <Typography variant="h3" align="center">
+                            {topText}
+                        </Typography>
+                        <Typography variant="h3" align="center">
+                            {bottomText}
+                        </Typography>
+                    </div>
+                    <LinkIcon/>
                 </Link>
             ) : (
-                content
+                <div style={{height: "100%", width: "100%", display: "flex", flexDirection: "column"}}>
+                    <Typography variant="h3" align="center">
+                        {topText}
+                    </Typography>
+                    <Typography variant="h3" align="center">
+                        {bottomText}
+                    </Typography>
+                </div>
             )}
         </div>
     );
 };
-const agencyText = (agencyName: string, agencyLink: string | null) => {
-    const content = (
-        <Typography color="gray" variant="h4">
-            {agencyName} <LinkIcon/>
-        </Typography>
-    );
 
+const agencyText = (agencyName: string, agencyLink: string | null) => {
     return (
         <div style={{display: "flex", width: "100%", flexDirection: "column", alignItems: "center"}}>
             {agencyLink ? (
                 <Link href={agencyLink} underline="hover">
-                    {content}
+                    <Typography color="gray" variant="h4" align={"center"}
+                                style={{display: "flex", flexDirection: "row"}}>
+                        {agencyName} <LinkIcon/>
+                    </Typography>
                 </Link>
             ) : (
-                content
+                <Typography color="gray" variant="h4" align={"center"}>
+                    {agencyName}
+                </Typography>
             )}
         </div>
     );
 };
+
 const launchTimeDate = (date: string) => {
+    return (
+        <Typography variant={"h5"} color={"white"}>
+            {formatDateToText(date)}
+        </Typography>
+    )
+}
+
+const launchDelta = (date: string) => {
     const absoluteLaunchDaysHours = getabsoluteLaunchDaysHoursDifference(date);
-    if (dayjs(date).isBefore(dayjs())) {
-        // if launch date is in the past
-        return (
-            <div style={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-                width: "100%",
-                alignItems: "start"
-            }}>
-                <Typography variant={"h5"} color={"white"}>
-                    {formatDateToText(date)}
-                </Typography>
-                <Typography variant={"h6"} color={"gray"}>
-                    LAUNCHED
-                </Typography>
-                <Typography variant={"h4"} color={"white"}>
-                    {`${absoluteLaunchDaysHours.days} DAYS`}
-                </Typography>
-                <Typography variant={"h4"} color={"white"}
-                            style={{display: "flex", flexDirection: "row", gap: "0.5rem"}}>
-                    {`${absoluteLaunchDaysHours.hours} HOURS`}
-                </Typography>
-                <Typography variant={"h6"} color={"gray"}>
+    const isPast = dayjs(date).isBefore(dayjs());
+    return (
+        <div style={{
+            display: "flex",
+            flexDirection: "column"
+        }}>
+            <Typography variant={"h6"} color={"gray"}>
+                {isPast ? "LAUNCHED" : "LAUNCHES IN"}
+            </Typography>
+            <Typography variant={"h4"} color={"white"}>
+                {`${absoluteLaunchDaysHours.days} DAYS`}
+            </Typography>
+            <Typography variant={"h4"} color={"white"}
+                        style={{display: "flex", flexDirection: "row", gap: "0.5rem"}}>
+                {`${absoluteLaunchDaysHours.hours} HOURS`}
+            </Typography>
+            {isPast && (
+                <Typography variant="h6" color="gray">
                     AGO
                 </Typography>
-            </div>
-        )
-    } else {
-        // launch date is in the future
-        return (
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "100%",
-                    width: "100%",
-                    alignItems: "start"
-                }}>
-                <Typography variant={"h6"} color={"gray"}>
-                    LAUNCHING IN
-                </Typography>
-                <Typography variant={"h4"} color={"white"}>
-                    {`${absoluteLaunchDaysHours.days} DAYS`}
-                </Typography>
-                <Typography variant={"h4"} color={"white"}
-                            style={{display: "flex", flexDirection: "row", gap: "0.5rem"}}>
-                    {`${absoluteLaunchDaysHours.hours} HOURS`}
-                </Typography>
-            </div>
-        )
-    }
+            )}
+        </div>
+    )
 }
+
+const launchLocation = (latitude: number | null, longitude: number | null, padName: string | null) => {
+    return (
+        <div style={{display: "flex", flexDirection: "column"}}>
+            <div>
+                {padName != null && (
+                    <>
+                        <Typography variant="h6" color="gray">
+                            FROM PAD
+                        </Typography>
+                        <Typography variant="h4" color="white">
+                            {padName}
+                        </Typography>
+                    </>
+                )}
+                {latitude != null && longitude != null && (
+                    <div style={{display: "flex", flexDirection: "column"}}>
+                        <Typography
+                            variant="h5"
+                            color="gray"
+                        >
+                            {`LAT: ${latitude.toFixed(3)}`}
+                        </Typography>
+                        <Typography
+                            variant="h5"
+                            color="gray"
+                        >
+                            {`LNG: ${longitude.toFixed(3)}`}
+                        </Typography>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+
 const rocketStats = (
     totalSuccessfulLaunches: number | null,
     totalLaunches: number | null,
@@ -151,32 +174,66 @@ const rocketStats = (
             : null;
 
     return (
-        <div style={{display: "flex", flexDirection: "column", alignItems: "flex-end"}}>
-            {totalSuccessfulLaunches != null && (
+        <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "end"}}>
+            {totalSuccessfulLaunches != null ? (
                 <Typography color="green" variant="h5">
                     {`${formatLaunchText(totalSuccessfulLaunches)} SUCCESSFUL`}
                 </Typography>
+            ) : (
+                <Typography color="orange" variant="h5">
+                    Launch Success Count Unavailable
+                </Typography>
             )}
-            {failureCount != null && (
+
+            {failureCount != null ? (
                 <Typography color="red" variant="h5">
                     {`${formatLaunchText(failureCount)} FAILED`}
                 </Typography>
+            ) : (
+                <Typography color="orange" variant="h5">
+                    Launch Failure Count Data Unavailable
+                </Typography>
             )}
-            {height != null && (
+
+            {height != null ? (
                 <Typography variant="h5">{`${height} METERS TALL`}</Typography>
+            ) : (
+                <Typography color="orange" variant="h5">
+                    Height Data Unavailable
+                </Typography>
             )}
-            {diameter != null && (
+
+            {diameter != null ? (
                 <Typography variant="h5">{`${diameter} METERS WIDE`}</Typography>
+            ) : (
+                <Typography color="orange" variant="h5">
+                    Diameter Data Unavailable
+                </Typography>
             )}
-            {launchMass != null && (
+
+            {launchMass != null ? (
                 <Typography variant="h5">{`${launchMass} KG`}</Typography>
+            ) : (
+                <Typography color="orange" variant="h5">
+                    Launch Mass Data Unavailable
+                </Typography>
             )}
-            {launchCost != null && (
+
+            {launchCost != null ? (
                 <Typography variant="h5">{`$${launchCost.toLocaleString()} TO LAUNCH`}</Typography>
+            ) : (
+                <Typography color="orange" variant="h5">
+                    Launch Cost Data Unavailable
+                </Typography>
             )}
-            {isReusable != null && (
+
+            {isReusable != null ? (
                 <Typography color={isReusable ? "green" : "red"} variant="h5">
                     {isReusable ? "REUSABLE :D" : "NON-REUSABLE :("}
+                </Typography>
+            ) : (
+                <Typography color="orange" variant="h5">
+                    Reusability Data Unavailable
                 </Typography>
             )}
         </div>
@@ -191,30 +248,31 @@ export const LaunchDetails = (
     return (
         <div style={{
             display: "flex",
-            flex: 1,
             flexDirection: "column",
             width: "100%",
             height: "100%",
             justifyContent: "space-between"
         }}>
             <div>
-                <div style={{width: "100%", justifyContent: "center"}}>
-                    <Typography
-                        variant="h5"
-                        align="center"
-                        alignSelf={"center"}
-                    >
-                        Launch Details
-                        <Tooltip
-                            title={"Some launch data might not be available due to reasons beyond our, or Launch Library II's, control"}>
-                            <IconButton size="small" sx={{ml: 0.5}}>
-                                <InfoOutlineIcon fontSize="small"/>
-                            </IconButton>
-                        </Tooltip>
-                    </Typography>
-                </div>
+                <Typography
+                    variant="h5"
+                    align="center"
+                    alignSelf={"center"}
+                    width={"100%"}
+                >
+                    <IconButton size="small" sx={{visibility: "hidden", ml: 0.5}}>
+                        <InfoOutlineIcon fontSize="small"/>
+                    </IconButton>
+                    Launch Details
+                    <Tooltip
+                        title={"Some launch data might not be available due to reasons beyond our, or Launch Library II's, control"}>
+                        <IconButton size="small" sx={{ml: 0.5}}>
+                            <InfoOutlineIcon fontSize="small"/>
+                        </IconButton>
+                    </Tooltip>
+                </Typography>
+
                 <Button variant="text"
-                        style={{paddingLeft: "1.75rem"}}
                         onClick={() => setPanelData({contentType: "newsFeed", content: newsFeedDataArray})}>
                     {"< Go back to News Feed"}
                 </Button>
@@ -229,22 +287,34 @@ export const LaunchDetails = (
                 <div style={{
                     display: "flex",
                     flexDirection: "column",
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                    justifyContent: "center",
-                    alignItems: "start",
-                    gap: "1rem",
-                    padding: "0rem 1.75rem"
+                    width: "100%",
+                    height: "100%",
+                    justifyContent: "space-around"
                 }}>
-                    {launchText(content.launchName, content.launcherConfiguration.infoURL, content.launcherConfiguration.wikiURL)}
-                    {agencyText(content.agency.name, content.agency.link)}
+                    <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
+                        {launchText(content.launchName, content.launcherConfiguration.infoURL, content.launcherConfiguration.wikiURL)}
+                        {agencyText(content.agency.name, content.agency.link)}
+                    </div>
+
                     <div style={{
                         width: "100%",
+                        minHeight: "50%",
+                        maxHeight: "100%",
                         display: "grid",
                         gridTemplateColumns: "1fr 1fr",
-                        justifyContent: "space-between"
                     }}>
-                        {launchTimeDate(content.launchDate)}
+                        <div style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            width: "100%",
+                            height: "100%",
+                            justifyContent: "space-around"
+                        }}>
+                            {launchTimeDate(content.launchDate)}
+                            {launchDelta(content.launchDate)}
+                            {launchLocation(content.location.latitude, content.location.longitude, content.pad.name)}
+                        </div>
+
                         {rocketStats(
                             content.launcherConfiguration.totalSuccessfulLaunches,
                             content.launcherConfiguration.totalLaunches,

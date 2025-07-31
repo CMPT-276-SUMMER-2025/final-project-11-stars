@@ -38,61 +38,53 @@ const SidePanelWithAnimatedTransitions = (
             }
         })();
     }, []);
-
     return (
-        <div style={{
-            display: "flex",
-            width: "100%",
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-        }}>
-            <AnimatePresence mode="wait">
-                {(() => {
-                    if (panelData.contentType === "newsFeed") {
-                        return (
-                            <motion.div
-                                key="news"
-                                variants={fadeVariants}
-                                initial="initial"
-                                animate="animate"
-                                exit="exit"
-                            >
-                                {NewsFeed(panelData.content as newsFeedDataInterface[])}
-                            </motion.div>
-                        );
-                    } else if (panelData.contentType === "launchDetails") {
-                        return (
-                            <motion.div
-                                key="details"
-                                variants={fadeVariants}
-                                initial="initial"
-                                animate="animate"
-                                exit="exit"
-                                style={{height: "100%", width: "100%"}}
-                            >
-                                {LaunchDetails(panelData.content as detailedLaunchDataInterface, setPanelData, newsFeedDataArray as newsFeedDataInterface[])}
-                            </motion.div>
-                        );
-                    } else {
-                        return (
-                            <motion.div
-                                key="loading"
-                                variants={fadeVariants}
-                                initial="initial"
-                                animate="animate"
-                                exit="exit"
-                            >
-                                {LoadingNews()}
-                            </motion.div>
-                        );
-                    }
-                })()}
-            </AnimatePresence>
-        </div>
+        <AnimatePresence mode="wait">
+            {(() => {
+                if (panelData.contentType === "newsFeed") {
+                    return (
+                        <motion.div
+                            key="news"
+                            variants={fadeVariants}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                            style={{height: "100%", width: "100%"}}
+                        >
+                            {NewsFeed(panelData.content as newsFeedDataInterface[])}
+                        </motion.div>
+                    );
+                } else if (panelData.contentType === "launchDetails") {
+                    return (
+                        <motion.div
+                            key="details"
+                            variants={fadeVariants}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                            style={{height: "100%", width: "100%"}}
+                        >
+                            {LaunchDetails(panelData.content as detailedLaunchDataInterface, setPanelData, newsFeedDataArray as newsFeedDataInterface[])}
+                        </motion.div>
+                    );
+                } else {
+                    return (
+                        <motion.div
+                            key="loading"
+                            variants={fadeVariants}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                            style={{height: "100%", width: "100%"}}
+                        >
+                            {LoadingNews()}
+                        </motion.div>
+                    );
+                }
+            })()}
+        </AnimatePresence>
     )
 };
-
 
 export const SiteContent = (
     launchSearchStartDate: type_dayjs, setlaunchSearchStartDate: React.Dispatch<React.SetStateAction<type_dayjs>>,
@@ -107,37 +99,54 @@ export const SiteContent = (
         <div style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: 'start',
-            alignItems: 'center',
             width: "100%",
             height: "100%"
         }}>
-            {GlobeContainer(basicLaunchDataArray, detailedLaunchDataArray, satelliteTLEArray, setsatelliteTLEArray, setnewsOrLaunchDataSidePanelData)}
-            <>
+            <div style={{
+                width: "60%",
+                height: "100%",
+                display: "flex",
+            }}>
+                {GlobeContainer(basicLaunchDataArray, detailedLaunchDataArray, satelliteTLEArray, setsatelliteTLEArray, setnewsOrLaunchDataSidePanelData)}
+            </div>
+            <div style={{
+                width: "40%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-around",
+                alignItems: "center",
+                gap: "1rem",
+                padding: "1rem 0rem"
+            }}>
+                {LaunchDateRangePicker(
+                    launchSearchStartDate, setlaunchSearchStartDate,
+                    launchSearchEndDate, setlaunchSearchEndDate,
+                    basicLaunchDataArray, setbasicLaunchDataArray,
+                    setdetailedLaunchDataArray,
+                    newsFeedDataArray,
+                    setnewsOrLaunchDataSidePanelData)}
+                <Divider orientation="horizontal"
+                         variant="middle"
+                         style={{backgroundColor: "white"}}
+                         flexItem
+                />
                 <div style={{
-                    width: window.innerWidth * (2 / 5),
-                    height: window.innerHeight,
+                    width: "100%",
+                    height: "100%",
                     display: "flex",
                     flexDirection: "column",
-                    justifyContent: "start",
+                    justifyContent: "center",
                     alignItems: "center",
                     gap: "1rem",
-                    padding: "1rem 0rem",
+                    padding: "0rem 1.75rem"
                 }}>
-                    {LaunchDateRangePicker(
-                        launchSearchStartDate, setlaunchSearchStartDate,
-                        launchSearchEndDate, setlaunchSearchEndDate,
-                        basicLaunchDataArray, setbasicLaunchDataArray,
-                        setdetailedLaunchDataArray,
-                        newsFeedDataArray,
-                        setnewsOrLaunchDataSidePanelData)}
-                    <Divider orientation="horizontal" variant="middle"
-                             style={{backgroundColor: "white", marginTop: "1rem"}} flexItem/>
-                    {SidePanelWithAnimatedTransitions(
-                        newsFeedDataArray, setnewsFeedDataArray,
-                        newsOrLaunchDataSidePanelData, setnewsOrLaunchDataSidePanelData)}
+                    {SidePanelWithAnimatedTransitions(newsFeedDataArray, setnewsFeedDataArray, newsOrLaunchDataSidePanelData, setnewsOrLaunchDataSidePanelData)}
                 </div>
-            </>
+            </div>
         </div>
     )
 }
+/*
+
+ */
