@@ -1,10 +1,6 @@
-// @ts-ignore
 import axios from "axios";
 import type {satelliteTLEInterface} from "./interfaces.ts";
 import * as satellite from "satellite.js";
-import celestrakExampleJSON from "../../example-jsons/celestrak.json"
-
-const isDevMode = import.meta.env.VITE_CUSTOM_DEV_MODE === "true";
 
 export function parseRawTLEStringIntoTLEObjectArray(
     rawTLEString: string
@@ -23,20 +19,10 @@ export function parseRawTLEStringIntoTLEObjectArray(
 
 export const load100BrightestSatellites = async (): Promise<satelliteTLEInterface[]> => {
     const CELESTRAK_URL = "https://www.celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle";
-    const exampleDataFromJSON = celestrakExampleJSON[0].data;
-    if (isDevMode) {
-
-        return parseRawTLEStringIntoTLEObjectArray(exampleDataFromJSON);
-    } else {
-        let parsedTLEObjectArray: satelliteTLEInterface[];
-        try {
-            const response = await axios.get(CELESTRAK_URL);
-            parsedTLEObjectArray = parseRawTLEStringIntoTLEObjectArray(response.data);
-        } catch (error) {
-            parsedTLEObjectArray = parseRawTLEStringIntoTLEObjectArray(exampleDataFromJSON);
-        }
-        return parsedTLEObjectArray;
-    }
+    let parsedTLEObjectArray: satelliteTLEInterface[];
+    const response = await axios.get(CELESTRAK_URL);
+    parsedTLEObjectArray = parseRawTLEStringIntoTLEObjectArray(response.data); // Parses the data, since the response is a row string.
+    return parsedTLEObjectArray;
 };
 
 export const getSatellitePositionAtTime = (
@@ -74,11 +60,10 @@ export const getPositionsFromTLEArray = (
         const position = getSatellitePositionAtTime(satellite.line1, satellite.line2, time);
 
         if (!position) {
-            // Could not compute position for this satellite -> set to null.
+            // Can't compute position for this satellite -> set to null.
             // This is filtered out before the getPositionsFromTLEArray return.
             return null;
         }
-
         return {
             ...position,
             id: satellite.name,
