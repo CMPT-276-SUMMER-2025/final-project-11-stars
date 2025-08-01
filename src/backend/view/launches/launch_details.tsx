@@ -9,6 +9,11 @@ import {Button, IconButton, Link, Tooltip, Typography} from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
 import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
 
+const stripBrackets = (input: string): string => {
+    const index = input.indexOf(" (");
+    return index !== -1 ? input.slice(0, index) : input;
+};
+
 const getabsoluteLaunchDaysHoursDifference = (dateStr: string): { hours: number; days: number } => {
     const launchDate = dayjs(dateStr);
     const now = dayjs();
@@ -87,7 +92,7 @@ const agencyText = (agencyName: string, agencyLink: string | null) => {
 
 const launchTimeDate = (date: string) => {
     return (
-        <Typography variant={"h5"} color={"white"}>
+        <Typography variant={"h5"} color={"white"} align={"center"}>
             {formatDateToText(date)}
         </Typography>
     )
@@ -120,36 +125,43 @@ const launchDelta = (date: string) => {
     )
 }
 
-const launchLocation = (latitude: number | null, longitude: number | null, padName: string | null) => {
+const launchPadName = (name: string | null) => {
+    if (name == null) return null;
+
     return (
         <div style={{display: "flex", flexDirection: "column"}}>
-            <div>
-                {padName != null && (
-                    <>
-                        <Typography variant="h6" color="gray">
-                            FROM PAD
-                        </Typography>
-                        <Typography variant="h4" color="white">
-                            {padName}
-                        </Typography>
-                    </>
-                )}
-                {latitude != null && longitude != null && (
-                    <div style={{display: "flex", flexDirection: "column"}}>
-                        <Typography
-                            variant="h5"
-                            color="gray"
-                        >
-                            {`LAT: ${latitude.toFixed(3)}`}
-                        </Typography>
-                        <Typography
-                            variant="h5"
-                            color="gray"
-                        >
-                            {`LNG: ${longitude.toFixed(3)}`}
-                        </Typography>
-                    </div>
-                )}
+            <Typography variant="h6" color="gray">
+                FROM PAD
+            </Typography>
+            <Typography variant="h4" color="white">
+                {stripBrackets(name)}
+            </Typography>
+        </div>
+    );
+};
+
+const launchPadCoordinates = (latitude: number | null, longitude: number | null) => {
+    if (latitude == null || longitude == null) {
+        return null
+    }
+
+    return (
+        <div style={{display: "flex", flexDirection: "column"}}>
+            <div style={{display: "flex", gap: "0.5rem"}}>
+                <Typography variant="h6" color="gray" component="span">
+                    LAT:
+                </Typography>
+                <Typography variant="h5" color="white" component="span">
+                    {latitude.toFixed(3)}
+                </Typography>
+            </div>
+            <div style={{display: "flex", gap: "0.5rem"}}>
+                <Typography variant="h6" color="gray" component="span">
+                    LNG:
+                </Typography>
+                <Typography variant="h5" color="white" component="span">
+                    {longitude.toFixed(3)}
+                </Typography>
             </div>
         </div>
     );
@@ -165,8 +177,27 @@ const rocketStats = (
     launchCost: number | null,
     isReusable: boolean | null
 ) => {
-    const formatLaunchText = (count: number) =>
-        `${count} LAUNCH${count === 1 ? "" : "ES"}`;
+    const rocketLabelText = (text: string) => (
+        <Typography color="gray" variant="h6" component="span">
+            {` ${text}`}
+        </Typography>
+    );
+
+    const formatLaunchText = (count: number) => {
+        return (
+            <>
+                {count} {rocketLabelText(`LAUNCH${count === 1 ? "" : "ES"}`)}
+            </>
+        );
+    };
+
+    const formatFailureText = (count: number) => {
+        return (
+            <>
+                {count} {rocketLabelText(`FAILURE${count === 1 ? "" : "S"}`)}
+            </>
+        );
+    };
 
     const failureCount =
         totalSuccessfulLaunches != null && totalLaunches != null
@@ -175,69 +206,52 @@ const rocketStats = (
 
     return (
         <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "end"}}>
-            {totalSuccessfulLaunches != null ? (
+            {totalSuccessfulLaunches != null && (
+                // Label text is inside formatLaunchText
                 <Typography color="green" variant="h5">
-                    {`${formatLaunchText(totalSuccessfulLaunches)} SUCCESSFUL`}
-                </Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Launch Success Count Unavailable
+                    {formatLaunchText(totalSuccessfulLaunches)}
                 </Typography>
             )}
 
-            {failureCount != null ? (
+            {failureCount != null && (
+                // Label text is inside formatFailureText
                 <Typography color="red" variant="h5">
-                    {`${formatLaunchText(failureCount)} FAILED`}
-                </Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Launch Failure Count Data Unavailable
+                    {formatFailureText(failureCount)}
                 </Typography>
             )}
 
-            {height != null ? (
-                <Typography variant="h5">{`${height} METERS TALL`}</Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Height Data Unavailable
+            {height != null && (
+                <Typography variant="h5">
+                    {height} {rocketLabelText("METERS TALL")}
                 </Typography>
             )}
 
-            {diameter != null ? (
-                <Typography variant="h5">{`${diameter} METERS WIDE`}</Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Diameter Data Unavailable
+            {diameter != null && (
+                <Typography variant="h5">
+                    {diameter} {rocketLabelText("METERS WIDE")}
                 </Typography>
             )}
 
-            {launchMass != null ? (
-                <Typography variant="h5">{`${launchMass} KG`}</Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Launch Mass Data Unavailable
+            {launchMass != null && (
+                <Typography variant="h5">
+                    {launchMass} {rocketLabelText("KG")}
                 </Typography>
             )}
 
-            {launchCost != null ? (
-                <Typography variant="h5">{`$${launchCost.toLocaleString()} TO LAUNCH`}</Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Launch Cost Data Unavailable
+            {launchCost != null && (
+                <Typography variant="h5">
+                    ${launchCost.toLocaleString()} {rocketLabelText("TO LAUNCH")}
                 </Typography>
             )}
 
-            {isReusable != null ? (
+            {isReusable != null && (
                 <Typography color={isReusable ? "green" : "red"} variant="h5">
                     {isReusable ? "REUSABLE :D" : "NON-REUSABLE :("}
-                </Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Reusability Data Unavailable
                 </Typography>
             )}
         </div>
     );
+
 };
 
 export const LaunchDetails = (
@@ -292,8 +306,9 @@ export const LaunchDetails = (
                     justifyContent: "space-around"
                 }}>
                     <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
-                        {launchText(content.launchName, content.launcherConfiguration.infoURL, content.launcherConfiguration.wikiURL)}
-                        {agencyText(content.agency.name, content.agency.link)}
+                        {launchText(stripBrackets(content.launchName), content.launcherConfiguration.infoURL, content.launcherConfiguration.wikiURL)}
+                        {agencyText(stripBrackets(content.agency.name), content.agency.link)}
+                        {launchTimeDate(content.launchDate)}
                     </div>
 
                     <div style={{
@@ -310,9 +325,9 @@ export const LaunchDetails = (
                             height: "100%",
                             justifyContent: "space-around"
                         }}>
-                            {launchTimeDate(content.launchDate)}
                             {launchDelta(content.launchDate)}
-                            {launchLocation(content.location.latitude, content.location.longitude, content.pad.name)}
+                            {launchPadName(stripBrackets(content.pad.name))}
+                            {launchPadCoordinates(content.location.latitude, content.location.longitude)}
                         </div>
 
                         {rocketStats(
