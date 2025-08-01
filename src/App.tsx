@@ -34,7 +34,7 @@ const App = () => {
     });
     const [satelliteTLEArray, setsatelliteTLEArray] = useState<satelliteTLEInterface[]>([]);
 
-    return (<>
+    return (<div style={{width: "100vw", height: "100vh", overflowY: "hidden"}}>
             <ThemeProvider theme={darkTheme}>
                 <CssBaseline/>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -48,7 +48,7 @@ const App = () => {
                     {Footer()}
                 </LocalizationProvider>
             </ThemeProvider>
-        </>
+        </div>
     )
 }
 

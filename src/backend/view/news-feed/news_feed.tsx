@@ -1,69 +1,53 @@
 import type {newsFeedDataInterface} from "../../model/interfaces.ts";
 import dayjs from "dayjs";
-import Image from "mui-image";
 import {Alert, IconButton, LinearProgress, Link, Tooltip, Typography} from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
 import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
+import React from "react";
+
 
 const NoNewsAlert = () => {
     return (
-        <div style={{
-            display: "flex",
-            width: '100%',
-            height: "100%",
-            justifyContent: "center",
-            alignItems: "center"
-        }}>
-            <Alert severity="error" style={{width: "100%"}}>
-                News is currently unavailable - check in later.
-            </Alert>
-        </div>
+        <Alert severity="error">
+            News is currently unavailable - check in later.
+        </Alert>
     );
 }
 
 const newsFeedItem = (content: newsFeedDataInterface) => {
     const truncateToNearestSentenceOrWord = (str: string) => {
         let returnString;
-        const slicedAt150Chars = str.slice(0, 150); // Slice the string at 150 characters to start with
-        const periodIndex = slicedAt150Chars.lastIndexOf('.'); // Get the index, if it exsits, of the last period in the string
-        const spaceIndex = slicedAt150Chars.lastIndexOf(' '); // Get the index, if it exsits, of the last space in the string
+        const slivedAt300Chars = str.slice(0, 300); // Slice the string at 150 characters to start with
+        const periodIndex = slivedAt300Chars.lastIndexOf('.'); // Get the index, if it exsits, of the last period in the string
+        const spaceIndex = slivedAt300Chars.lastIndexOf(' '); // Get the index, if it exsits, of the last space in the string
+        if (str.length < 200) {
+            returnString = str;
+        }
         // lastIndexOf(STRING) returns -1 if there is no such character in STRING
-        if (periodIndex > -1) {
-            returnString = slicedAt150Chars.slice(0, periodIndex) + '…' // Prefer period truncations
+        else if (periodIndex > -1) {
+            returnString = slivedAt300Chars.slice(0, periodIndex) + '…' // Prefer period truncations
         } else if (spaceIndex > -1) {
-            returnString = slicedAt150Chars.slice(0, periodIndex) + '…' // Fall back to space truncations
+            returnString = slivedAt300Chars.slice(0, periodIndex) + '…' // Fall back to space truncations
         } else {
-            returnString = slicedAt150Chars; // Incredibly unlikely, but kept in case of non-standard space chracters
+            returnString = slivedAt300Chars; // Incredibly unlikely, but kept in case of non-standard space chracters
         }
         return returnString;
     };
     const truncatedBodyText = truncateToNearestSentenceOrWord(content.bodyText);
     const formattedDate = dayjs(content.date).format('MMMM Do, YYYY');
+
     return (
         <div
             style={{
-                display: "grid",
-                gridTemplateColumns: "3fr 8fr",
-                aspectRatio: 5,
+                display: "flex",
+                flexDirection: "column",
                 gap: "0.5rem",
-                padding: "0 1.75rem",
                 height: "100%",
-                width: "100%"
+                justifyContent: "center",
+                flex: 1
             }}
         >
-            <Image src={content.imageURL} style={{aspectRatio: "1/1"}}/>
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.5rem",
-                    height: "100%",
-                    width: "100%",
-                    justifyContent: "start",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis"
-                }}
-            >
+            {content.sourceURL ? (
                 <Link
                     href={content.sourceURL}
                     underline="hover"
@@ -73,72 +57,84 @@ const newsFeedItem = (content: newsFeedDataInterface) => {
                         {content.headline} <LinkIcon/>
                     </Typography>
                 </Link>
-                <Typography color="gray" variant="h6">
-                    {content.eventType} on {formattedDate}
+            ) : (
+                <Typography color="primary" variant="h5">
+                    {content.headline}
                 </Typography>
-                <Tooltip
-                    title={content.bodyText}>
-                    <Typography
-                        style={{
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
-                        }}
-                    >
-                        {truncatedBodyText}
-                    </Typography>
-                </Tooltip>
-            </div>
+            )}
+
+            <Typography color="gray" variant="h6">
+                {content.eventType} on {formattedDate}
+            </Typography>
+            <Tooltip
+                title={content.bodyText}>
+                <Typography>
+                    {truncatedBodyText}
+                </Typography>
+            </Tooltip>
         </div>
     );
-};
+}
 
+/*
+
+ */
 export const LoadingNews = () => {
     return (
-        <div style={{
-            display: "flex",
-            flexDirection: "column",
-            width: '100%',
-            height: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "1rem"
-        }}>
-            <Typography variant={"h6"} align={"center"}>
+        <>
+            <Typography variant={"h6"} align={"center"} display={"flex"} flexDirection={"column"}>
                 Loading News Feed...
+                <div style={{width: "100%"}}>
+                    <LinearProgress/>
+                </div>
             </Typography>
-            <div style={{width: "100%"}}>
-                <LinearProgress/>
-            </div>
-        </div>
+        </>
     )
 }
 
 export const NewsFeed = (content: newsFeedDataInterface[]) => {
-    return (<div style={{
-        display: "flex",
-        flexDirection: "column",
-        width: '100%',
-        height: "100%",
-        gap: "1rem"
-    }}>
-        {content == undefined || content.length < 3 ? (
-            <NoNewsAlert/>
-        ) : (
-            <>
-                <Typography variant={"h5"} align={"center"}>News Feed
-                    <Tooltip
-                        title={<>The three nearest upcoming space-related events are
-                            shown. <br/> If a news description is cut off, hover over it to see the full text.</>}
-                        arrow>
-                        <IconButton size="small" sx={{ml: 0.5}}>
-                            <InfoOutlineIcon fontSize="small"/>
-                        </IconButton>
-                    </Tooltip>
-                </Typography>
-                {newsFeedItem(content[0])}
-                {newsFeedItem(content[1])}
-                {newsFeedItem(content[2])}
-            </>
-        )}
-    </div>)
+    if (content == undefined) {
+        return (<NoNewsAlert/>);
+    } else {
+        return (<div style={{
+            display: "flex",
+            flexDirection: "column",
+            width: '100%',
+            height: "100%",
+            gap: "1rem"
+        }}>
+            <Typography variant="h5" align="center">
+                <IconButton size="small" sx={{visibility: 'hidden', ml: 0.5}}>
+                    <InfoOutlineIcon fontSize="small"/>
+                </IconButton>
+                News Feed
+                <Tooltip
+                    title={
+                        <>
+                            The 3 nearest upcoming space-related events are shown. <br/>
+                            If a news description is cut off, hover over it to see the full text.
+                        </>
+                    }
+                >
+                    <IconButton size="small" sx={{ml: 0.5}}>
+                        <InfoOutlineIcon fontSize="small"/>
+                    </IconButton>
+                </Tooltip>
+            </Typography>
+            <div style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+                height: "100%",
+                width: "100%",
+                overflowY: "auto"
+            }}>
+                {content.map((item, index) => (
+                    <React.Fragment key={index}>
+                        {newsFeedItem(item)}
+                    </React.Fragment>
+                ))}
+            </div>
+        </div>)
+    }
 }
