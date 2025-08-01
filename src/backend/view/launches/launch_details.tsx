@@ -39,19 +39,20 @@ const formatDateToText = (date: string): string => {
     return `${formattedDate} ${timeZoneAbbr}`.toUpperCase();
 }
 
-const launchText = (launchName: string, infoURL: string | null, wikiURL: string | null) => {
+const launchHeaderWithLink = (launchName: string, infoURL: string | null, wikiURL: string | null) => {
     const [topText, bottomText] = launchName.split(" | ");
     const URL = infoURL || wikiURL;
 
     return (
         <div style={{display: "flex", width: "100%", flexDirection: "column", alignItems: "center"}}>
             {URL ? (
-                <Link href={URL} underline="hover" style={{display: "flex", flexDirection: "row", width: "100%"}}>
-                    <div style={{height: "100%", width: "100%", display: "flex", flexDirection: "column"}}>
-                        <Typography variant="h3" align="center">
+                <Link href={URL} underline="hover"
+                      style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
+                    <div style={{height: "100%", display: "flex", flexDirection: "column"}}>
+                        <Typography variant="h4" align="center">
                             {topText}
                         </Typography>
-                        <Typography variant="h3" align="center">
+                        <Typography variant="h4" align="center">
                             {bottomText}
                         </Typography>
                     </div>
@@ -59,30 +60,31 @@ const launchText = (launchName: string, infoURL: string | null, wikiURL: string 
                 </Link>
             ) : (
                 <div style={{height: "100%", width: "100%", display: "flex", flexDirection: "column"}}>
-                    <Typography variant="h3" align="center">
+                    <Typography variant="h4" align="center">
                         {topText}
                     </Typography>
-                    <Typography variant="h3" align="center">
+                    <Typography variant="h4" align="center">
                         {bottomText}
                     </Typography>
                 </div>
-            )}
+            )
+            }
         </div>
     );
 };
 
-const agencyText = (agencyName: string, agencyLink: string | null) => {
+const agencyHeaderWithLink = (agencyName: string, agencyLink: string | null) => {
     return (
         <div style={{display: "flex", width: "100%", flexDirection: "column", alignItems: "center"}}>
             {agencyLink ? (
                 <Link href={agencyLink} underline="hover">
-                    <Typography color="gray" variant="h4" align={"center"}
+                    <Typography color="gray" variant="h5" align={"center"}
                                 style={{display: "flex", flexDirection: "row"}}>
                         {agencyName} <LinkIcon/>
                     </Typography>
                 </Link>
             ) : (
-                <Typography color="gray" variant="h4" align={"center"}>
+                <Typography color="gray" variant="h5" align={"center"}>
                     {agencyName}
                 </Typography>
             )}
@@ -109,10 +111,10 @@ const launchDelta = (date: string) => {
             <Typography variant={"h6"} color={"gray"}>
                 {isPast ? "LAUNCHED" : "LAUNCHES IN"}
             </Typography>
-            <Typography variant={"h4"} color={"white"}>
+            <Typography variant={"h5"} color={"white"}>
                 {`${absoluteLaunchDaysHours.days} DAYS`}
             </Typography>
-            <Typography variant={"h4"} color={"white"}
+            <Typography variant={"h5"} color={"white"}
                         style={{display: "flex", flexDirection: "row", gap: "0.5rem"}}>
                 {`${absoluteLaunchDaysHours.hours} HOURS`}
             </Typography>
@@ -131,9 +133,9 @@ const launchPadName = (name: string | null) => {
     return (
         <div style={{display: "flex", flexDirection: "column"}}>
             <Typography variant="h6" color="gray">
-                FROM PAD
+                FROM
             </Typography>
-            <Typography variant="h4" color="white">
+            <Typography variant="h5" color="white">
                 {stripBrackets(name)}
             </Typography>
         </div>
@@ -167,6 +169,60 @@ const launchPadCoordinates = (latitude: number | null, longitude: number | null)
     );
 };
 
+export const LaunchDetailsHeader = (
+    setPanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>,
+    newsFeedDataArray: newsFeedDataInterface[]
+) => (
+    <div>
+        <Typography
+            variant="h5"
+            align="center"
+            alignSelf="center"
+            width="100%"
+        >
+            <IconButton size="small" sx={{visibility: "hidden", ml: 0.5}}>
+                <InfoOutlineIcon fontSize="small"/>
+            </IconButton>
+            Launch Details
+            <Tooltip
+                title="Some launch data might not be available due to reasons beyond our, or Launch Library II's, control">
+                <IconButton size="small" sx={{ml: 0.5}}>
+                    <InfoOutlineIcon fontSize="small"/>
+                </IconButton>
+            </Tooltip>
+        </Typography>
+
+        <Button
+            variant="text"
+            onClick={() =>
+                setPanelData({contentType: "newsFeed", content: newsFeedDataArray})
+            }
+        >
+            {"< Go back to News Feed"}
+        </Button>
+    </div>
+);
+
+export const timeDeltaAndLaunchPadInfo = (
+    launchDate: string,
+    padName: string,
+    latitude: number | null,
+    longitude: number | null
+) => (
+    <div
+        style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            height: "100%",
+            justifyContent: "space-between",
+        }}
+    >
+        {launchDelta(launchDate)}
+        {launchPadName(stripBrackets(padName))}
+        {launchPadCoordinates(latitude, longitude)}
+    </div>
+);
 
 const rocketStats = (
     totalSuccessfulLaunches: number | null,
@@ -199,13 +255,10 @@ const rocketStats = (
         );
     };
 
-    const failureCount =
-        totalSuccessfulLaunches != null && totalLaunches != null
-            ? totalLaunches - totalSuccessfulLaunches
-            : null;
+    const failureCount = totalSuccessfulLaunches != null && totalLaunches != null ? totalLaunches - totalSuccessfulLaunches : null;
 
     return (
-        <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "end"}}>
+        <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "end"}}>
             {totalSuccessfulLaunches != null && (
                 // Label text is inside formatLaunchText
                 <Typography color="green" variant="h5">
@@ -265,80 +318,41 @@ export const LaunchDetails = (
             flexDirection: "column",
             width: "100%",
             height: "100%",
-            justifyContent: "space-between"
+            gap: "1rem"
         }}>
-            <div>
-                <Typography
-                    variant="h5"
-                    align="center"
-                    alignSelf={"center"}
-                    width={"100%"}
-                >
-                    <IconButton size="small" sx={{visibility: "hidden", ml: 0.5}}>
-                        <InfoOutlineIcon fontSize="small"/>
-                    </IconButton>
-                    Launch Details
-                    <Tooltip
-                        title={"Some launch data might not be available due to reasons beyond our, or Launch Library II's, control"}>
-                        <IconButton size="small" sx={{ml: 0.5}}>
-                            <InfoOutlineIcon fontSize="small"/>
-                        </IconButton>
-                    </Tooltip>
-                </Typography>
-
-                <Button variant="text"
-                        onClick={() => setPanelData({contentType: "newsFeed", content: newsFeedDataArray})}>
-                    {"< Go back to News Feed"}
-                </Button>
-            </div>
+            {LaunchDetailsHeader(setPanelData, newsFeedDataArray)}
             <div style={{
                 display: "flex",
-                width: "100%",
-                height: "100%",
-                justifyContent: "center",
-                alignItems: "center"
+                flexDirection: "column",
+                flex: 1,
+                gap: "1rem",
+                justifyContent: "space-around"
             }}>
+                <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
+                    {launchHeaderWithLink(stripBrackets(content.launchName), content.launcherConfiguration.infoURL, content.launcherConfiguration.wikiURL)}
+                    {agencyHeaderWithLink(stripBrackets(content.agency.name), content.agency.link)}
+                    {launchTimeDate(content.launchDate)}
+                </div>
                 <div style={{
-                    display: "flex",
-                    flexDirection: "column",
                     width: "100%",
                     height: "100%",
-                    justifyContent: "space-around"
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
                 }}>
-                    <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
-                        {launchText(stripBrackets(content.launchName), content.launcherConfiguration.infoURL, content.launcherConfiguration.wikiURL)}
-                        {agencyText(stripBrackets(content.agency.name), content.agency.link)}
-                        {launchTimeDate(content.launchDate)}
-                    </div>
-
-                    <div style={{
-                        width: "100%",
-                        minHeight: "50%",
-                        maxHeight: "100%",
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
-                    }}>
-                        <div style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            width: "100%",
-                            height: "100%",
-                            justifyContent: "space-around"
-                        }}>
-                            {launchDelta(content.launchDate)}
-                            {launchPadName(stripBrackets(content.pad.name))}
-                            {launchPadCoordinates(content.location.latitude, content.location.longitude)}
-                        </div>
-
-                        {rocketStats(
-                            content.launcherConfiguration.totalSuccessfulLaunches,
-                            content.launcherConfiguration.totalLaunches,
-                            content.launcherConfiguration.height,
-                            content.launcherConfiguration.diameter,
-                            content.launcherConfiguration.launchMass,
-                            content.launcherConfiguration.launchCost,
-                            content.launcherConfiguration.isReusable)}
-                    </div>
+                    {timeDeltaAndLaunchPadInfo(
+                        content.launchDate,
+                        content.pad.name,
+                        content.location.latitude,
+                        content.location.longitude
+                    )}
+                    {rocketStats(
+                        content.launcherConfiguration.totalSuccessfulLaunches,
+                        content.launcherConfiguration.totalLaunches,
+                        content.launcherConfiguration.height,
+                        content.launcherConfiguration.diameter,
+                        content.launcherConfiguration.launchMass,
+                        content.launcherConfiguration.launchCost,
+                        content.launcherConfiguration.isReusable)}
                 </div>
             </div>
         </div>
