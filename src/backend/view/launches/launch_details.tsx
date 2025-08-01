@@ -10,22 +10,10 @@ import LinkIcon from "@mui/icons-material/Link";
 import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
 
 const stripBrackets = (input: string): string => {
+    // Strip bracketed text from data in order to shorten it.
     const index = input.indexOf(" (");
     return index !== -1 ? input.slice(0, index) : input;
 };
-
-const getabsoluteLaunchDaysHoursDifference = (dateStr: string): { hours: number; days: number } => {
-    const launchDate = dayjs(dateStr);
-    const now = dayjs();
-
-    const differenceInMiliseconds = Math.abs(launchDate.diff(now));
-
-    const totalHours = Math.floor(differenceInMiliseconds / (1000 * 60 * 60));
-    const days = Math.floor(totalHours / 24);
-    const hours = totalHours % 24;
-
-    return {days: days, hours: hours};
-}
 
 const formatDateToText = (date: string): string => {
     const launchDate = dayjs(date);
@@ -98,6 +86,20 @@ const launchTimeDate = (date: string) => {
             {formatDateToText(date)}
         </Typography>
     )
+}
+
+const getabsoluteLaunchDaysHoursDifference = (dateStr: string): { hours: number; days: number } => {
+    // Used to display the time delta (absolute difference)
+    const launchDate = dayjs(dateStr);
+    const now = dayjs();
+
+    const differenceInMiliseconds = Math.abs(launchDate.diff(now));
+
+    const totalHours = Math.floor(differenceInMiliseconds / (1000 * 60 * 60));
+    const days = Math.floor(totalHours / 24);
+    const hours = totalHours % 24;
+
+    return {days: days, hours: hours}; // Returns separate days and hours for two-line display
 }
 
 const launchDelta = (date: string) => {
@@ -240,6 +242,7 @@ const rocketStats = (
     );
 
     const formatLaunchText = (count: number) => {
+        // Tyopgraphy is set in the calling function
         return (
             <>
                 {count} {rocketLabelText(`LAUNCH${count === 1 ? "" : "ES"}`)}
@@ -248,6 +251,7 @@ const rocketStats = (
     };
 
     const formatFailureText = (count: number) => {
+        // Tyopgraphy is set in the calling function
         return (
             <>
                 {count} {rocketLabelText(`FAILURE${count === 1 ? "" : "S"}`)}

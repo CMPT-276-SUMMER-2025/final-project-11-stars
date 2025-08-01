@@ -34,79 +34,59 @@ const loadLaunchesOverTime = async (startDate: string, endDate: string) => {
             response = await axios.get(BACKUP_LAUNCHES_URL);
         }
     }
-    detailedLaunchDataArray = response.data.results.map((launch: any) => { //todo - figure out typing for launch variable because auto-typing might not work properly.
-        let launchServiceProvider = launch.launch_service_provider;
-        let launchRocketConfig = launch.rocket.configuration;
+    detailedLaunchDataArray = response.data.results.map((launch: any) => {
+        // If any data doesn't exist, set it to null
+        let launchServiceProvider = launch?.launch_service_provider ?? null;
+        let launchRocketConfig = launch?.rocket?.configuration ?? null;
+        return {
+            id: launch?.id ?? null,
+            launchName: launch?.name ?? null,
+            imageURL: launch?.image?.image_url ?? null,
+            launchStatus: launch?.status?.abbrev ?? null,
+            launchDate: launch?.window_start == null ? "Not Launched Yet" : launch.window_start,
 
-        let launchObject = {
-            id: launch.id,
-            launchName: launch.name,
-            imageURL: launch.image.image_url,
-            launchStatus: launch.status.abbrev,
-            launchDate: (launch.window_start == null) ? "Not Launched Yet" : launch.window_start,
+            location: launch?.pad ? {
+                longitude: launch.pad.longitude ?? null,
+                latitude: launch.pad.latitude ?? null
+            } : null,
 
-            // launch location is just location of pad
-            location: {
-                longitude: launch.pad.longitude,
-                latitude: launch.pad.latitude
-            },
+            pad: launch?.pad ? {
+                name: launch.pad.name ?? null,
+                image: launch.pad.image?.image_url ?? null
+            } : null,
 
-            pad: {
-                name: launch.pad.name,
-                image: launch.pad.image.image_url
-            },
+            agency: launchServiceProvider ? {
+                name: launchServiceProvider.name ?? null,
+                description: launchServiceProvider.description ?? null,
+                logo: launchServiceProvider.logo?.image_url ?? null,
+                link: launchServiceProvider.info_url ?? null
+            } : null,
 
-            agency: {
-                name: launchServiceProvider.name,
-                description: launchServiceProvider.description,
-                logo: launchServiceProvider.logo.image_url,
-                link: launchServiceProvider.info_url
-            },
+            launcherConfiguration: launchRocketConfig ? {
+                name: launchRocketConfig.full_name ?? null,
+                image: launchRocketConfig.image?.image_url ?? null,
+                infoURL: launchRocketConfig.info_url ?? null,
+                wikiURL: launchRocketConfig.wiki_url ?? null,
 
-            launcherConfiguration: {
-                name: launchRocketConfig.full_name,
-                image: launchRocketConfig.image.image_url,
-                infoURL: launchRocketConfig.info_url,
-                wikiURL: launchRocketConfig.wiki_url,
+                totalSuccessfulLaunches: launchRocketConfig.successful_launches ?? null,
+                totalLaunches: launchRocketConfig.total_launch_count ?? null,
 
-                totalSuccessfulLaunches: launchRocketConfig.successful_launches,
-                totalLaunches: launchRocketConfig.total_launch_count,
+                height: launchRocketConfig.length ?? null,
+                diameter: launchRocketConfig.diameter ?? null,
+                launchMass: launchRocketConfig.launch_mass ?? null,
+                launchCost: launchRocketConfig.launch_cost ?? null,
 
-                height: launchRocketConfig.length,
-                diameter: launchRocketConfig.diameter,
-                launchMass: launchRocketConfig.launch_mass,
-                launchCost: launchRocketConfig.launch_cost,
+                isReusable: launchRocketConfig.reusable ?? null,
 
-                isReusable: launchRocketConfig.reusable,
-
-                manufacturer: launchRocketConfig.manufacturer.name
-            }
+                manufacturer: launchRocketConfig.manufacturer?.name ?? null
+            } : null
         };
-        /*
-        // TODO - fix setFieldsWithNoDataToNull - currently sets filteredLaunchObject to nested arrays with nothing in them
-        const filteredLaunchObject = setFieldsWithNoDataToNull(detailedLaunchDataArray);
-        console.log(filteredLaunchObject);
-        return filteredLaunchObject;
-        */
-        return launchObject;
-    });
-    return detailedLaunchDataArray;
+    })
+    return setFieldsWithNoDataToNull(detailedLaunchDataArray);
 }
 
 const getLaunchesAsList = () => {
     return detailedLaunchDataArray;
-}
-
-/**
- * @returns Null if launch is not found.
- */
-const getLaunchById = (launchId: string) => {
-    for (let launch of detailedLaunchDataArray) {
-        if (launchId == launch.id) {
-            return launch;
-        }
-    }
-    return null;
 }
 
 /**
@@ -133,7 +113,7 @@ const setFieldsWithNoDataToNull = (launchObject: any) => { //todo - set typing. 
                 setFieldsWithNoDataToNull(launchObject[key])
 
             } else if (invalidPrimitives.includes(launchObject[key])) {
-                // field is a primitive 
+                // field is a primitive
                 launchObject[key] = null;
             }
         }
@@ -161,22 +141,17 @@ const setLaunchData = async (
     // Convert dayjs objects to ISO8601 date strings
     const ISOStartDate = launchSearchStartDate.toISOString();
     const ISOEndDate = launchSearchEndDate.toISOString();
-    try {
-        // Make launches API call with date range parameters and set detailed data (parsed to cut out unimportant data, but not mutated)
-        const newDetailedLaunchData = await loadLaunchesOverTimePeriod(ISOStartDate, ISOEndDate); //
-        setdetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]);
-        // Extract and set basic data relevent for globe display (not mutated either)
-        const newBasicLaunchData = extractBasicLaunchDataFromDetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]); //
-        setbasicLaunchData(newBasicLaunchData);
-    } catch (error) {
-        console.log("error getting/setting new launch data", error);
-    }
+    // Make launches API call with date range parameters and set detailed data (parsed to cut out unimportant data, but not mutated)
+    const newDetailedLaunchData = await loadLaunchesOverTimePeriod(ISOStartDate, ISOEndDate); //
+    setdetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]);
+    // Extract and set basic data relevent for globe display (not mutated either)
+    const newBasicLaunchData = extractBasicLaunchDataFromDetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]); //
+    setbasicLaunchData(newBasicLaunchData);
 }
 
 export {
     loadLaunchesOverTime,
     getLaunchesAsList,
-    getLaunchById,
     setFieldsWithNoDataToNull,
     extractBasicLaunchDataFromDetailedLaunchData,
     setLaunchData

@@ -147,6 +147,3 @@ export const SiteContent = (
         </div>
     )
 }
-/*
-
- */
