@@ -1,25 +1,30 @@
-name: Deploy from main to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - main 
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout source
         uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build and deploy
-        run: npm run deploy
+      - name: Build the site
+        run: npm run build
+
+      - name: Deploy to production branch
+        run: |
+          npm install -g gh-pages
+          npx gh-pages -d dist -b prod-build
