@@ -20,11 +20,4 @@ const getLaunches = () => {
     return getLaunchesAsList();
 }
 
-/*
-// Unused ATM - if readding, don't forget to re-add to exports
-const getLaunch = (id: string) => {
-    return getLaunchById(id);
-}
- */
-
 export {loadLaunchesOverTimePeriod, getLaunches}

@@ -11,7 +11,6 @@ import {setLaunchData} from "../../model/launches.ts"
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 
 const APIErrorAlert = () => (
-    // TODO - implement in the alert box section.
     // Alert for when there's some sort of error with the API during fetching/setting data that we can't do anything about.
     // e.g. API server is down
     <Alert severity="error" style={{width: "45%"}}>
@@ -61,7 +60,7 @@ const AlertContainer = (
     if (!isloadingLaunchDataFromAPI && basicLaunchDataArray.length === 0) {
         return <NoDataForRangeAlert/>;
     }
-
+    // If no warnings need to be shown, then the data is inherently valid.
     return <ValidDateRangeAlert/>;
 };
 

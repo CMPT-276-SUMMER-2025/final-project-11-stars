@@ -14,13 +14,14 @@ const loadNewsFeedData = async () => {
         try {
             response = await axios.get(REAL_EVENTS_URL);
         } catch (error) {
-            console.warn("Failed to load from LL2 Events (news feed) API. Falling back to dev/backup API.", error);
             response = await axios.get(BACKUP_EVENTS_URL);
         }
     }
     return response.data.results.map((event: any) => {
         let URL;
 
+        // This checks to make sure that there are valid URLs available.
+        // If not, explicitly set the URL field to null.
         if (event.vid_urls.length != 0) {
             URL = event.vid_urls[0];
         } else if (event.info_urls.length != 0) {
@@ -37,8 +38,6 @@ const loadNewsFeedData = async () => {
             imageURL: event.image.image_url,
             sourceURL: URL
         };
-        // todo - filter data like in launches.ts
-
         return eventObject;
     });
 }

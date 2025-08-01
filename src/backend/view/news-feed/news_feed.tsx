@@ -5,7 +5,6 @@ import LinkIcon from "@mui/icons-material/Link";
 import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
 import React from "react";
 
-
 const NoNewsAlert = () => {
     return (
         <Alert severity="error">
