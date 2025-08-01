@@ -4,8 +4,6 @@ import {Dayjs as type_dayjs} from "dayjs";
 import React from "react";
 import {loadLaunchesOverTimePeriod} from "../controllers/launches_controller.ts";
 
-const isDevMode = import.meta.env.VITE_CUSTOM_DEV_MODE === "true";
-
 /**
  * Handles business logic and access to data in relation to orbital launches.
  */
@@ -19,21 +17,10 @@ let detailedLaunchDataArray: detailedLaunchDataInterface[];
  * @param endDate Expected to be ISO 8601 format.
  */
 const loadLaunchesOverTime = async (startDate: string, endDate: string) => {
-    const REAL_LAUNCHES_URL = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`;
-    const BACKUP_LAUNCHES_URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`;
-    let response;
+    const LAUNCHES_URL = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`;
+    const response = await axios.get(LAUNCHES_URL);
 
-    if (isDevMode) {
-        // If we're in dev mode, skip calling the real API.
-        response = await axios.get(BACKUP_LAUNCHES_URL);
-    } else {
-        try {
-            response = await axios.get(REAL_LAUNCHES_URL);
-        } catch (error) {
-            console.warn("Failed to load from LL2 Launches API. Falling back to dev/backup API.", error);
-            response = await axios.get(BACKUP_LAUNCHES_URL);
-        }
-    }
+
     detailedLaunchDataArray = response.data.results.map((launch: any) => {
         // If any data doesn't exist, set it to null
         let launchServiceProvider = launch?.launch_service_provider ?? null;
