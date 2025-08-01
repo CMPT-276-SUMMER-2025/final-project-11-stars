@@ -20,11 +20,12 @@ const loadNewsFeedData = async () => {
     }
     return response.data.results.map((event: any) => {
         let URL;
-
-        if (event.vid_urls.length != 0) {
-            URL = event.vid_urls[0];
-        } else if (event.info_urls.length != 0) {
-            URL = event.info_urls[0];
+        // This checks to make sure that there are valid URLs available.
+        // If not, explicitly set the URL field to null.
+        if (event.vid_urls.length !== 0) {
+            URL = event.vid_urls[0].url;
+        } else if (event.info_urls.length !== 0) {
+            URL = event.info_urls[0].url;
         } else {
             URL = null;
         }
