@@ -9,6 +9,11 @@ import {Button, IconButton, Link, Tooltip, Typography} from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
 import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
 
+const stripBrackets = (input: string): string => {
+    const index = input.indexOf(" (");
+    return index !== -1 ? input.slice(0, index) : input;
+};
+
 const getabsoluteLaunchDaysHoursDifference = (dateStr: string): { hours: number; days: number } => {
     const launchDate = dayjs(dateStr);
     const now = dayjs();
@@ -34,19 +39,20 @@ const formatDateToText = (date: string): string => {
     return `${formattedDate} ${timeZoneAbbr}`.toUpperCase();
 }
 
-const launchText = (launchName: string, infoURL: string | null, wikiURL: string | null) => {
+const launchHeaderWithLink = (launchName: string, infoURL: string | null, wikiURL: string | null) => {
     const [topText, bottomText] = launchName.split(" | ");
     const URL = infoURL || wikiURL;
 
     return (
         <div style={{display: "flex", width: "100%", flexDirection: "column", alignItems: "center"}}>
             {URL ? (
-                <Link href={URL} underline="hover" style={{display: "flex", flexDirection: "row", width: "100%"}}>
-                    <div style={{height: "100%", width: "100%", display: "flex", flexDirection: "column"}}>
-                        <Typography variant="h3" align="center">
+                <Link href={URL} underline="hover"
+                      style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
+                    <div style={{height: "100%", display: "flex", flexDirection: "column"}}>
+                        <Typography variant="h4" align="center">
                             {topText}
                         </Typography>
-                        <Typography variant="h3" align="center">
+                        <Typography variant="h4" align="center">
                             {bottomText}
                         </Typography>
                     </div>
@@ -54,30 +60,31 @@ const launchText = (launchName: string, infoURL: string | null, wikiURL: string 
                 </Link>
             ) : (
                 <div style={{height: "100%", width: "100%", display: "flex", flexDirection: "column"}}>
-                    <Typography variant="h3" align="center">
+                    <Typography variant="h4" align="center">
                         {topText}
                     </Typography>
-                    <Typography variant="h3" align="center">
+                    <Typography variant="h4" align="center">
                         {bottomText}
                     </Typography>
                 </div>
-            )}
+            )
+            }
         </div>
     );
 };
 
-const agencyText = (agencyName: string, agencyLink: string | null) => {
+const agencyHeaderWithLink = (agencyName: string, agencyLink: string | null) => {
     return (
         <div style={{display: "flex", width: "100%", flexDirection: "column", alignItems: "center"}}>
             {agencyLink ? (
                 <Link href={agencyLink} underline="hover">
-                    <Typography color="gray" variant="h4" align={"center"}
+                    <Typography color="gray" variant="h5" align={"center"}
                                 style={{display: "flex", flexDirection: "row"}}>
                         {agencyName} <LinkIcon/>
                     </Typography>
                 </Link>
             ) : (
-                <Typography color="gray" variant="h4" align={"center"}>
+                <Typography color="gray" variant="h5" align={"center"}>
                     {agencyName}
                 </Typography>
             )}
@@ -87,7 +94,7 @@ const agencyText = (agencyName: string, agencyLink: string | null) => {
 
 const launchTimeDate = (date: string) => {
     return (
-        <Typography variant={"h5"} color={"white"}>
+        <Typography variant={"h5"} color={"white"} align={"center"}>
             {formatDateToText(date)}
         </Typography>
     )
@@ -104,10 +111,10 @@ const launchDelta = (date: string) => {
             <Typography variant={"h6"} color={"gray"}>
                 {isPast ? "LAUNCHED" : "LAUNCHES IN"}
             </Typography>
-            <Typography variant={"h4"} color={"white"}>
+            <Typography variant={"h5"} color={"white"}>
                 {`${absoluteLaunchDaysHours.days} DAYS`}
             </Typography>
-            <Typography variant={"h4"} color={"white"}
+            <Typography variant={"h5"} color={"white"}
                         style={{display: "flex", flexDirection: "row", gap: "0.5rem"}}>
                 {`${absoluteLaunchDaysHours.hours} HOURS`}
             </Typography>
@@ -120,41 +127,102 @@ const launchDelta = (date: string) => {
     )
 }
 
-const launchLocation = (latitude: number | null, longitude: number | null, padName: string | null) => {
+const launchPadName = (name: string | null) => {
+    if (name == null) return null;
+
     return (
         <div style={{display: "flex", flexDirection: "column"}}>
-            <div>
-                {padName != null && (
-                    <>
-                        <Typography variant="h6" color="gray">
-                            FROM PAD
-                        </Typography>
-                        <Typography variant="h4" color="white">
-                            {padName}
-                        </Typography>
-                    </>
-                )}
-                {latitude != null && longitude != null && (
-                    <div style={{display: "flex", flexDirection: "column"}}>
-                        <Typography
-                            variant="h5"
-                            color="gray"
-                        >
-                            {`LAT: ${latitude.toFixed(3)}`}
-                        </Typography>
-                        <Typography
-                            variant="h5"
-                            color="gray"
-                        >
-                            {`LNG: ${longitude.toFixed(3)}`}
-                        </Typography>
-                    </div>
-                )}
+            <Typography variant="h6" color="gray">
+                FROM
+            </Typography>
+            <Typography variant="h5" color="white">
+                {stripBrackets(name)}
+            </Typography>
+        </div>
+    );
+};
+
+const launchPadCoordinates = (latitude: number | null, longitude: number | null) => {
+    if (latitude == null || longitude == null) {
+        return null
+    }
+
+    return (
+        <div style={{display: "flex", flexDirection: "column"}}>
+            <div style={{display: "flex", gap: "0.5rem"}}>
+                <Typography variant="h6" color="gray" component="span">
+                    LAT:
+                </Typography>
+                <Typography variant="h5" color="white" component="span">
+                    {latitude.toFixed(3)}
+                </Typography>
+            </div>
+            <div style={{display: "flex", gap: "0.5rem"}}>
+                <Typography variant="h6" color="gray" component="span">
+                    LNG:
+                </Typography>
+                <Typography variant="h5" color="white" component="span">
+                    {longitude.toFixed(3)}
+                </Typography>
             </div>
         </div>
     );
 };
 
+export const LaunchDetailsHeader = (
+    setPanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>,
+    newsFeedDataArray: newsFeedDataInterface[]
+) => (
+    <div>
+        <Typography
+            variant="h5"
+            align="center"
+            alignSelf="center"
+            width="100%"
+        >
+            <IconButton size="small" sx={{visibility: "hidden", ml: 0.5}}>
+                <InfoOutlineIcon fontSize="small"/>
+            </IconButton>
+            Launch Details
+            <Tooltip
+                title="Some launch data might not be available due to reasons beyond our, or Launch Library II's, control">
+                <IconButton size="small" sx={{ml: 0.5}}>
+                    <InfoOutlineIcon fontSize="small"/>
+                </IconButton>
+            </Tooltip>
+        </Typography>
+
+        <Button
+            variant="text"
+            onClick={() =>
+                setPanelData({contentType: "newsFeed", content: newsFeedDataArray})
+            }
+        >
+            {"< Go back to News Feed"}
+        </Button>
+    </div>
+);
+
+export const timeDeltaAndLaunchPadInfo = (
+    launchDate: string,
+    padName: string,
+    latitude: number | null,
+    longitude: number | null
+) => (
+    <div
+        style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            height: "100%",
+            justifyContent: "space-between",
+        }}
+    >
+        {launchDelta(launchDate)}
+        {launchPadName(stripBrackets(padName))}
+        {launchPadCoordinates(latitude, longitude)}
+    </div>
+);
 
 const rocketStats = (
     totalSuccessfulLaunches: number | null,
@@ -165,79 +233,78 @@ const rocketStats = (
     launchCost: number | null,
     isReusable: boolean | null
 ) => {
-    const formatLaunchText = (count: number) =>
-        `${count} LAUNCH${count === 1 ? "" : "ES"}`;
+    const rocketLabelText = (text: string) => (
+        <Typography color="gray" variant="h6" component="span">
+            {` ${text}`}
+        </Typography>
+    );
 
-    const failureCount =
-        totalSuccessfulLaunches != null && totalLaunches != null
-            ? totalLaunches - totalSuccessfulLaunches
-            : null;
+    const formatLaunchText = (count: number) => {
+        return (
+            <>
+                {count} {rocketLabelText(`LAUNCH${count === 1 ? "" : "ES"}`)}
+            </>
+        );
+    };
+
+    const formatFailureText = (count: number) => {
+        return (
+            <>
+                {count} {rocketLabelText(`FAILURE${count === 1 ? "" : "S"}`)}
+            </>
+        );
+    };
+
+    const failureCount = totalSuccessfulLaunches != null && totalLaunches != null ? totalLaunches - totalSuccessfulLaunches : null;
 
     return (
-        <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "end"}}>
-            {totalSuccessfulLaunches != null ? (
+        <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "end"}}>
+            {totalSuccessfulLaunches != null && (
+                // Label text is inside formatLaunchText
                 <Typography color="green" variant="h5">
-                    {`${formatLaunchText(totalSuccessfulLaunches)} SUCCESSFUL`}
-                </Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Launch Success Count Unavailable
+                    {formatLaunchText(totalSuccessfulLaunches)}
                 </Typography>
             )}
 
-            {failureCount != null ? (
+            {failureCount != null && (
+                // Label text is inside formatFailureText
                 <Typography color="red" variant="h5">
-                    {`${formatLaunchText(failureCount)} FAILED`}
-                </Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Launch Failure Count Data Unavailable
+                    {formatFailureText(failureCount)}
                 </Typography>
             )}
 
-            {height != null ? (
-                <Typography variant="h5">{`${height} METERS TALL`}</Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Height Data Unavailable
+            {height != null && (
+                <Typography variant="h5">
+                    {height} {rocketLabelText("METERS TALL")}
                 </Typography>
             )}
 
-            {diameter != null ? (
-                <Typography variant="h5">{`${diameter} METERS WIDE`}</Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Diameter Data Unavailable
+            {diameter != null && (
+                <Typography variant="h5">
+                    {diameter} {rocketLabelText("METERS WIDE")}
                 </Typography>
             )}
 
-            {launchMass != null ? (
-                <Typography variant="h5">{`${launchMass} KG`}</Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Launch Mass Data Unavailable
+            {launchMass != null && (
+                <Typography variant="h5">
+                    {launchMass} {rocketLabelText("KG")}
                 </Typography>
             )}
 
-            {launchCost != null ? (
-                <Typography variant="h5">{`$${launchCost.toLocaleString()} TO LAUNCH`}</Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Launch Cost Data Unavailable
+            {launchCost != null && (
+                <Typography variant="h5">
+                    ${launchCost.toLocaleString()} {rocketLabelText("TO LAUNCH")}
                 </Typography>
             )}
 
-            {isReusable != null ? (
+            {isReusable != null && (
                 <Typography color={isReusable ? "green" : "red"} variant="h5">
                     {isReusable ? "REUSABLE :D" : "NON-REUSABLE :("}
-                </Typography>
-            ) : (
-                <Typography color="orange" variant="h5">
-                    Reusability Data Unavailable
                 </Typography>
             )}
         </div>
     );
+
 };
 
 export const LaunchDetails = (
@@ -251,79 +318,41 @@ export const LaunchDetails = (
             flexDirection: "column",
             width: "100%",
             height: "100%",
-            justifyContent: "space-between"
+            gap: "1rem"
         }}>
-            <div>
-                <Typography
-                    variant="h5"
-                    align="center"
-                    alignSelf={"center"}
-                    width={"100%"}
-                >
-                    <IconButton size="small" sx={{visibility: "hidden", ml: 0.5}}>
-                        <InfoOutlineIcon fontSize="small"/>
-                    </IconButton>
-                    Launch Details
-                    <Tooltip
-                        title={"Some launch data might not be available due to reasons beyond our, or Launch Library II's, control"}>
-                        <IconButton size="small" sx={{ml: 0.5}}>
-                            <InfoOutlineIcon fontSize="small"/>
-                        </IconButton>
-                    </Tooltip>
-                </Typography>
-
-                <Button variant="text"
-                        onClick={() => setPanelData({contentType: "newsFeed", content: newsFeedDataArray})}>
-                    {"< Go back to News Feed"}
-                </Button>
-            </div>
+            {LaunchDetailsHeader(setPanelData, newsFeedDataArray)}
             <div style={{
                 display: "flex",
-                width: "100%",
-                height: "100%",
-                justifyContent: "center",
-                alignItems: "center"
+                flexDirection: "column",
+                flex: 1,
+                gap: "1rem",
+                justifyContent: "space-around"
             }}>
+                <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
+                    {launchHeaderWithLink(stripBrackets(content.launchName), content.launcherConfiguration.infoURL, content.launcherConfiguration.wikiURL)}
+                    {agencyHeaderWithLink(stripBrackets(content.agency.name), content.agency.link)}
+                    {launchTimeDate(content.launchDate)}
+                </div>
                 <div style={{
-                    display: "flex",
-                    flexDirection: "column",
                     width: "100%",
                     height: "100%",
-                    justifyContent: "space-around"
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
                 }}>
-                    <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
-                        {launchText(content.launchName, content.launcherConfiguration.infoURL, content.launcherConfiguration.wikiURL)}
-                        {agencyText(content.agency.name, content.agency.link)}
-                    </div>
-
-                    <div style={{
-                        width: "100%",
-                        minHeight: "50%",
-                        maxHeight: "100%",
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
-                    }}>
-                        <div style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            width: "100%",
-                            height: "100%",
-                            justifyContent: "space-around"
-                        }}>
-                            {launchTimeDate(content.launchDate)}
-                            {launchDelta(content.launchDate)}
-                            {launchLocation(content.location.latitude, content.location.longitude, content.pad.name)}
-                        </div>
-
-                        {rocketStats(
-                            content.launcherConfiguration.totalSuccessfulLaunches,
-                            content.launcherConfiguration.totalLaunches,
-                            content.launcherConfiguration.height,
-                            content.launcherConfiguration.diameter,
-                            content.launcherConfiguration.launchMass,
-                            content.launcherConfiguration.launchCost,
-                            content.launcherConfiguration.isReusable)}
-                    </div>
+                    {timeDeltaAndLaunchPadInfo(
+                        content.launchDate,
+                        content.pad.name,
+                        content.location.latitude,
+                        content.location.longitude
+                    )}
+                    {rocketStats(
+                        content.launcherConfiguration.totalSuccessfulLaunches,
+                        content.launcherConfiguration.totalLaunches,
+                        content.launcherConfiguration.height,
+                        content.launcherConfiguration.diameter,
+                        content.launcherConfiguration.launchMass,
+                        content.launcherConfiguration.launchCost,
+                        content.launcherConfiguration.isReusable)}
                 </div>
             </div>
         </div>

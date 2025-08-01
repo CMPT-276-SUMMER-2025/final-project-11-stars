@@ -117,7 +117,7 @@ export const SiteContent = (
                 justifyContent: "space-around",
                 alignItems: "center",
                 gap: "1rem",
-                padding: "1rem 0rem"
+                padding: "1rem 0rem 2rem 0rem"
             }}>
                 {LaunchDateRangePicker(
                     launchSearchStartDate, setlaunchSearchStartDate,
