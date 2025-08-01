@@ -10,13 +10,11 @@ import type {
 import {load100BrightestSatellites, getPositionsFromTLEArray} from "../../model/satellites.ts";
 
 export const GlobeContainer = (
-    // TODO - remove _satelliteTLEArray if it doesn't end up being used
     basicLaunchDataArray: basicLaunchDataInterface[],
     detailedLaunchDataArray: detailedLaunchDataInterface[],
     _satelliteTLEArray: satelliteTLEInterface[], setsatelliteTLEArray: React.Dispatch<React.SetStateAction<satelliteTLEInterface[]>>,
     setnewsOrLaunchDataSidePanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>
 ) => {
-    // const basicLaunchDataArrayClone = [...basicLaunchDataArray]; // TODO: remove if not needed (2)
     const [dimensions, setDimensions] = useState({
         width: window.innerWidth * 3 / 5,
         height: window.innerHeight
@@ -38,8 +36,7 @@ export const GlobeContainer = (
     useEffect(() => {
         (async () => {
             await load100BrightestSatellites().then((data) => {
-                setsatelliteTLEArray(data); // satelliteTLEArray cannot be directly used in the function after being set.
-                                            // I (Anton / PM) am not sure if this is intended behavior or a bug, but this is a non-issue for this feature.
+                setsatelliteTLEArray(data); // satelliteTLEArray state cannot be used in the function after being set due to React scoping.
                 setInterval(() => {
                     const now = new Date();
                     const positions = getPositionsFromTLEArray(data, now).map((p: {
@@ -62,7 +59,7 @@ export const GlobeContainer = (
         })();
     }, []);
 
-    //@ts-ignore - This ignores the typing issue for the useRef, which is a bug from the react-globegl library. // TODO: see if possible to clear error somehow (or if im actually wrong lol)
+    //@ts-ignore - This ignores the typing issue for the useRef, which is a bug from the react-globegl library.
     const globeObjectMethodsReference = useRef<InstanceType<typeof Globe>>(null); // This is needed for external/functional interaction with the globe object, such as centering the globe to a specific position.
     return (
         <div style={{userSelect: "none", MozUserSelect: "none", pointerEvents: "auto"}}>

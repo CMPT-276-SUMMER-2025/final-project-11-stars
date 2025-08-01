@@ -2,7 +2,6 @@ import * as launchesC from "../../controllers/launches_controller.js";
 import * as launches from "../launches.js"
 import axios from "axios";
 
-// TODO - remove @ts-ignore and add proper typing
 /**
  * File for unit testing model in relation to api-1-feature-1/2.
  */
