@@ -1,4 +1,4 @@
-import type {newsFeedDataInterface} from "../../model/interfaces.ts";
+import type {newsFeedDataInterface} from "../../../model/interfaces.ts";
 import dayjs from "dayjs";
 import {Alert, IconButton, LinearProgress, Link, Tooltip, Typography} from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
