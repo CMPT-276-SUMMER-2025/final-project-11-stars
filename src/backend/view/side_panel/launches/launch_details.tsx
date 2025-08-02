@@ -2,7 +2,7 @@ import type {
     detailedLaunchDataInterface,
     newsFeedDataInterface,
     newsOrLaunchDataSidePanelDataInterface
-} from "../../model/interfaces.ts";
+} from "../../../model/interfaces.ts";
 import React from "react";
 import dayjs from "dayjs";
 import {Button, IconButton, Link, Tooltip, Typography} from "@mui/material";
