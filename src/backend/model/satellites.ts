@@ -1,5 +1,5 @@
 import axios from "axios";
-import type {satelliteTLEInterface} from "./interfaces.ts";
+import type {satellitePositionInterface, satelliteTLEInterface} from "./interfaces.ts";
 import * as satellite from "satellite.js";
 
 export function parseRawTLEStringIntoTLEObjectArray(
@@ -41,7 +41,7 @@ export const getSatellitePositionAtTime = (
             return {
                 lat: satellite.degreesLat(geodetic.latitude), // Convert latitude to degrees
                 lng: satellite.degreesLong(geodetic.longitude), // Convert longitude to degrees
-                altitudeKm: geodetic.height, // Altitude in kilometers
+                alt: geodetic.height, // Altitude in kilometers
             };
         } else {
             return null; // If position couldn't be calculated, drop the entry. This will cause GlobeGL to just ignore this satellite and not render it.
@@ -50,6 +50,28 @@ export const getSatellitePositionAtTime = (
         return null; // Safety net - shouldn't really need to be used unless the calculations somehow return garbage data.
     }
 };
+const deduplicateSatelliteNamesAndIDs = (
+    satellites: satellitePositionInterface[]
+) => {
+    const nameCount: Record<string, number> = {};
+    const result: typeof satellites = [];
+
+    for (const satellite of satellites) {
+        const baseName = satellite.name;
+        if (!(baseName in nameCount)) {
+            nameCount[baseName] = 1;
+            result.push(satellite);
+        } else {
+            const count = nameCount[baseName]++;
+            result.push({
+                ...satellite,
+                name: `${baseName} (${count})`,
+                id: `${baseName}_${count}`
+            });
+        }
+    }
+    return result;
+}
 
 export const getPositionsFromTLEArray = (
     tleArray: satelliteTLEInterface[],
@@ -66,12 +88,15 @@ export const getPositionsFromTLEArray = (
         }
         return {
             ...position,
+            alt: position.alt / 6371, // This normalizes the altitude to match the globe radius
             id: satellite.name,
             name: satellite.name,
         };
     });
 
-    // Filter out all nulls
-    return positionsOrNull.filter(pos => pos !== null);
-};
 
+    // Filter out all nulls
+    const nullFilteredPositions = positionsOrNull.filter(pos => pos !== null);
+    // De-duplicate names and IDs
+    return deduplicateSatelliteNamesAndIDs(nullFilteredPositions);
+};
