@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from "react";
+import React, {useEffect, useState, useCallback, useRef} from "react";
 import Globe from "react-globe.gl";
 import type {
     basicLaunchDataInterface,
@@ -8,15 +8,21 @@ import type {
     satellitePositionInterface
 } from "../../model/interfaces.ts";
 import {load100BrightestSatellites, getPositionsFromTLEArray} from "../../model/satellites.ts";
+import {calculateNewDateFromHourDelta} from "../satellite_controls/satellite_time_delta_slider.tsx";
+import {centerGlobeToChosenSatellitePosition} from "../satellite_controls/dropdown_and_button_to_center_satellite.tsx";
 
 export const GlobeContainer = (
     //@ts-ignore - This ignores the typing issue for the useRef, which is a bug from the react-globegl library.
     globeRef: InstanceType<typeof Globe>,
     basicLaunchDataArray: basicLaunchDataInterface[],
     detailedLaunchDataArray: detailedLaunchDataInterface[],
-    _satelliteTLEArray: satelliteTLEInterface[], setsatelliteTLEArray: React.Dispatch<React.SetStateAction<satelliteTLEInterface[]>>,
+    setsatelliteTLEArray: React.Dispatch<React.SetStateAction<satelliteTLEInterface[]>>,
     satellitePositions: satellitePositionInterface[], setsatellitePositions: React.Dispatch<React.SetStateAction<satellitePositionInterface[]>>,
-    setnewsOrLaunchDataSidePanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>
+    setnewsOrLaunchDataSidePanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>,
+    satelliteSeekMinuteOffset: number,
+    selectedSatelliteForCentering: satellitePositionInterface | null,
+    lockGlobeDueToCenteredSatellite: boolean,
+    disableGlobeInterval: boolean
 ) => {
     const [dimensions, setDimensions] = useState({
         width: window.innerWidth * 3 / 5,
@@ -36,25 +42,42 @@ export const GlobeContainer = (
     }, []);
 
     useEffect(() => {
+        // if the globe lock state is false, then enable rotation
+        // if the globe lock state is true, then disable rotation
+        globeRef.current.controls().enableRotate = !lockGlobeDueToCenteredSatellite;
+    }, [lockGlobeDueToCenteredSatellite]);
+
+    // Create mutable ref objects to hold the latest offset value for the setInterval renders
+    const satelliteSeekMinuteOffsetRef = useRef(satelliteSeekMinuteOffset);
+    const selectedSatelliteForCenteringRef = useRef(selectedSatelliteForCentering);
+    const disableGlobeIntervalRef = useRef(disableGlobeInterval)
+
+    // Update the ref whenever the state changes, which avoids using stale values in the interval
+    useEffect(() => {
+        satelliteSeekMinuteOffsetRef.current = satelliteSeekMinuteOffset;
+    }, [satelliteSeekMinuteOffset]);
+
+    useEffect(() => {
+        selectedSatelliteForCenteringRef.current = selectedSatelliteForCentering;
+    }, [selectedSatelliteForCentering]);
+
+    useEffect(() => {
+        disableGlobeIntervalRef.current = disableGlobeInterval;
+    }, [disableGlobeInterval]);
+
+
+    useEffect(() => {
         (async () => {
             await load100BrightestSatellites().then((data) => {
                 setsatelliteTLEArray(data); // satelliteTLEArray state cannot be used in the function after being set due to React scoping.
                 setInterval(() => {
-                    const now = new Date();
-                    const positions = getPositionsFromTLEArray(data, now).map((p: {
-                        lat: any;
-                        lng: any;
-                        altitudeKm: number;
-                        id: any;
-                        name: any;
-                    }) => ({
-                        lat: p.lat,
-                        lng: p.lng,
-                        alt: p.altitudeKm / 6371, // This normalizes the altitude to match the globe radius
-                        id: p.id,
-                        name: p.name
-                    }));
-                    setsatellitePositions(positions);
+                    if (!disableGlobeIntervalRef.current) { // If the interval isn't being 'taken over' by some other function
+                        // Use the current/updated values from the refs instead of the states
+                        const currentTimeWithOffsetAdded = calculateNewDateFromHourDelta(satelliteSeekMinuteOffsetRef.current);
+                        const positions = getPositionsFromTLEArray(data, currentTimeWithOffsetAdded)
+                        setsatellitePositions(positions);
+                        centerGlobeToChosenSatellitePosition(selectedSatelliteForCenteringRef.current, globeRef, positions)
+                    }
                 }, 500) // Particles update every 500ms. This looks good without causing too much system strain.
             });
         })();
@@ -73,7 +96,7 @@ export const GlobeContainer = (
                 pointColor={() => 'red'}
                 pointRadius={1}
                 onPointClick={(point) => {
-                    // @ts-ignore
+                    // @ts-ignore - TS  believes that there does not/might not exist an id for every point, which is incorrect.
                     const pointID = point.id;
                     const matchingDetailedLaunchDataObject = detailedLaunchDataArray.find(
                         (detailedObject) => detailedObject.id === pointID
