@@ -72,6 +72,7 @@ export const satelliteTimeDeltaSlider = (
             gap: "1rem",
             minWidth: "6rem", // The slider component naturally (i.e. by design) overflows, so this allows center the info icon.
             paddingBottom: "2rem", // Stops slider from visually overflowing past the bottom of the page
+            pointerEvents: "auto", //Re-enable interaction for this specific section
         }}>
             <Tooltip
                 title={

@@ -86,6 +86,7 @@ const App = () => {
                         paddingTop: "1rem",
                         display: "flex",
                         flexDirection: "row",
+                        pointerEvents: "none" // disable interaction for the entire div - re-enabled in child components
                     }}>
                         {satelliteTimeDeltaSlider(
                             satelliteTLEArray,
