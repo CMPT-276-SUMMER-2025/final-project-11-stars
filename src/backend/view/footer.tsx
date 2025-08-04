@@ -8,7 +8,7 @@ export const Footer = () => {
         }}>
 
             <div>
-                © Anton, Bidisha, Paul & Sadab (Group 11 - "Stars") | CMPT 276 Summer 2025 @ SFU
+                © Anton, Bidisha, Paul & Sadab | CMPT 276 Summer 2025 @ SFU
             </div>
         </div>
     )

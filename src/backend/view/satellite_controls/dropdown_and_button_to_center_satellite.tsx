@@ -61,7 +61,8 @@ export const dropdownAndButtonForCenteringSatellite = (
             gap: "1rem",
             top: 0,
             justifyContent: "center",
-            height: "3.5rem"
+            height: "3.5rem",
+            pointerEvents: "auto", //Re-enable interaction for this specific section
         }}>
 
             {!satellitePositions || satellitePositions.length === 0 ? (
