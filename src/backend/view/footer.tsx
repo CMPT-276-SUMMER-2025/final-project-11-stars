@@ -1,9 +1,9 @@
 export const Footer = () => {
     return (
         <div style={{
-            position: "fixed",
-            bottom: 0,
-            right: 0,
+            display: "flex",
+            width: "100%",
+            justifyContent: "end",
             pointerEvents: "none",
         }}>
 

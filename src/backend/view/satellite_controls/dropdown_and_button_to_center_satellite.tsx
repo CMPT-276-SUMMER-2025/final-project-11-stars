@@ -1,8 +1,21 @@
 import Globe from "react-globe.gl";
 import type {satellitePositionInterface} from "../../model/interfaces.ts";
-import {Autocomplete, Button, IconButton, TextField, Tooltip} from "@mui/material";
+import {Alert, Autocomplete, Button, IconButton, TextField, Tooltip} from "@mui/material";
 import React, {type RefObject} from "react";
 import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
+
+const APIErrorAlert = () => (
+    // Alert for when there's some sort of error with the API during fetching/setting data that we can't do anything about.
+    // e.g. API server is down
+    <Alert severity="error"
+           style={{
+               // Centers the alert text and icon due to nonstandard height
+               display: "flex",
+               alignItems: "center"
+           }}>
+        CELESTRAK API unavailable.
+    </Alert>
+);
 
 export const centerGlobeToChosenSatellitePosition = (
     selectedSatelliteForCentering: satellitePositionInterface | null,
@@ -40,76 +53,73 @@ export const dropdownAndButtonForCenteringSatellite = (
 ) => {
     const [internalSelectedSatellite, setinternalSelectedSatellite] = React.useState<satellitePositionInterface | null>(null);
     return (
+
         <div style={{
-            position: "absolute", // Absolute to ensure that it displays overtop (z-axis) the rest of the website
-            width: "60%",
-            top: 0,
-            left: 0,
             display: "flex",
             flexDirection: "row",
-            zIndex: 1, // Standard z-axis is 0, so setting it to 1 makes it display overtop of the rest of the side content
+            width: "100%",
             gap: "1rem",
+            top: 0,
             justifyContent: "center",
-            paddingTop: "1rem"
+            height: "3.5rem"
         }}>
-            <div style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "1rem",
-            }}>
+
+            {!satellitePositions || satellitePositions.length === 0 ? (
+                APIErrorAlert()
+            ) : (
                 <Autocomplete
                     options={satellitePositions}
                     getOptionLabel={(satellite) => satellite.name}
-                    renderInput={(params) => (
+                    renderInput={(params) =>
                         <TextField {...params} label="Search For A Satellite To Center" variant="outlined"/>
-                    )}
+                    }
                     isOptionEqualToValue={(option, value) => option.id === value.id}
                     style={{width: "25rem"}}
                     value={internalSelectedSatellite}
                     onChange={(_event, newValue) => setinternalSelectedSatellite(newValue)}
                 />
-
-                <Button
-                    variant="contained"
-                    disabled={internalSelectedSatellite === null} // if there isn't a picked satellite, then don't let the user click the button
-                    onClick={() => {
-                        if (internalSelectedSatellite) {
-                            setlockGlobeDueToCenteredSatellite(true); // Lock the globe
-                            setSelectedSatelliteForCentering(internalSelectedSatellite); // Update the globally use variable for the selected satellite
-                            centerGlobeToChosenSatellitePosition(internalSelectedSatellite, globeRef, satellitePositions, true); // Force a visual update
-                        }
-                    }}
-                >
-                    Lock to Satellite
-                </Button>
-                <Button
-                    variant="contained"
-                    disabled={internalSelectedSatellite === null} // if there isn't a picked satellite, then don't let the user click the button to avoid re-seting null to null
-                    onClick={() => {
-                        if (internalSelectedSatellite) {
-                            setlockGlobeDueToCenteredSatellite(false); // Unlock the globe
-                            setinternalSelectedSatellite(null) // Locally remove satellite from being selected for centering
-                            setSelectedSatelliteForCentering(null); // Globally remove satellite from being selected for centering
-                        }
-                    }}
-                >
-                    Deselect Satellite & Unlock Globe
-                </Button>
-                <Tooltip
-                    title={<div>
-                        Select a satellite to center the globe on its position.<br/>
-                        Click "Lock to Satellite" to center to your chosen satellite, and to automatically follow it
-                        through all time changes.<br/>
-                        Use "Deselect Satellite & Unlock Globe" to clear the selection and allow for mouse interaction
-                        with the globe again.
-                    </div>}
-                >
-                    <IconButton size="small" sx={{ml: 0.5}}>
-                        <InfoOutlineIcon fontSize="small"/>
-                    </IconButton>
-                </Tooltip>
-            </div>
-        </div>)
+            )}
+            <Button
+                variant="contained"
+                disabled={internalSelectedSatellite === null} // if there isn't a picked satellite, then don't let the user click the button
+                onClick={() => {
+                    if (internalSelectedSatellite) {
+                        setlockGlobeDueToCenteredSatellite(true); // Lock the globe
+                        setSelectedSatelliteForCentering(internalSelectedSatellite); // Update the globally use variable for the selected satellite
+                        centerGlobeToChosenSatellitePosition(internalSelectedSatellite, globeRef, satellitePositions, true); // Force a visual update
+                    }
+                }}
+            >
+                Lock to Satellite
+            </Button>
+            <Button
+                variant="contained"
+                disabled={internalSelectedSatellite === null} // if there isn't a picked satellite, then don't let the user click the button to avoid re-seting null to null
+                onClick={() => {
+                    if (internalSelectedSatellite) {
+                        setlockGlobeDueToCenteredSatellite(false); // Unlock the globe
+                        setinternalSelectedSatellite(null) // Locally remove satellite from being selected for centering
+                        setSelectedSatelliteForCentering(null); // Globally remove satellite from being selected for centering
+                    }
+                }}
+            >
+                Deselect Satellite & Unlock Globe
+            </Button>
+            <Tooltip
+                title={<div>
+                    Select a satellite to center the globe on its position.<br/>
+                    Click "Lock to Satellite" to center to your chosen satellite, and to automatically follow it
+                    through all time changes.<br/>
+                    Use "Deselect Satellite & Unlock Globe" to clear the selection and allow for mouse interaction
+                    with the globe again.
+                </div>}
+            >
+                <IconButton size="small" sx={{ml: 0.5}}>
+                    <InfoOutlineIcon fontSize="small"/>
+                </IconButton>
+            </Tooltip>
+        </div>
+    )
 }
 
 

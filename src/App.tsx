@@ -76,6 +76,17 @@ const App = () => {
             <ThemeProvider theme={darkTheme}>
                 <CssBaseline/>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <div style={{
+                        position: "absolute", // Absolute to ensure that it displays overtop (z-axis) the rest of the website
+                        height: "100%",
+                        width: "60%", // prevent overflow to the side panel/launch search controls
+                        top: 0, // Lock position to top of page
+                        left: 0, // Lock position to left of page
+                        zIndex: 1, // Place overtop of regular elements
+                        paddingTop: "1rem",
+                        display: "flex",
+                        flexDirection: "row",
+                    }}>
                         {satelliteTimeDeltaSlider(
                             satelliteTLEArray,
                             setsatellitePositions,
@@ -88,6 +99,7 @@ const App = () => {
                             setSelectedSatelliteForCentering,
                             globeRef,
                             setlockGlobeDueToCenteredSatellite)}
+                    </div>
                     <div style={{
                         display: "flex",
                         flexDirection: "row",
@@ -119,7 +131,7 @@ const App = () => {
                             justifyContent: "space-around",
                             alignItems: "center",
                             gap: "1rem",
-                            padding: "1rem 0rem 2rem 0rem"
+                            paddingTop: "1rem"
                         }}>
                             {LaunchDateRangePicker(
                                 launchSearchStartDate, setlaunchSearchStartDate,
@@ -133,21 +145,10 @@ const App = () => {
                                      style={{backgroundColor: "white"}}
                                      flexItem
                             />
-                            <div style={{
-                                width: "100%",
-                                height: "100%",
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                gap: "1rem",
-                                padding: "0rem 1.75rem"
-                            }}>
-                                {NewsOrLaunchDetailsSidePanel(newsFeedDataArray, setnewsFeedDataArray, newsOrLaunchDataSidePanelData, setnewsOrLaunchDataSidePanelData)}
-                            </div>
+                            {NewsOrLaunchDetailsSidePanel(newsFeedDataArray, setnewsFeedDataArray, newsOrLaunchDataSidePanelData, setnewsOrLaunchDataSidePanelData)}
+                            {Footer()}
                         </div>
                     </div>
-                    {Footer()}
                 </LocalizationProvider>
             </ThemeProvider>
         </div>

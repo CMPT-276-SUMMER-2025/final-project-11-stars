@@ -33,49 +33,60 @@ export const NewsOrLaunchDetailsSidePanel = (
         })();
     }, []);
     return (
-        <AnimatePresence mode="wait">
-            {(() => {
-                if (panelData.contentType === "newsFeed") {
-                    return (
-                        <motion.div
-                            key="news"
-                            variants={fadeVariants}
-                            initial="initial"
-                            animate="animate"
-                            exit="exit"
-                            style={{height: "100%", width: "100%"}}
-                        >
-                            {NewsFeed(panelData.content as newsFeedDataInterface[])}
-                        </motion.div>
-                    );
-                } else if (panelData.contentType === "launchDetails") {
-                    return (
-                        <motion.div
-                            key="details"
-                            variants={fadeVariants}
-                            initial="initial"
-                            animate="animate"
-                            exit="exit"
-                            style={{height: "100%", width: "100%"}}
-                        >
-                            {LaunchDetails(panelData.content as detailedLaunchDataInterface, setPanelData, newsFeedDataArray as newsFeedDataInterface[])}
-                        </motion.div>
-                    );
-                } else {
-                    return (
-                        <motion.div
-                            key="loading"
-                            variants={fadeVariants}
-                            initial="initial"
-                            animate="animate"
-                            exit="exit"
-                            style={{height: "100%", width: "100%"}}
-                        >
-                            {LoadingNews()}
-                        </motion.div>
-                    );
-                }
-            })()}
-        </AnimatePresence>
+        <div style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "1rem",
+            padding: "0rem 1.75rem"
+        }}>
+            <AnimatePresence mode="wait">
+                {(() => {
+                    if (panelData.contentType === "newsFeed") {
+                        return (
+                            <motion.div
+                                key="news"
+                                variants={fadeVariants}
+                                initial="initial"
+                                animate="animate"
+                                exit="exit"
+                                style={{height: "100%", width: "100%"}}
+                            >
+                                {NewsFeed(panelData.content as newsFeedDataInterface[])}
+                            </motion.div>
+                        );
+                    } else if (panelData.contentType === "launchDetails") {
+                        return (
+                            <motion.div
+                                key="details"
+                                variants={fadeVariants}
+                                initial="initial"
+                                animate="animate"
+                                exit="exit"
+                                style={{height: "100%", width: "100%"}}
+                            >
+                                {LaunchDetails(panelData.content as detailedLaunchDataInterface, setPanelData, newsFeedDataArray as newsFeedDataInterface[])}
+                            </motion.div>
+                        );
+                    } else {
+                        return (
+                            <motion.div
+                                key="loading"
+                                variants={fadeVariants}
+                                initial="initial"
+                                animate="animate"
+                                exit="exit"
+                                style={{height: "100%", width: "100%"}}
+                            >
+                                {LoadingNews()}
+                            </motion.div>
+                        );
+                    }
+                })()}
+            </AnimatePresence>
+        </div>
     )
 };

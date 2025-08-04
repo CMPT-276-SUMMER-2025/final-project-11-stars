@@ -6,8 +6,8 @@ import {getPositionsFromTLEArray} from "../../model/satellites.ts";
 import {centerGlobeToChosenSatellitePosition} from "./dropdown_and_button_to_center_satellite.tsx";
 import Globe from "react-globe.gl";
 import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
-import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
 
+// Visual marks for the slider for every 24 hour period
 const timeDeltaMarks = [
     {value: -10080, label: '-7 days'},
     {value: -8640, label: '-6 days'},
@@ -66,37 +66,27 @@ export const satelliteTimeDeltaSlider = (
     const [internalOffsetValue, setinternalOffsetValue] = React.useState<number>(0); // internal value that doesn't affect the globe object, but can be set internally so the user can see the current state whiel dragging.
     return (
         <div style={{
-            position: "absolute", // Absolute to ensure that it displays overtop (z-axis) the rest of the website
-            height: "100%",
-            top: 0,
-            left: 0,
-            zIndex: 2, // Standard z-axis is 0 and the dropdown/button container is 1, so setting it to 2 makes it display overtop of the rest of the side content AND the dropdown/button container
-            gap: "1rem",
-            padding: "1.5rem 0rem 2.5rem 0rem", // Slightly more padding to account for text guttering
             display: "flex",
-            flexDirection: "column"
+            flexDirection: "column",
+            height: "100%",
+            gap: "1rem",
+            minWidth: "6rem", // The slider component naturally (i.e. by design) overflows, so this allows center the info icon.
+            paddingBottom: "2rem", // Stops slider from visually overflowing past the bottom of the page
         }}>
-            <div style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-            }}>
-                <Tooltip
-                    title={
-                        <div>
-                            Drag the slider up to view the future, current, or past positions of the 100 brightest
-                            satellites orbiting the earth. <br/>
-                            The range of options is in singular minutes, with a maximum range of 1 week in both
-                            directions.
-                        </div>
-                    }
-                >
-                    <IconButton size="large">
-                        <SubdirectoryArrowRightIcon fontSize="large" sx={{transform: 'rotate(90deg)'}}/>
-                        <InfoOutlineIcon fontSize="large"/>
-                    </IconButton>
-                </Tooltip>
-            </div>
+            <Tooltip
+                title={
+                    <div>
+                        Drag the slider up to view the future, current, or past positions of the 100 brightest
+                        satellites orbiting the earth. <br/>
+                        The range of options is in singular minutes, with a maximum range of 1 week in both
+                        directions.
+                    </div>
+                }
+            >
+                <IconButton size="large">
+                    <InfoOutlineIcon fontSize="large"/>
+                </IconButton>
+            </Tooltip>
             <Slider
                 orientation="vertical"
                 min={-10080}
