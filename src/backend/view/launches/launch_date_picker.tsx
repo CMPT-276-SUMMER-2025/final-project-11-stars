@@ -1,4 +1,4 @@
-import {Alert, Box, Button, LinearProgress, Typography} from "@mui/material";
+import {Alert, Box, Button, IconButton, LinearProgress, Tooltip, Typography} from "@mui/material";
 import {DatePicker} from "@mui/x-date-pickers";
 import dayjs, {Dayjs as type_dayjs} from "dayjs";
 import React, {useEffect, useState} from "react";
@@ -8,25 +8,62 @@ import type {
     newsOrLaunchDataSidePanelDataInterface
 } from "../../model/interfaces.ts";
 import {setLaunchData} from "../../model/launches.ts"
-import {loadNewsFeedData} from "../../model/events.ts";
+import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
+const APIErrorAlert = () => (
+    // TODO - implement in the alert box section.
+    // Alert for when there's some sort of error with the API during fetching/setting data that we can't do anything about.
+    // e.g. API server is down
+    <Alert severity="error" style={{width: "45%"}}>
+        Unexpected API error - try again.
+    </Alert>
+);
 
 const InvalidDateRangeAlert = () => (
+    // Alert for when the user selects an invalid date range
+    // e.g. Start: January 2025, End: January 1991
     <Alert severity="error" style={{width: "45%"}}>
         Start date cannot be after end date.
     </Alert>
 );
 
 const NoDataForRangeAlert = () => (
+    // Alert for when the request went through fine, but the data returned contained 0 launches.
+    // Assume this is due to no recorded launches being available for the specified date range.
     <Alert severity="warning" style={{width: "45%"}}>
         No launches available for this date range.
     </Alert>
 );
 
 const ValidDateRangeAlert = () => (
+    // Alert for when everything is fine.
+    // Shows the user feedback that they did everything correctly.
     <Alert severity="success" style={{width: "45%"}}>
         Date range is valid.
     </Alert>
 );
+
+const AlertContainer = (
+    launchSearchStartDate: type_dayjs,
+    launchSearchEndDate: type_dayjs,
+    isloadingLaunchDataFromAPI: boolean,
+    errorLoadingLaunchDataFromAPI: boolean,
+    basicLaunchDataArray: basicLaunchDataInterface[],
+) => {
+    if (errorLoadingLaunchDataFromAPI) {
+        return <APIErrorAlert/>;
+    }
+
+    if (launchSearchEndDate.endOf('month').isBefore(launchSearchStartDate.startOf('month'))) {
+        return <InvalidDateRangeAlert/>;
+    }
+
+    if (!isloadingLaunchDataFromAPI && basicLaunchDataArray.length === 0) {
+        return <NoDataForRangeAlert/>;
+    }
+
+    return <ValidDateRangeAlert/>;
+};
+
 
 export const LaunchDateRangePicker = (
     launchSearchStartDate: type_dayjs, setlaunchSearchStartDate: React.Dispatch<React.SetStateAction<type_dayjs>>,
@@ -36,32 +73,41 @@ export const LaunchDateRangePicker = (
     newsFeedDataArray: newsFeedDataInterface[],
     setnewsOrLaunchDataSidePanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>
 ) => {
-    const [loadingLaunchDataFromAPI, setLoadingLaunchDataFromAPI] = useState(false); // To show loading icon when making API calls
+    const [isloadingLaunchDataFromAPI, setisloadingLaunchDataFromAPI] = useState(false); // To show loading icon when making API calls
+    const [errorLoadingLaunchDataFromAPI, seterrorLoadingLaunchDataFromAPI] = useState(false); // To show API alert icon when making API calls
     // Create default data as soon as the component mounts.
     useEffect(() => {
         (async () => {
-            await loadNewsFeedData() // this should really be moved up, coz it doesn't belong in this function. actually, all the data-loading stuff should be refactored out of here
-            setLoadingLaunchDataFromAPI(true);
+            seterrorLoadingLaunchDataFromAPI(false);
+            setisloadingLaunchDataFromAPI(true);
             try {
+                // The search data parameters already have initialized data on site open
                 await setLaunchData(launchSearchStartDate, launchSearchEndDate, setbasicLaunchDataArray, setdetailedLaunchDataArray)
+            } catch (error) {
+                seterrorLoadingLaunchDataFromAPI(true);
+                setisloadingLaunchDataFromAPI(false);
             } finally {
-                setLoadingLaunchDataFromAPI(false);
+                setisloadingLaunchDataFromAPI(false);
             }
         })();
     }, []);
-
+    // The useEffect above and handleClickSubmitButton function basically do the same thing,
+    // but the process is slightly different with/without user input, and so they are intentionally near-dulpicates.
     const handleClickSubmitButton = async (
         launchSearchStartDate: dayjs.Dayjs,
         launchSearchEndDate: dayjs.Dayjs,
         newsFeedData: newsFeedDataInterface[],
         setnewsOrLaunchDataSidePanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>
     ) => {
-        setLoadingLaunchDataFromAPI(true);
+        setisloadingLaunchDataFromAPI(true); // Show the loading icon
         setnewsOrLaunchDataSidePanelData({contentType: "newsFeed", content: newsFeedData}); // Reset the news panel in case the user still has a launch selected
         try {
             await setLaunchData(launchSearchStartDate, launchSearchEndDate, setbasicLaunchDataArray, setdetailedLaunchDataArray)
+        } catch (error) {
+            seterrorLoadingLaunchDataFromAPI(true);
+            setisloadingLaunchDataFromAPI(false);
         } finally {
-            setLoadingLaunchDataFromAPI(false);
+            setisloadingLaunchDataFromAPI(false);// Stop showing the loading icon
         }
     };
 
@@ -76,10 +122,16 @@ export const LaunchDateRangePicker = (
         }}>
             <Typography variant={"h5"}>
                 Launch Search
+                <Tooltip title="To optimize visibility, only up to 10 launches are shown, limited to the most recent one per location." arrow>
+                    <IconButton size="small" sx={{ml: 0.5}}>
+                        <InfoOutlineIcon fontSize="small"/>
+                    </IconButton>
+                </Tooltip>
             </Typography>
             <div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-evenly"}}>
                 <div style={{width: "45%"}}>
                     <DatePicker
+                        disabled={isloadingLaunchDataFromAPI}
                         views={['year', 'month']}
                         label="Start Date"
                         value={launchSearchStartDate}
@@ -98,6 +150,7 @@ export const LaunchDateRangePicker = (
                 </div>
                 <div style={{width: "45%"}}>
                     <DatePicker
+                        disabled={isloadingLaunchDataFromAPI}
                         views={['year', 'month']}
                         label="End Date"
                         value={launchSearchEndDate}
@@ -116,13 +169,13 @@ export const LaunchDateRangePicker = (
                 </div>
             </div>
             <div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-evenly"}}>
-                {launchSearchEndDate.endOf('month').isBefore(launchSearchStartDate.startOf('month')) ? (
-                    <InvalidDateRangeAlert/>
-                ) : (!loadingLaunchDataFromAPI && basicLaunchDataArray.length === 0) ? (
-                    <NoDataForRangeAlert/>
-                ) : (
-                    <ValidDateRangeAlert/>
-                )}
+                {AlertContainer(
+                    launchSearchStartDate,
+                    launchSearchEndDate,
+                    isloadingLaunchDataFromAPI,
+                    errorLoadingLaunchDataFromAPI,
+                    basicLaunchDataArray)
+                }
                 <div style={{display: "flex", width: "45%"}}>
                     <Button
                         variant="contained"
@@ -130,12 +183,12 @@ export const LaunchDateRangePicker = (
                         disabled={!launchSearchStartDate || !launchSearchEndDate || launchSearchEndDate.endOf('month').isBefore(launchSearchStartDate.startOf('month'))}
                         fullWidth
                     >
-                        {loadingLaunchDataFromAPI ? (
+                        {isloadingLaunchDataFromAPI ? (
                             <Box sx={{width: '100%'}}>
                                 <LinearProgress color="inherit"/>
                             </Box>
                         ) : (
-                            'Search For New Launches'
+                            'Apply New Date Range'
                         )}
                     </Button>
                 </div>

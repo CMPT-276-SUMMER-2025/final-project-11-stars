@@ -2,7 +2,9 @@
 import axios from "axios";
 import type {satelliteTLEInterface} from "./interfaces.ts";
 import * as satellite from "satellite.js";
-import celestrak from "../../example-jsons/celestrak.json"
+import celestrakExampleJSON from "../../example-jsons/celestrak.json"
+
+const isDevMode = import.meta.env.VITE_CUSTOM_DEV_MODE === "true";
 
 export function parseRawTLEStringIntoTLEObjectArray(
     rawTLEString: string
@@ -28,22 +30,25 @@ export function parseRawTLEStringIntoTLEObjectArray(
 }
 
 export const load100BrightestSatellites = async (): Promise<satelliteTLEInterface[]> => {
-    /*
     const CELESTRAK_URL = "https://www.celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle";
-    try {
-        const response = await axios.get(CELESTRAK_URL);
-        if (response.status !== 200) {
-            console.error("Celestrak did not send an HTTP 200 code.");
-        }
-        const parsedTLEObjectArray = parseRawTLEStringIntoTLEObjectArray(
-            response.data
-        );
+    const exampleDataFromJSON = celestrakExampleJSON[0].data;
+    if (isDevMode) {
+        // If we're in dev mode, skip calling the real API.
+        console.log("devmode!")
+        return parseRawTLEStringIntoTLEObjectArray(exampleDataFromJSON);
+    } else {
+        let parsedTLEObjectArray: satelliteTLEInterface[];
+        try {
+            const response = await axios.get(CELESTRAK_URL);
+            parsedTLEObjectArray = parseRawTLEStringIntoTLEObjectArray(response.data);
         } catch (error) {
-        console.error("Error fetching launches", error);
+            // Use Example Data from JSON file in case of API error since no backup API exists.
+            // TODO - Notify the user that the backup example data is being used instead of the API
+            console.warn("Failed to load from API. Falling back to example data.", error);
+            parsedTLEObjectArray = parseRawTLEStringIntoTLEObjectArray(exampleDataFromJSON);
+        }
+        return parsedTLEObjectArray;
     }
-     */
-    // USE JSON DATA TO AVOID GETTING IP BANNED LOL
-    return parseRawTLEStringIntoTLEObjectArray(celestrak[0].data);
 };
 
 export const getSatellitePositionAtTime = (

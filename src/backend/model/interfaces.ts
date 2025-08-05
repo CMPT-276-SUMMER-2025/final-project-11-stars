@@ -64,3 +64,11 @@ export interface satelliteTLEInterface {
     line1: string;
     line2: string;
 }
+
+export interface satellitePositionInterface {
+    lat: number;
+    lng: number;
+    alt: number;
+    id: string;
+    name: string;
+}

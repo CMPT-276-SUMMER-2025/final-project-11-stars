@@ -5,8 +5,9 @@ import type {
 } from "../../model/interfaces.ts";
 import React from "react";
 import dayjs from "dayjs";
-import {Button, Link, Typography} from "@mui/material";
+import {Button, IconButton, Link, Tooltip, Typography} from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
+import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
 
 const getabsoluteLaunchDaysHoursDifference = (dateStr: string): { hours: number; days: number } => {
     const launchDate = dayjs(dateStr);
@@ -204,6 +205,12 @@ export const LaunchDetails = (
                         alignSelf={"center"}
                     >
                         Launch Details
+                        <Tooltip
+                            title={"Some launch data might not be available due to reasons beyond our, or Launch Library II's, control"}>
+                            <IconButton size="small" sx={{ml: 0.5}}>
+                                <InfoOutlineIcon fontSize="small"/>
+                            </IconButton>
+                        </Tooltip>
                     </Typography>
                 </div>
                 <Button variant="text"
