@@ -40,12 +40,10 @@ var launchesC = require("../../../controllers/launches_controller");
 var launches = require("../../launches");
 var axios_1 = require("axios");
 // TODO - remove @ts-ignore and add proper typing
-/**
- * File for unit testing model in relation to api-1-feature-1/2.
- */
-/**
- * Test through controller.
- */
+
+// File for unit testing model in relation to api-1-feature-1/2.
+
+// Test through controller.
 function testLoadLaunchesOverTime(startDate, endDate) {
     return __awaiter(this, void 0, void 0, function () {
         var launchesFromModel, URL, result, launchesFromAPI, errorMessage, i;
@@ -78,11 +76,10 @@ function testLoadLaunchesOverTime(startDate, endDate) {
         });
     });
 }
-/**
- * Testing @setFieldsWithNoDataToNull in launches.js.
- * @param mockLaunchObject
- * @param message Used to indicate child object was tested.
- */
+
+// Testing @setFieldsWithNoDataToNull in launches.js.
+// @param mockLaunchObject
+// @param message Used to indicate child object was tested.
 //@ts-ignore
 function testSetFieldsWithNoDataToNull(launchObject) {
     // test function directly in launches.js 
@@ -183,10 +180,10 @@ function main() {
     });
 }
 main();
-/**
- * DOES NOT test any function.
- * Used to prints the fields of the object after the "no data" fields have been set to null.
- */
+
+
+// DOES NOT test any function.
+// Used to prints the fields of the object after the "no data" fields have been set to null.
 //@ts-ignore
 function printFieldsOfObject(object, prefix) {
     for (var key in object) {
