@@ -10,7 +10,7 @@ import type {
     detailedLaunchDataInterface,
     newsFeedDataInterface, newsOrLaunchDataSidePanelDataInterface,
     satelliteTLEInterface
-} from "./backend/model/interfaces.ts";
+} from "./model/interfaces.ts";
 import dayjs, {Dayjs as type_dayjs} from "dayjs"
 
 const darkTheme = createTheme({

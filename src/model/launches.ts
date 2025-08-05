@@ -1,23 +1,19 @@
 import axios from 'axios';
-import type {basicLaunchDataInterface, detailedLaunchDataInterface} from './interfaces';
+import type {basicLaunchDataInterface, detailedLaunchDataInterface} from './interfaces.ts';
 import {Dayjs as type_dayjs} from "dayjs";
 import React from "react";
 import {loadLaunchesOverTimePeriod} from "../controllers/launches_controller.ts";
 
 const isDevMode = import.meta.env.VITE_CUSTOM_DEV_MODE === "true";
 
-/**
- * Handles business logic and access to data in relation to orbital launches.
- */
+// Handles business logic and access to data in relation to orbital launches.
 
 
 let detailedLaunchDataArray: detailedLaunchDataInterface[];
 
-/**
- * This method is expected to be called before any other method in this module.
- * @param startDate Expected to be ISO 8601 format.
- * @param endDate Expected to be ISO 8601 format.
- */
+// This method is expected to be called before any other method in this module.
+// @param startDate Expected to be ISO 8601 format.
+// @param endDate Expected to be ISO 8601 format.
 const loadLaunchesOverTime = async (startDate: string, endDate: string) => {
     const REAL_LAUNCHES_URL = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`;
     const BACKUP_LAUNCHES_URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`;
@@ -87,18 +83,16 @@ const loadLaunchesOverTime = async (startDate: string, endDate: string) => {
         });
         return detailedLaunchDataArray;
 
-    } catch (error) {
-        console.error('Error fetching launches', error);
-    }
+    // } catch (error) {
+    //     console.error('Error fetching launches', error);
+    // }
 }
 
 const getLaunchesAsList = () => {
     return detailedLaunchDataArray;
 }
 
-/**
- * @returns Null if launch is not found.
- */
+// @returns Null if launch is not found.
 const getLaunchById = (launchId: string) => {
     for (let launch of detailedLaunchDataArray) {
         if (launchId == launch.id) {
@@ -108,11 +102,9 @@ const getLaunchById = (launchId: string) => {
     return null;
 }
 
-/**
- * Traverses all fields of the object, if any field is ('Unknown' or empty string or empty array), then set it to null,
- * if the field itself refers to an object, then check that object for 'Unknown'/empty string/empty array fields.
- * NOTE: This function is dependent on the Launch Library 2 /launches endpoint. May not work for other objects.
- */
+// Traverses all fields of the object, if any field is ('Unknown' or empty string or empty array), then set it to null,
+// if the field itself refers to an object, then check that object for 'Unknown'/empty string/empty array fields.
+// NOTE: This function is dependent on the Launch Library 2 /launches endpoint. May not work for other objects.
 const setFieldsWithNoDataToNull = (launchObject: any) => { //todo - set typing. maybe detailedLaunchDataInterface?
 
     let invalidPrimitives = [

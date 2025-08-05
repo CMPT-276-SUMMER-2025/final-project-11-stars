@@ -6,8 +6,8 @@ import type {
     basicLaunchDataInterface,
     detailedLaunchDataInterface, newsFeedDataInterface,
     newsOrLaunchDataSidePanelDataInterface
-} from "../../model/interfaces.ts";
-import {setLaunchData} from "../../model/launches.ts"
+} from "../../../model/interfaces.ts";
+import {setLaunchData} from "../../../model/launches.ts"
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 const APIErrorAlert = () => (
     // TODO - implement in the alert box section.

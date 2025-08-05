@@ -39,15 +39,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setLaunchData = exports.setFieldsWithNoDataToNull = exports.getLaunchById = exports.getLaunchesAsList = exports.loadLaunchesOverTime = void 0;
 exports.extractBasicLaunchDataFromDetailedLaunchData = extractBasicLaunchDataFromDetailedLaunchData;
 var axios_1 = require("axios");
-/**
- * Handles business logic and access to data in relation to orbital launches.
- */
+
+// Handles business logic and access to data in relation to orbital launches.
 var detailedLaunchDataArray;
-/**
- * This method is expected to be called before any other method in this module.
- * @param startDate Expected to be ISO 8601 format.
- * @param endDate Expected to be ISO 8601 format.
- */
+
+// This method is expected to be called before any other method in this module.
+// @param startDate Expected to be ISO 8601 format.
+// @param endDate Expected to be ISO 8601 format.
 var loadLaunchesOverTime = function (startDate, endDate) { return __awaiter(void 0, void 0, void 0, function () {
     var LAUNCHES_URL, response, error_1;
     return __generator(this, function (_a) {
@@ -116,9 +114,8 @@ var getLaunchesAsList = function () {
     return detailedLaunchDataArray;
 };
 exports.getLaunchesAsList = getLaunchesAsList;
-/**
- * @returns Null if launch is not found.
- */
+
+// @returns Null if launch is not found.
 var getLaunchById = function (launchId) {
     for (var _i = 0, detailedLaunchDataArray_1 = detailedLaunchDataArray; _i < detailedLaunchDataArray_1.length; _i++) {
         var launch = detailedLaunchDataArray_1[_i];
@@ -129,11 +126,10 @@ var getLaunchById = function (launchId) {
     return null;
 };
 exports.getLaunchById = getLaunchById;
-/**
- * Traverses all fields of the object, if any field is ('Unknown' or empty string or empty array), then set it to null,
- * if the field itself refers to an object, then check that object for 'Unknown'/empty string/empty array fields.
- * NOTE: This function is dependent on the Launch Library 2 /launches endpoint. May not work for other objects.
- */
+
+// Traverses all fields of the object, if any field is ('Unknown' or empty string or empty array), then set it to null,
+// if the field itself refers to an object, then check that object for 'Unknown'/empty string/empty array fields.
+// NOTE: This function is dependent on the Launch Library 2 /launches endpoint. May not work for other objects.
 var setFieldsWithNoDataToNull = function (launchObject) {
     var invalidPrimitives = [
         "Unknown", undefined, ""

@@ -2,7 +2,7 @@
 import axios from "axios";
 import type {satelliteTLEInterface} from "./interfaces.ts";
 import * as satellite from "satellite.js";
-import celestrakExampleJSON from "../../example-jsons/celestrak.json"
+import celestrakExampleJSON from "../example-jsons/celestrak.json"
 
 const isDevMode = import.meta.env.VITE_CUSTOM_DEV_MODE === "true";
 

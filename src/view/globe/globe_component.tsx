@@ -6,8 +6,8 @@ import type {
     newsOrLaunchDataSidePanelDataInterface,
     satelliteTLEInterface,
     satellitePositionInterface
-} from "../../model/interfaces.ts";
-import {load100BrightestSatellites, getPositionsFromTLEArray} from "../../model/satellites.ts";
+} from "../../../model/interfaces.ts";
+import {load100BrightestSatellites, getPositionsFromTLEArray} from "../../../model/satellites.ts";
 
 export const GlobeContainer = (
     // TODO - remove _satelliteTLEArray if it doesn't end up being used
