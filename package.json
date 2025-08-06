@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "vite build",
-    "deploy": "gh-pages -d dist -b prod-build"
+    "deploy": "gh-pages -d dist -b prod-build -u \"github-actions[bot] <github-actions[bot]@users.noreply.github.com>\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
