@@ -16,10 +16,19 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build and deploy
+      - name: Run tests
+        run: npm test
+
+      - name: Build project
+        run: npm run build
+
+      - name: Install gh-pages globally
+        run: npm install -g gh-pages
+
+      - name: Deploy to GitHub Pages
         run: npm run deploy
