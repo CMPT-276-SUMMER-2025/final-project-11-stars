@@ -8,15 +8,22 @@ import type {
     satellitePositionInterface
 } from "../../model/interfaces.ts";
 import {load100BrightestSatellites, getPositionsFromTLEArray} from "../../model/satellites.ts";
+import {calculateNewDateFromHourDelta} from "../../view/satellite_controls/satellite_time_delta_slider.tsx";
+import {centerGlobeToChosenSatellitePosition} from "../../view/satellite_controls/dropdown_and_button_to_center_satellite.tsx";
 
 export const GlobeContainer = (
-    // TODO - remove _satelliteTLEArray if it doesn't end up being used
+    //@ts-ignore - This ignores the typing issue for the useRef, which is a bug from the react-globegl library.
+    globeRef: InstanceType<typeof Globe>,
     basicLaunchDataArray: basicLaunchDataInterface[],
     detailedLaunchDataArray: detailedLaunchDataInterface[],
-    _satelliteTLEArray: satelliteTLEInterface[], setsatelliteTLEArray: React.Dispatch<React.SetStateAction<satelliteTLEInterface[]>>,
-    setnewsOrLaunchDataSidePanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>
+    setsatelliteTLEArray: React.Dispatch<React.SetStateAction<satelliteTLEInterface[]>>,
+    satellitePositions: satellitePositionInterface[], setsatellitePositions: React.Dispatch<React.SetStateAction<satellitePositionInterface[]>>,
+    setnewsOrLaunchDataSidePanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>,
+    satelliteSeekMinuteOffset: number,
+    selectedSatelliteForCentering: satellitePositionInterface | null,
+    lockGlobeDueToCenteredSatellite: boolean,
+    disableGlobeInterval: boolean
 ) => {
-    // const basicLaunchDataArrayClone = [...basicLaunchDataArray]; // TODO: remove if not needed (2)
     const [dimensions, setDimensions] = useState({
         width: window.innerWidth * 3 / 5,
         height: window.innerHeight
@@ -34,40 +41,52 @@ export const GlobeContainer = (
         window.addEventListener('resize', handleResize);
     }, []);
 
-    const [satellitePositions, setSatellitePositions] = useState<satellitePositionInterface[][]>([]);
+    useEffect(() => {
+        // if the globe lock state is false, then enable rotation
+        // if the globe lock state is true, then disable rotation
+        globeRef.current.controls().enableRotate = !lockGlobeDueToCenteredSatellite;
+    }, [lockGlobeDueToCenteredSatellite]);
+
+    // Create mutable ref objects to hold the latest offset value for the setInterval renders
+    const satelliteSeekMinuteOffsetRef = useRef(satelliteSeekMinuteOffset);
+    const selectedSatelliteForCenteringRef = useRef(selectedSatelliteForCentering);
+    const disableGlobeIntervalRef = useRef(disableGlobeInterval)
+
+    // Update the ref whenever the state changes, which avoids using stale values in the interval
+    useEffect(() => {
+        satelliteSeekMinuteOffsetRef.current = satelliteSeekMinuteOffset;
+    }, [satelliteSeekMinuteOffset]);
+
+    useEffect(() => {
+        selectedSatelliteForCenteringRef.current = selectedSatelliteForCentering;
+    }, [selectedSatelliteForCentering]);
+
+    useEffect(() => {
+        disableGlobeIntervalRef.current = disableGlobeInterval;
+    }, [disableGlobeInterval]);
+
+
     useEffect(() => {
         (async () => {
             await load100BrightestSatellites().then((data) => {
-                setsatelliteTLEArray(data); // satelliteTLEArray cannot be directly used in the function after being set.
-                                            // I (Anton / PM) am not sure if this is intended behavior or a bug, but this is a non-issue for this feature.
+                setsatelliteTLEArray(data); // satelliteTLEArray state cannot be used in the function after being set due to React scoping.
                 setInterval(() => {
-                    const now = new Date();
-                    const positions = getPositionsFromTLEArray(data, now).map((p: {
-                        lat: any;
-                        lng: any;
-                        altitudeKm: number;
-                        id: any;
-                        name: any;
-                    }) => ({
-                        lat: p.lat,
-                        lng: p.lng,
-                        alt: p.altitudeKm / 6371, // This normalizes the altitude to match the globe radius
-                        id: p.id,
-                        name: p.name
-                    }));
-                    // GlobeGL expects particle data to be placed in a nested array.
-                    setSatellitePositions([positions]);
+                    if (!disableGlobeIntervalRef.current) { // If the interval isn't being 'taken over' by some other function
+                        // Use the current/updated values from the refs instead of the states
+                        const currentTimeWithOffsetAdded = calculateNewDateFromHourDelta(satelliteSeekMinuteOffsetRef.current);
+                        const positions = getPositionsFromTLEArray(data, currentTimeWithOffsetAdded)
+                        setsatellitePositions(positions);
+                        centerGlobeToChosenSatellitePosition(selectedSatelliteForCenteringRef.current, globeRef, positions)
+                    }
                 }, 500) // Particles update every 500ms. This looks good without causing too much system strain.
             });
         })();
     }, []);
 
-    //@ts-ignore - This ignores the typing issue for the useRef, which is a bug from the react-globegl library. // TODO: see if possible to clear error somehow (or if im actually wrong lol)
-    const globeObjectMethodsReference = useRef<InstanceType<typeof Globe>>(null); // This is needed for external/functional interaction with the globe object, such as centering the globe to a specific position.
     return (
         <div style={{userSelect: "none", MozUserSelect: "none", pointerEvents: "auto"}}>
             <Globe
-                ref={globeObjectMethodsReference}
+                ref={globeRef}
                 width={dimensions.width}
                 height={dimensions.height}
                 animateIn={true}
@@ -77,7 +96,7 @@ export const GlobeContainer = (
                 pointColor={() => 'red'}
                 pointRadius={1}
                 onPointClick={(point) => {
-                    // @ts-ignore
+                    // @ts-ignore - TS  believes that there does not/might not exist an id for every point, which is incorrect.
                     const pointID = point.id;
                     const matchingDetailedLaunchDataObject = detailedLaunchDataArray.find(
                         (detailedObject) => detailedObject.id === pointID
@@ -91,16 +110,16 @@ export const GlobeContainer = (
                         throw new Error("error: no detailed launch info found for id:", pointID);
                     }
                 }}
-                particlesData={satellitePositions} // particlesData expects a nested array: [[{lat: ..., lng: ..., ...}]]
+                particlesData={[satellitePositions]} // particlesData expects a nested array: [[{lat: ..., lng: ..., ...}]]
                 // Acessor names to compare to the passed json file
                 // e.g. 'particleLabel: "name_of_thing"' matches "SATELLITE" in {name_of_thing: "SATELLITE", lat: 1, lng: 1}
                 particleLabel="name"
                 particleLat="lat"
                 particleLng="lng"
                 particleAltitude="alt"
-                // Particle size and color never change, so they never need to be updated and can be set in the Globe object directly
-                particlesSize={1} // This replaces using an acessor string
-                particlesColor={useCallback(() => 'palegreen', [])} // This replaces using an acessor string
+                // Particle size and color never change, so they never need to be updated and can be set in the Globe object directly instead of using acessor strings.
+                particlesSize={1}
+                particlesColor={useCallback(() => 'palegreen', [])}
             />
         </div>
     );

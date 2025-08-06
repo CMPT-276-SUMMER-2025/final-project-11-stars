@@ -6,15 +6,15 @@ import type {
     basicLaunchDataInterface,
     detailedLaunchDataInterface, newsFeedDataInterface,
     newsOrLaunchDataSidePanelDataInterface
-} from "../../model/interfaces.ts";
-import {setLaunchData} from "../../model/launches.ts"
+} from "../../../model/interfaces.ts";
+import {setLaunchData} from "../../../model/launches.ts"
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
+
 const APIErrorAlert = () => (
-    // TODO - implement in the alert box section.
     // Alert for when there's some sort of error with the API during fetching/setting data that we can't do anything about.
     // e.g. API server is down
     <Alert severity="error" style={{width: "45%"}}>
-        Unexpected API error - try again.
+        LL2 API unavailable.
     </Alert>
 );
 
@@ -60,7 +60,7 @@ const AlertContainer = (
     if (!isloadingLaunchDataFromAPI && basicLaunchDataArray.length === 0) {
         return <NoDataForRangeAlert/>;
     }
-
+    // If no warnings need to be shown, then the data is inherently valid.
     return <ValidDateRangeAlert/>;
 };
 
@@ -121,8 +121,13 @@ export const LaunchDateRangePicker = (
             gap: "1rem"
         }}>
             <Typography variant={"h5"}>
+                <IconButton size="small" sx={{visibility: 'hidden', ml: 0.5}}>
+                    <InfoOutlineIcon fontSize="small"/>
+                </IconButton>
                 Launch Search
-                <Tooltip title="To optimize visibility, only up to 10 launches are shown, limited to the most recent one per location." arrow>
+                <Tooltip
+                    title="To optimize visibility, only up to 10 launches are shown, limited to the most recent one per location."
+                    arrow>
                     <IconButton size="small" sx={{ml: 0.5}}>
                         <InfoOutlineIcon fontSize="small"/>
                     </IconButton>

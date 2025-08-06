@@ -1,22 +1,16 @@
-import {GlobeContainer} from "./globe/globe_component.tsx";
-import {LaunchDateRangePicker} from "./launches/launch_date_picker.tsx";
 import React, {useEffect} from "react";
 import type {
-    basicLaunchDataInterface,
     detailedLaunchDataInterface,
     newsFeedDataInterface,
     newsOrLaunchDataSidePanelDataInterface,
-    satelliteTLEInterface
-} from "../model/interfaces.ts";
-import {Dayjs as type_dayjs} from "dayjs"
+} from "../../../model/interfaces.ts";
 import {AnimatePresence, motion} from "framer-motion";
-import {Divider} from "@mui/material";
 //@ts-ignore // mui-image does not have types, so none can be installed to prevent the error.
-import {loadNewsFeedData} from "../model/events.ts";
-import {LoadingNews, NewsFeed} from "./news-feed/news_feed.tsx";
-import {LaunchDetails} from "./launches/launch_details.tsx";
+import {loadNewsFeedData} from "../../../model/events.ts";
+import {LoadingNews, NewsFeed} from "../news-feed/news_feed.tsx";
+import {LaunchDetails} from "../launches/launch_details.tsx";
 
-const SidePanelWithAnimatedTransitions = (
+export const NewsOrLaunchDetailsSidePanel = (
     newsFeedDataArray: newsFeedDataInterface[], setnewsFeedDataArray: React.Dispatch<React.SetStateAction<newsFeedDataInterface[]>>,
     panelData: newsOrLaunchDataSidePanelDataInterface, setPanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>,
 ) => {
@@ -38,14 +32,16 @@ const SidePanelWithAnimatedTransitions = (
             }
         })();
     }, []);
-
     return (
         <div style={{
-            display: "flex",
             width: "100%",
-            flex: 1,
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            gap: "1rem",
+            padding: "0rem 1.75rem"
         }}>
             <AnimatePresence mode="wait">
                 {(() => {
@@ -57,6 +53,7 @@ const SidePanelWithAnimatedTransitions = (
                                 initial="initial"
                                 animate="animate"
                                 exit="exit"
+                                style={{height: "100%", width: "100%"}}
                             >
                                 {NewsFeed(panelData.content as newsFeedDataInterface[])}
                             </motion.div>
@@ -82,6 +79,7 @@ const SidePanelWithAnimatedTransitions = (
                                 initial="initial"
                                 animate="animate"
                                 exit="exit"
+                                style={{height: "100%", width: "100%"}}
                             >
                                 {LoadingNews()}
                             </motion.div>
@@ -92,52 +90,3 @@ const SidePanelWithAnimatedTransitions = (
         </div>
     )
 };
-
-
-export const SiteContent = (
-    launchSearchStartDate: type_dayjs, setlaunchSearchStartDate: React.Dispatch<React.SetStateAction<type_dayjs>>,
-    launchSearchEndDate: type_dayjs, setlaunchSearchEndDate: React.Dispatch<React.SetStateAction<type_dayjs>>,
-    detailedLaunchDataArray: detailedLaunchDataInterface[], setdetailedLaunchDataArray: React.Dispatch<React.SetStateAction<detailedLaunchDataInterface[]>>,
-    basicLaunchDataArray: basicLaunchDataInterface[], setbasicLaunchDataArray: React.Dispatch<React.SetStateAction<basicLaunchDataInterface[]>>,
-    newsFeedDataArray: newsFeedDataInterface[], setnewsFeedDataArray: React.Dispatch<React.SetStateAction<newsFeedDataInterface[]>>,
-    newsOrLaunchDataSidePanelData: newsOrLaunchDataSidePanelDataInterface, setnewsOrLaunchDataSidePanelData: React.Dispatch<React.SetStateAction<newsOrLaunchDataSidePanelDataInterface>>,
-    satelliteTLEArray: satelliteTLEInterface[], setsatelliteTLEArray: React.Dispatch<React.SetStateAction<satelliteTLEInterface[]>>
-) => {
-    return (
-        <div style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: 'start',
-            alignItems: 'center',
-            width: "100%",
-            height: "100%"
-        }}>
-            {GlobeContainer(basicLaunchDataArray, detailedLaunchDataArray, satelliteTLEArray, setsatelliteTLEArray, setnewsOrLaunchDataSidePanelData)}
-            <>
-                <div style={{
-                    width: window.innerWidth * (2 / 5),
-                    height: window.innerHeight,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "start",
-                    alignItems: "center",
-                    gap: "1rem",
-                    padding: "1rem 0rem",
-                }}>
-                    {LaunchDateRangePicker(
-                        launchSearchStartDate, setlaunchSearchStartDate,
-                        launchSearchEndDate, setlaunchSearchEndDate,
-                        basicLaunchDataArray, setbasicLaunchDataArray,
-                        setdetailedLaunchDataArray,
-                        newsFeedDataArray,
-                        setnewsOrLaunchDataSidePanelData)}
-                    <Divider orientation="horizontal" variant="middle"
-                             style={{backgroundColor: "white", marginTop: "1rem"}} flexItem/>
-                    {SidePanelWithAnimatedTransitions(
-                        newsFeedDataArray, setnewsFeedDataArray,
-                        newsOrLaunchDataSidePanelData, setnewsOrLaunchDataSidePanelData)}
-                </div>
-            </>
-        </div>
-    )
-}
