@@ -98,13 +98,14 @@ Built with React, MaterialUI, Vite, and Three.js via the react-globe.gl library.
    ```
 
 6. **Go to the website**\
-	In your IDE console, you will see a message similar to the onme shown below.	
+    In your IDE console, you will see a message similar to the onme shown below.	
     ```
-  	➜  Local:   http://localhost:<...>
-  	➜  Network: use --host to expose
-  	➜  press h + enter to show help
+   ➜  Local:   http://localhost:<...>/<___>
+   ➜  Network: use --host to expose
+   ➜  press h + enter to show help
     ```
-   Copy the `http://localhost:<...>` line of text, where `...` represents a **3-5 digit sequence of numbers**.
+   Copy the `http://localhost:<...>` line of text, where `...` represents a **3-5 digit sequence of numbers** and `___` represents a (potentially-present) string. \
+   Usually, it will appear as `http://localhost:5173/final-project-11-stars`, but make sure to copy the link shown in **YOUR** IDE!
 
 7. Open up your preferred web browser, paste it into the search bar and press enter.
 
