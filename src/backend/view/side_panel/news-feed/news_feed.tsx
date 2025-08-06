@@ -13,6 +13,19 @@ const NoNewsAlert = () => {
     );
 }
 
+export const LoadingNews = () => {
+    return (
+        <>
+            <Typography variant={"h6"} align={"center"} display={"flex"} flexDirection={"column"}>
+                Loading News Feed...
+                <div style={{width: "100%"}}>
+                    <LinearProgress/>
+                </div>
+            </Typography>
+        </>
+    )
+}
+
 const newsFeedItem = (content: newsFeedDataInterface) => {
     const truncateToNearestSentenceOrWord = (str: string) => {
         let returnString;
@@ -75,24 +88,8 @@ const newsFeedItem = (content: newsFeedDataInterface) => {
     );
 }
 
-/*
-
- */
-export const LoadingNews = () => {
-    return (
-        <>
-            <Typography variant={"h6"} align={"center"} display={"flex"} flexDirection={"column"}>
-                Loading News Feed...
-                <div style={{width: "100%"}}>
-                    <LinearProgress/>
-                </div>
-            </Typography>
-        </>
-    )
-}
-
 export const NewsFeed = (content: newsFeedDataInterface[]) => {
-    if (content == undefined) {
+    if (!content || content.length == 0) { // if the news is invalid, display that the news is unavailable. the api error is handled in another function.
         return (<NoNewsAlert/>);
     } else {
         return (<div style={{
