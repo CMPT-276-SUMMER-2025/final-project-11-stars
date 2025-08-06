@@ -29,9 +29,15 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-
       - name: Install gh-pages globally
         run: npm install -g gh-pages
 
       - name: Deploy to GitHub Pages
+        env:
+         GIT_AUTHOR_NAME: github-actions[bot]
+         GIT_AUTHOR_EMAIL: github-actions[bot]@users.noreply.github.com
+         GIT_COMMITTER_NAME: github-actions[bot]
+         GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
+         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run deploy
+
