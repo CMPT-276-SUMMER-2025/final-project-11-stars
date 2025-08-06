@@ -22,7 +22,7 @@ export const centerGlobeToChosenSatellitePosition = (
     //@ts-ignore - This ignores the typing issue for the useRef, which is a bug from the react-globegl library.
     globeRef: InstanceType<typeof Globe>,
     satellitePositions: satellitePositionInterface[],
-    playLongAnimation: boolean = false, // keep at end of function so that the default value can be used
+    playLongerAnimation: boolean = false, // keep at end of function so that the default value can be used
 ) => {
     if (selectedSatelliteForCentering != null && selectedSatelliteForCentering.id != null) { // if there's no satellite chosen
         const satellite = satellitePositions.find(s => s.id === selectedSatelliteForCentering.id); // find the satellite's position, if it exists
@@ -35,7 +35,7 @@ export const centerGlobeToChosenSatellitePosition = (
                     // @ts-ignore
                     lng: satellite.lng
                 },
-                playLongAnimation ? 1000 : 100 // How long the rotation animation should be
+                playLongerAnimation ? 250 : 50 // How long the rotation animation should be
                 // Certain functions might want to use the long animation timer, as they jump between distant positions,
                 // such as when the user selects a new satellite.
                 // Otherwise, the function is probably called by the globe auto-update interval, and doesn't need a long animation
@@ -45,6 +45,7 @@ export const centerGlobeToChosenSatellitePosition = (
 
 }
 
+
 export const dropdownAndButtonForCenteringSatellite = (
     satellitePositions: satellitePositionInterface[],
     setSelectedSatelliteForCentering: React.Dispatch<React.SetStateAction<satellitePositionInterface | null>>,
@@ -52,6 +53,31 @@ export const dropdownAndButtonForCenteringSatellite = (
     setlockGlobeDueToCenteredSatellite: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
     const [internalSelectedSatellite, setinternalSelectedSatellite] = React.useState<satellitePositionInterface | null>(null);
+
+    const handleSatelliteChange = (
+        newValue: satellitePositionInterface | null
+    ) => {
+        setinternalSelectedSatellite(newValue);
+        if (newValue === null) {
+            // handle the user using the built-in "x" to clear the value instead of the dedicated button
+            handleDeselectSatellite()
+        }
+    };
+
+    const handleLockToSatellite = () => {
+        if (internalSelectedSatellite) {
+            setlockGlobeDueToCenteredSatellite(true); // Lock the globe
+            setSelectedSatelliteForCentering(internalSelectedSatellite); // Update the globally use variable for the selected satellite
+            centerGlobeToChosenSatellitePosition(internalSelectedSatellite, globeRef, satellitePositions, true); // Force a visual update
+        }
+    };
+
+    const handleDeselectSatellite = () => {
+        setlockGlobeDueToCenteredSatellite(false);
+        setinternalSelectedSatellite(null);
+        setSelectedSatelliteForCentering(null);
+    };
+
     return (
 
         <div style={{
@@ -77,32 +103,24 @@ export const dropdownAndButtonForCenteringSatellite = (
                     isOptionEqualToValue={(option, value) => option.id === value.id}
                     style={{width: "25rem"}}
                     value={internalSelectedSatellite}
-                    onChange={(_event, newValue) => setinternalSelectedSatellite(newValue)}
+                    onChange={(_event, newValue) => handleSatelliteChange(newValue)} // The underscore means that the variable's existance is required, but that its value isnt read
                 />
             )}
             <Button
                 variant="contained"
                 disabled={internalSelectedSatellite === null} // if there isn't a picked satellite, then don't let the user click the button
-                onClick={() => {
-                    if (internalSelectedSatellite) {
-                        setlockGlobeDueToCenteredSatellite(true); // Lock the globe
-                        setSelectedSatelliteForCentering(internalSelectedSatellite); // Update the globally use variable for the selected satellite
-                        centerGlobeToChosenSatellitePosition(internalSelectedSatellite, globeRef, satellitePositions, true); // Force a visual update
-                    }
-                }}
+                onClick={() =>
+                    handleLockToSatellite()
+                }
             >
                 Lock to Satellite
             </Button>
             <Button
                 variant="contained"
                 disabled={internalSelectedSatellite === null} // if there isn't a picked satellite, then don't let the user click the button to avoid re-seting null to null
-                onClick={() => {
-                    if (internalSelectedSatellite) {
-                        setlockGlobeDueToCenteredSatellite(false); // Unlock the globe
-                        setinternalSelectedSatellite(null) // Locally remove satellite from being selected for centering
-                        setSelectedSatelliteForCentering(null); // Globally remove satellite from being selected for centering
-                    }
-                }}
+                onClick={() =>
+                    handleDeselectSatellite()
+                }
             >
                 Deselect Satellite & Unlock Globe
             </Button>

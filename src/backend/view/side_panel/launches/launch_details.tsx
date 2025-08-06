@@ -291,7 +291,7 @@ const rocketStats = (
 
             {launchMass != null && (
                 <Typography variant="h5">
-                    {launchMass} {rocketLabelText("KG")}
+                    {launchMass} {rocketLabelText("TONNES")}
                 </Typography>
             )}
 
