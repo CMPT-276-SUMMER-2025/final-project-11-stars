@@ -1,6 +1,6 @@
 import {
     loadNewsFeedData
-} from "../model/events.js"
+} from "../model/events.ts"
 
 
 const getNews = async () => {

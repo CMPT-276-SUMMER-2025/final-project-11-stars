@@ -36,13 +36,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var launchesC = require("../../../controllers/launches_controller");
-var launches = require("../../launches");
+var dayjs_1 = require("dayjs");
+var react_1 = require("react");
+var launchesC = require("../../../controllers/launches_controller.ts");
+var launches = require("../../launches.ts");
 var axios_1 = require("axios");
 // TODO - remove @ts-ignore and add proper typing
-
 // File for unit testing model in relation to api-1-feature-1/2.
-
 // Test through controller.
 function testLoadLaunchesOverTime(startDate, endDate) {
     return __awaiter(this, void 0, void 0, function () {
@@ -76,7 +76,6 @@ function testLoadLaunchesOverTime(startDate, endDate) {
         });
     });
 }
-
 // Testing @setFieldsWithNoDataToNull in launches.js.
 // @param mockLaunchObject
 // @param message Used to indicate child object was tested.
@@ -142,11 +141,130 @@ function testExtractBasicLaunchDataFromDetailedLaunchData() {
         });
     });
 }
+function testSetLaunchData() {
+    return __awaiter(this, void 0, void 0, function () {
+        var launchSearchStartDate, launchSearchEndDate, launchSearchStartDateAsDayJS, launchSearchEndDateAsDayJS, expectedBasicLaunchDataArray, expectedDetailedLaunchDataArray, _a, responseBasicLaunchDataArray, setresponseBasicLaunchDataArray, _b, responseDetailedLaunchDataArray, setresponseDetailedLaunchDataArray;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    launchSearchStartDate = '2024-07-19T02:54:00Z';
+                    launchSearchEndDate = '2024-08-04T15:02:53Z';
+                    launchSearchStartDateAsDayJS = (0, dayjs_1.default)(launchSearchStartDate);
+                    launchSearchEndDateAsDayJS = (0, dayjs_1.default)(launchSearchEndDate);
+                    expectedBasicLaunchDataArray = [
+                        {
+                            "id": "86139b24-aed8-47b0-a385-5ed28cca6409",
+                            "name": "Falcon 9 Block 5",
+                            "lng": -120.611,
+                            "lat": 34.632,
+                        },
+                        {
+                            "id": "59426ed2-57ff-4f61-8f62-9794b6dbb9ad",
+                            "name": "Falcon 9 Block 5",
+                            "lng": -80.57735736,
+                            "lat": 28.56194122,
+                        }
+                    ];
+                    expectedDetailedLaunchDataArray = [
+                        {
+                            "id": "86139b24-aed8-47b0-a385-5ed28cca6409",
+                            "launchName": "Falcon 9 Block 5 | Starlink Group 11-1",
+                            "imageURL": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20221009234147.png",
+                            "launchStatus": "Success",
+                            "launchDate": "2024-08-04T07:24:00Z",
+                            "location": {
+                                "longitude": -120.611,
+                                "latitude": 34.632
+                            },
+                            "pad": {
+                                "name": "Space Launch Complex 4E",
+                                "image": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20231223073520.jpeg"
+                            },
+                            "agency": {
+                                "name": "SpaceX",
+                                "description": "Space Exploration Technologies Corp., known as SpaceX, is an American aerospace manufacturer and space transport services company headquartered in Hawthorne, California. It was founded in 2002 by entrepreneur Elon Musk with the goal of reducing space transportation costs and enabling the colonization of Mars. SpaceX operates from many pads, on the East Coast of the US they operate from SLC-40 at Cape Canaveral Space Force Station and historic LC-39A at Kennedy Space Center. They also operate from SLC-4E at Vandenberg Space Force Base, California, usually for polar launches. Another launch site is being developed at Boca Chica, Texas.",
+                                "logo": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/spacex_logo_20220826094919.png",
+                                "link": "https://www.spacex.com/"
+                            },
+                            "launcherConfiguration": {
+                                "name": "Falcon 9 Block 5",
+                                "image": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon_9_image_20230807133459.jpeg",
+                                "infoURL": "https://www.spacex.com/vehicles/falcon-9/",
+                                "wikiURL": "https://en.wikipedia.org/wiki/Falcon_9",
+                                "totalSuccessfulLaunches": 452,
+                                "totalLaunches": 453,
+                                "height": 70,
+                                "diameter": 3.65,
+                                "launchMass": 549,
+                                "launchCost": 52000000,
+                                "isReusable": true,
+                                "manufacturer": "SpaceX"
+                            }
+                        },
+                        {
+                            "id": "59426ed2-57ff-4f61-8f62-9794b6dbb9ad",
+                            "launchName": "Falcon 9 Block 5 | Cygnus CRS-2 NG-21 (S.S. Francis R. “Dick” Scobee)",
+                            "imageURL": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/f9_liftoff_from_image_20240804190439.jpeg",
+                            "launchStatus": "Success",
+                            "launchDate": "2024-08-04T15:02:53Z",
+                            "location": {
+                                "longitude": -80.57735736,
+                                "latitude": 28.56194122
+                            },
+                            "pad": {
+                                "name": "Space Launch Complex 40",
+                                "image": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/f9_liftoff_from_image_20240621050513.jpeg"
+                            },
+                            "agency": {
+                                "name": "SpaceX",
+                                "description": "Space Exploration Technologies Corp., known as SpaceX, is an American aerospace manufacturer and space transport services company headquartered in Hawthorne, California. It was founded in 2002 by entrepreneur Elon Musk with the goal of reducing space transportation costs and enabling the colonization of Mars. SpaceX operates from many pads, on the East Coast of the US they operate from SLC-40 at Cape Canaveral Space Force Station and historic LC-39A at Kennedy Space Center. They also operate from SLC-4E at Vandenberg Space Force Base, California, usually for polar launches. Another launch site is being developed at Boca Chica, Texas.",
+                                "logo": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/spacex_logo_20220826094919.png",
+                                "link": "https://www.spacex.com/"
+                            },
+                            "launcherConfiguration": {
+                                "name": "Falcon 9 Block 5",
+                                "image": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon_9_image_20230807133459.jpeg",
+                                "infoURL": "https://www.spacex.com/vehicles/falcon-9/",
+                                "wikiURL": "https://en.wikipedia.org/wiki/Falcon_9",
+                                "totalSuccessfulLaunches": 452,
+                                "totalLaunches": 453,
+                                "height": 70,
+                                "diameter": 3.65,
+                                "launchMass": 549,
+                                "launchCost": 52000000,
+                                "isReusable": true,
+                                "manufacturer": "SpaceX"
+                            }
+                        }
+                    ];
+                    _a = (0, react_1.useState)([]), responseBasicLaunchDataArray = _a[0], setresponseBasicLaunchDataArray = _a[1];
+                    _b = (0, react_1.useState)([]), responseDetailedLaunchDataArray = _b[0], setresponseDetailedLaunchDataArray = _b[1];
+                    return [4 /*yield*/, launches.setLaunchData(launchSearchStartDateAsDayJS, launchSearchEndDateAsDayJS, setresponseBasicLaunchDataArray, setresponseDetailedLaunchDataArray).then(function () {
+                            if (responseBasicLaunchDataArray != expectedBasicLaunchDataArray) {
+                                return false; // if the basic data doesn't match, fail
+                            }
+                            else if (responseDetailedLaunchDataArray != expectedDetailedLaunchDataArray) {
+                                return false; // if the detailed data doesn't match, fail
+                            }
+                            else {
+                                return true; // if both match, pass
+                            }
+                        })
+                        // If literally anything goes wrong, return false
+                    ];
+                case 1:
+                    _c.sent();
+                    // If literally anything goes wrong, return false
+                    return [2 /*return*/, false];
+            }
+        });
+    });
+}
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var start, end, objectWithUnwantedFields, _a, _b, _c, _d;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
+        var start, end, objectWithUnwantedFields, _a, _b, _c, _d, _e, _f;
+        return __generator(this, function (_g) {
+            switch (_g.label) {
                 case 0:
                     console.log("launches tests");
                     start = '2024-07-19T02:54:00Z';
@@ -168,20 +286,22 @@ function main() {
                     return [4 /*yield*/, testLoadLaunchesOverTime(start, end)];
                 case 1:
                     // each function returns T/F, can remove these print statements if necessary
-                    _b.apply(_a, [_e.sent()]);
+                    _b.apply(_a, [_g.sent()]);
                     console.log(testSetFieldsWithNoDataToNull(objectWithUnwantedFields));
                     _d = (_c = console).log;
                     return [4 /*yield*/, testExtractBasicLaunchDataFromDetailedLaunchData()];
                 case 2:
-                    _d.apply(_c, [_e.sent()]);
+                    _d.apply(_c, [_g.sent()]);
+                    _f = (_e = console).log;
+                    return [4 /*yield*/, testSetLaunchData()];
+                case 3:
+                    _f.apply(_e, [_g.sent()]);
                     return [2 /*return*/];
             }
         });
     });
 }
 main();
-
-
 // DOES NOT test any function.
 // Used to prints the fields of the object after the "no data" fields have been set to null.
 //@ts-ignore

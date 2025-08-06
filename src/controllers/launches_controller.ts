@@ -2,7 +2,7 @@ import {
     loadLaunchesOverTime,
     getLaunchesAsList,
     extractBasicLaunchDataFromDetailedLaunchData
-} from "../model/launches"
+} from "../model/launches.ts"
 
 
 /**

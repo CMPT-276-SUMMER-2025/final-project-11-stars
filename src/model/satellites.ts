@@ -6,6 +6,8 @@ import celestrakExampleJSON from "../example-jsons/celestrak.json"
 
 const isDevMode = import.meta.env.VITE_CUSTOM_DEV_MODE === "true";
 
+// TLE is just a specifically formatted string of data that holds orbital information, it allows people to estimate past/future positions of anything orbiting the earth.
+// The TLE will be translated into longitude and latitude by getSatellitePositionAtTime.
 export function parseRawTLEStringIntoTLEObjectArray(
     rawTLEString: string
 ): satelliteTLEInterface[] {

@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 import { useState } from "react";
-import * as launchesC from "../../../controllers/launches_controller";
-import type { basicLaunchDataInterface, detailedLaunchDataInterface } from "../../interfaces";
-import * as launches from "../../launches"
+import * as launchesC from "../../../controllers/launches_controller.ts";
+import type { basicLaunchDataInterface, detailedLaunchDataInterface } from "../../interfaces.ts";
+import * as launches from "../../launches.ts"
 import axios from "axios";
 // TODO - remove @ts-ignore and add proper typing
 

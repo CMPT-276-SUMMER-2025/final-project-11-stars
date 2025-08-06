@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBasicDataFromLaunches = exports.getLaunches = exports.loadLaunchesOverTimePeriod = void 0;
-var launches_1 = require("../model/launches");
+var launches_ts_1 = require("../model/launches.ts");
 /**
  * Dates are expected to be in ISO 8601 format.
  * Will load all the launches to be within a certain time frame.
@@ -49,14 +49,14 @@ var launches_1 = require("../model/launches");
 var loadLaunchesOverTimePeriod = function (startDate, endDate) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, launches_1.loadLaunchesOverTime)(startDate, endDate)];
+            case 0: return [4 /*yield*/, (0, launches_ts_1.loadLaunchesOverTime)(startDate, endDate)];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
 exports.loadLaunchesOverTimePeriod = loadLaunchesOverTimePeriod;
 var getLaunches = function () {
-    return (0, launches_1.getLaunchesAsList)();
+    return (0, launches_ts_1.getLaunchesAsList)();
 };
 exports.getLaunches = getLaunches;
 /*
@@ -66,6 +66,6 @@ const getLaunch = (id: string) => {
 }
  */
 var getBasicDataFromLaunches = function () {
-    return (0, launches_1.extractBasicLaunchDataFromDetailedLaunchData)((0, launches_1.getLaunchesAsList)());
+    return (0, launches_ts_1.extractBasicLaunchDataFromDetailedLaunchData)((0, launches_ts_1.getLaunchesAsList)());
 };
 exports.getBasicDataFromLaunches = getBasicDataFromLaunches;

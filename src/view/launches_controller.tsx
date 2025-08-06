@@ -2,10 +2,10 @@ import {Alert, Box, Button, LinearProgress, Typography} from "@mui/material";
 import {DatePicker} from "@mui/x-date-pickers";
 import dayjs, {Dayjs as type_dayjs} from "dayjs";
 import React, {useEffect, useState} from "react";
-import type {basicLaunchDataInterface, detailedLaunchDataInterface} from "../../model/interfaces.ts";
-import {extractBasicLaunchDataFromDetailedLaunchData} from "../../model/launches.ts"
+import type {basicLaunchDataInterface, detailedLaunchDataInterface} from "../model/interfaces.ts";
+import {extractBasicLaunchDataFromDetailedLaunchData} from "../model/launches.ts"
 import {loadLaunchesOverTimePeriod} from "../controllers/launches_controller.ts";
-import {loadNewsFeedData} from "../../model/events.ts";
+import {loadNewsFeedData} from "../model/events.ts";
 
 const InvalidDateRangeAlert = () => (
     <Alert severity="error" style={{width: "45%"}}>

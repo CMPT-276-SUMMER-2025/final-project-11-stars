@@ -7,12 +7,12 @@ import type {
     newsFeedDataInterface,
     newsOrLaunchDataSidePanelDataInterface,
     satelliteTLEInterface
-} from "../../model/interfaces.ts";
+} from "../model/interfaces.ts";
 import {Dayjs as type_dayjs} from "dayjs"
 import {AnimatePresence, motion} from "framer-motion";
 import {Divider} from "@mui/material";
 //@ts-ignore // mui-image does not have types, so none can be installed to prevent the error.
-import {loadNewsFeedData} from "../../model/events.ts";
+import {loadNewsFeedData} from "../model/events.ts";
 import {LoadingNews, NewsFeed} from "./news-feed/news_feed.tsx";
 import {LaunchDetails} from "./launches/launch_details.tsx";
 

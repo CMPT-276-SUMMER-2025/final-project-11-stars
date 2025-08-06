@@ -1,4 +1,4 @@
-import * as eventsC from "../../events";
+import * as eventsC from "../../events.ts";
 import axios from "axios";
 
 async function testLoadNews() {

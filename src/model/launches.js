@@ -39,25 +39,39 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setLaunchData = exports.setFieldsWithNoDataToNull = exports.getLaunchById = exports.getLaunchesAsList = exports.loadLaunchesOverTime = void 0;
 exports.extractBasicLaunchDataFromDetailedLaunchData = extractBasicLaunchDataFromDetailedLaunchData;
 var axios_1 = require("axios");
-
+var isDevMode = import.meta.env.VITE_CUSTOM_DEV_MODE === "true";
 // Handles business logic and access to data in relation to orbital launches.
 var detailedLaunchDataArray;
-
 // This method is expected to be called before any other method in this module.
 // @param startDate Expected to be ISO 8601 format.
 // @param endDate Expected to be ISO 8601 format.
 var loadLaunchesOverTime = function (startDate, endDate) { return __awaiter(void 0, void 0, void 0, function () {
-    var LAUNCHES_URL, response, error_1;
+    var REAL_LAUNCHES_URL, BACKUP_LAUNCHES_URL, response, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                LAUNCHES_URL = "https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=".concat(startDate, "&window_start__lte=").concat(endDate, "&mode=detailed");
-                _a.label = 1;
+                REAL_LAUNCHES_URL = "https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=".concat(startDate, "&window_start__lte=").concat(endDate, "&mode=detailed");
+                BACKUP_LAUNCHES_URL = "https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=".concat(startDate, "&window_start__lte=").concat(endDate, "&mode=detailed");
+                if (!isDevMode) return [3 /*break*/, 2];
+                return [4 /*yield*/, axios_1.default.get(BACKUP_LAUNCHES_URL)];
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, axios_1.default.get(LAUNCHES_URL)];
-            case 2:
+                // If we're in dev mode, skip calling the real API.
                 response = _a.sent();
+                return [3 /*break*/, 6];
+            case 2:
+                _a.trys.push([2, 4, , 6]);
+                return [4 /*yield*/, axios_1.default.get(REAL_LAUNCHES_URL)];
+            case 3:
+                response = _a.sent();
+                return [3 /*break*/, 6];
+            case 4:
+                error_1 = _a.sent();
+                console.warn("Failed to load from LL2 Launches API. Falling back to dev/backup API.", error_1);
+                return [4 /*yield*/, axios_1.default.get(BACKUP_LAUNCHES_URL)];
+            case 5:
+                response = _a.sent();
+                return [3 /*break*/, 6];
+            case 6:
                 detailedLaunchDataArray = response.data.results.map(function (launch) {
                     var launchServiceProvider = launch.launch_service_provider;
                     var launchRocketConfig = launch.rocket.configuration;
@@ -101,11 +115,6 @@ var loadLaunchesOverTime = function (startDate, endDate) { return __awaiter(void
                     return filteredLaunchObject;
                 });
                 return [2 /*return*/, detailedLaunchDataArray];
-            case 3:
-                error_1 = _a.sent();
-                console.error('Error fetching launches', error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
         }
     });
 }); };
@@ -114,7 +123,6 @@ var getLaunchesAsList = function () {
     return detailedLaunchDataArray;
 };
 exports.getLaunchesAsList = getLaunchesAsList;
-
 // @returns Null if launch is not found.
 var getLaunchById = function (launchId) {
     for (var _i = 0, detailedLaunchDataArray_1 = detailedLaunchDataArray; _i < detailedLaunchDataArray_1.length; _i++) {
@@ -126,7 +134,6 @@ var getLaunchById = function (launchId) {
     return null;
 };
 exports.getLaunchById = getLaunchById;
-
 // Traverses all fields of the object, if any field is ('Unknown' or empty string or empty array), then set it to null,
 // if the field itself refers to an object, then check that object for 'Unknown'/empty string/empty array fields.
 // NOTE: This function is dependent on the Launch Library 2 /launches endpoint. May not work for other objects.
@@ -181,7 +188,6 @@ var setLaunchData = function (launchSearchStartDate, launchSearchEndDate, setbas
                 newDetailedLaunchData = _a.sent();
                 setdetailedLaunchData(newDetailedLaunchData);
                 newBasicLaunchData = extractBasicLaunchDataFromDetailedLaunchData(newDetailedLaunchData);
-                // console.log("handleClickSubmitButton, newBasicLaunchData: ", newBasicLaunchData) //todo - remove when done testing
                 setbasicLaunchData(newBasicLaunchData);
                 return [3 /*break*/, 4];
             case 3:

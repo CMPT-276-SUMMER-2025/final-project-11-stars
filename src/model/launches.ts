@@ -1,8 +1,7 @@
 import axios from 'axios';
 import type {basicLaunchDataInterface, detailedLaunchDataInterface} from './interfaces.ts';
-import {Dayjs as type_dayjs} from "dayjs";
+import type {Dayjs as type_dayjs} from "dayjs";
 import React from "react";
-import {loadLaunchesOverTimePeriod} from "../controllers/launches_controller.ts";
 
 const isDevMode = import.meta.env.VITE_CUSTOM_DEV_MODE === "true";
 
@@ -153,7 +152,7 @@ const setLaunchData = async (
     const ISOEndDate = launchSearchEndDate.toISOString();
     try {
         // Make launches API call with date range parameters and set detailed data (parsed to cut out unimportant data, but not mutated)
-        const newDetailedLaunchData = await loadLaunchesOverTimePeriod(ISOStartDate, ISOEndDate); //
+        const newDetailedLaunchData = await loadLaunchesOverTime(ISOStartDate, ISOEndDate); //
         setdetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]);
         // Extract and set basic data relevent for globe display (not mutated either)
         const newBasicLaunchData = extractBasicLaunchDataFromDetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]); //

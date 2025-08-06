@@ -1,5 +1,5 @@
-import {Footer} from "./backend/view/footer.tsx"
-import {SiteContent} from "./backend/view/site_content.tsx";
+import {Footer} from "./view/footer.tsx"
+import {SiteContent} from "./view/site_content.tsx";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {CssBaseline} from "@mui/material";
 import {LocalizationProvider} from "@mui/x-date-pickers";
