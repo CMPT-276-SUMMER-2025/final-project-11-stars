@@ -1,9 +1,9 @@
-name: Deploy from main to GitHub Pages
+name: Deploy from cicd to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - cicd
 
 jobs:
   deploy:
