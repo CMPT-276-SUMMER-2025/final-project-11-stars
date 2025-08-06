@@ -22,7 +22,8 @@ export const GlobeContainer = (
     satelliteSeekMinuteOffset: number,
     selectedSatelliteForCentering: satellitePositionInterface | null,
     lockGlobeDueToCenteredSatellite: boolean,
-    disableGlobeInterval: boolean
+    disableGlobeInterval: boolean,
+    setisWaitingForCELESTRAKAPIResponse: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
     const [dimensions, setDimensions] = useState({
         width: window.innerWidth * 3 / 5,
@@ -52,15 +53,13 @@ export const GlobeContainer = (
     const selectedSatelliteForCenteringRef = useRef(selectedSatelliteForCentering);
     const disableGlobeIntervalRef = useRef(disableGlobeInterval)
 
-    // Update the ref whenever the state changes, which avoids using stale values in the interval
+    // Update the ref whenever the states of the used variables (all 3 below) change, which avoids using stale values in the interval
     useEffect(() => {
         satelliteSeekMinuteOffsetRef.current = satelliteSeekMinuteOffset;
     }, [satelliteSeekMinuteOffset]);
-
     useEffect(() => {
         selectedSatelliteForCenteringRef.current = selectedSatelliteForCentering;
     }, [selectedSatelliteForCentering]);
-
     useEffect(() => {
         disableGlobeIntervalRef.current = disableGlobeInterval;
     }, [disableGlobeInterval]);
@@ -70,6 +69,19 @@ export const GlobeContainer = (
         (async () => {
             await load100BrightestSatellites().then((data) => {
                 setsatelliteTLEArray(data); // satelliteTLEArray state cannot be used in the function after being set due to React scoping.
+
+                // call everything ONCE manually to allow for single-use disabling of the "waiting for celestrak" info alert.
+                if (!disableGlobeIntervalRef.current) { // If the interval isn't being 'taken over' by some other function
+                    // Use the current/updated values from the refs instead of the states
+                    const currentTimeWithOffsetAdded = calculateNewDateFromHourDelta(satelliteSeekMinuteOffsetRef.current);
+                    const positions = getPositionsFromTLEArray(data, currentTimeWithOffsetAdded)
+                    setisWaitingForCELESTRAKAPIResponse(false);
+                    // api call has completed and data has propogated, whether it's valid or not doesn't matter
+                    // since errors are accounted for in a different function
+                    setsatellitePositions(positions);
+                    centerGlobeToChosenSatellitePosition(selectedSatelliteForCenteringRef.current, globeRef, positions)
+                }
+                // automate the updates every afterward.
                 setInterval(() => {
                     if (!disableGlobeIntervalRef.current) { // If the interval isn't being 'taken over' by some other function
                         // Use the current/updated values from the refs instead of the states
