@@ -20,9 +20,10 @@ export function parseRawTLEStringIntoTLEObjectArray(
 }
 
 export const load100BrightestSatellites = async (): Promise<satelliteTLEInterface[]> => {
-    const CELESTRAK_URL = "https://www.celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle";
+    const CELESTRAK_URL = "https://www.celestrak.com/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle";
     let parsedTLEObjectArray: satelliteTLEInterface[];
     const response = await axios.get(CELESTRAK_URL);
+
     parsedTLEObjectArray = parseRawTLEStringIntoTLEObjectArray(response.data); // Parses the data, since the response is a row string.
     return parsedTLEObjectArray;
 };
@@ -40,19 +41,27 @@ export const getSatellitePositionAtTime = (
             const gmst = satellite.gstime(time); // Calculate Earth's rotation
             // Geodetic refers to the data being in relation to to the earth
             const geodetic = satellite.eciToGeodetic(positionAndVelocity.position, gmst); // Convert position to latitude, longitude and latitude
-            return {
+            let positionObject = {
                 lat: satellite.degreesLat(geodetic.latitude), // Convert latitude to degrees
                 lng: satellite.degreesLong(geodetic.longitude), // Convert longitude to degrees
                 alt: geodetic.height, // Altitude in kilometers
             };
+            // invalid lte(s) will result in the calculated values being NaN
+            if (Number.isNaN(positionObject.lat) || Number.isNaN(positionObject.lng || Number.isNaN(positionObject.alt))) {
+                return null;
+            } else {
+                // If position couldn't be calculated, drop the entry. This will cause GlobeGL to just ignore this satellite and not render it.
+                return positionObject;
+            }
         } else {
-            return null; // If position couldn't be calculated, drop the entry. This will cause GlobeGL to just ignore this satellite and not render it.
+            return null;
         }
     } catch {
         return null; // Safety net - shouldn't really need to be used unless the calculations somehow return garbage data.
     }
 };
-const deduplicateSatelliteNamesAndIDs = (
+
+export const deduplicateSatelliteNamesAndIDs = (
     satellites: satellitePositionInterface[]
 ) => {
     const nameCount: Record<string, number> = {};

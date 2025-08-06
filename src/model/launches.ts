@@ -12,16 +12,20 @@ let detailedLaunchDataArray: detailedLaunchDataInterface[];
 // This method is expected to be called before any other method in this module.
 // @param startDate Expected to be ISO 8601 format.
 // @param endDate Expected to be ISO 8601 format.
-const loadLaunchesOverTime = async (startDate: string, endDate: string) => {
-    const LAUNCHES_URL = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`;
-    const response = await axios.get(LAUNCHES_URL);
+const loadLaunchesOverTime = async (startDate: string, endDate: string, isDev : boolean) => {
+    let launches_url = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`;
+    
+    if(isDev) {
+        launches_url = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&mode=detailed`
+    }
 
+    const response = await axios.get(launches_url);
 
     detailedLaunchDataArray = response.data.results.map((launch: any) => {
         // If any data doesn't exist, set it to null
         let launchServiceProvider = launch?.launch_service_provider ?? null;
         let launchRocketConfig = launch?.rocket?.configuration ?? null;
-        return {
+        return setFieldsWithNoDataToNull({
             id: launch?.id ?? null,
             launchName: launch?.name ?? null,
             imageURL: launch?.image?.image_url ?? null,
@@ -63,9 +67,9 @@ const loadLaunchesOverTime = async (startDate: string, endDate: string) => {
 
                 manufacturer: launchRocketConfig.manufacturer?.name ?? null
             } : null
-        };
+        });
     })
-    return setFieldsWithNoDataToNull(detailedLaunchDataArray);
+    return detailedLaunchDataArray;
 }
 
 const getLaunchesAsList = () => {

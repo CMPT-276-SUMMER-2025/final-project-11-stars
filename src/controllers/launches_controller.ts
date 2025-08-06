@@ -14,7 +14,7 @@ import {
  * therefore @getLaunch will return an empty list.
  */
 const loadLaunchesOverTimePeriod = async (startDate: string, endDate: string) => {
-    return await loadLaunchesOverTime(startDate, endDate);
+    return await loadLaunchesOverTime(startDate, endDate, false);
 }
 
 const getLaunches = () => {

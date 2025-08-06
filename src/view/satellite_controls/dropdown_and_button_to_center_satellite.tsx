@@ -1,5 +1,5 @@
 import Globe from "react-globe.gl";
-import type {satellitePositionInterface} from "../../../model/interfaces.ts";
+import type {satellitePositionInterface} from "../../model/interfaces.ts";
 import {Alert, Autocomplete, Button, IconButton, TextField, Tooltip} from "@mui/material";
 import React, {type RefObject} from "react";
 import InfoOutlineIcon from "@mui/icons-material/InfoOutline";

@@ -36,85 +36,66 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setLaunchData = exports.setFieldsWithNoDataToNull = exports.getLaunchById = exports.getLaunchesAsList = exports.loadLaunchesOverTime = void 0;
+exports.setLaunchData = exports.setFieldsWithNoDataToNull = exports.getLaunchesAsList = exports.loadLaunchesOverTime = void 0;
 exports.extractBasicLaunchDataFromDetailedLaunchData = extractBasicLaunchDataFromDetailedLaunchData;
 var axios_1 = require("axios");
-var isDevMode = import.meta.env.VITE_CUSTOM_DEV_MODE === "true";
+var launches_controller_ts_1 = require("../controllers/launches_controller.ts");
 // Handles business logic and access to data in relation to orbital launches.
 var detailedLaunchDataArray;
 // This method is expected to be called before any other method in this module.
 // @param startDate Expected to be ISO 8601 format.
 // @param endDate Expected to be ISO 8601 format.
 var loadLaunchesOverTime = function (startDate, endDate) { return __awaiter(void 0, void 0, void 0, function () {
-    var REAL_LAUNCHES_URL, BACKUP_LAUNCHES_URL, response, error_1;
+    var LAUNCHES_URL, response;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                REAL_LAUNCHES_URL = "https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=".concat(startDate, "&window_start__lte=").concat(endDate, "&mode=detailed");
-                BACKUP_LAUNCHES_URL = "https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=".concat(startDate, "&window_start__lte=").concat(endDate, "&mode=detailed");
-                if (!isDevMode) return [3 /*break*/, 2];
-                return [4 /*yield*/, axios_1.default.get(BACKUP_LAUNCHES_URL)];
+                LAUNCHES_URL = "https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=".concat(startDate, "&window_start__lte=").concat(endDate, "&mode=detailed");
+                return [4 /*yield*/, axios_1.default.get(LAUNCHES_URL)];
             case 1:
-                // If we're in dev mode, skip calling the real API.
                 response = _a.sent();
-                return [3 /*break*/, 6];
-            case 2:
-                _a.trys.push([2, 4, , 6]);
-                return [4 /*yield*/, axios_1.default.get(REAL_LAUNCHES_URL)];
-            case 3:
-                response = _a.sent();
-                return [3 /*break*/, 6];
-            case 4:
-                error_1 = _a.sent();
-                console.warn("Failed to load from LL2 Launches API. Falling back to dev/backup API.", error_1);
-                return [4 /*yield*/, axios_1.default.get(BACKUP_LAUNCHES_URL)];
-            case 5:
-                response = _a.sent();
-                return [3 /*break*/, 6];
-            case 6:
                 detailedLaunchDataArray = response.data.results.map(function (launch) {
-                    var launchServiceProvider = launch.launch_service_provider;
-                    var launchRocketConfig = launch.rocket.configuration;
-                    var launchObject = {
-                        id: launch.id,
-                        launchName: launch.name,
-                        imageURL: launch.image.image_url,
-                        launchStatus: launch.status.abbrev,
-                        launchDate: (launch.window_start == null) ? "Not Launched Yet" : launch.window_start,
-                        // launch location is just location of pad
-                        location: {
-                            longitude: launch.pad.longitude,
-                            latitude: launch.pad.latitude
-                        },
-                        pad: {
-                            name: launch.pad.name,
-                            image: launch.pad.image.image_url
-                        },
-                        agency: {
-                            name: launchServiceProvider.name,
-                            description: launchServiceProvider.description,
-                            logo: launchServiceProvider.logo.image_url,
-                            link: launchServiceProvider.info_url
-                        },
-                        launcherConfiguration: {
-                            name: launchRocketConfig.full_name,
-                            image: launchRocketConfig.image.image_url,
-                            infoURL: launchRocketConfig.info_url,
-                            wikiURL: launchRocketConfig.wiki_url,
-                            totalSuccessfulLaunches: launchRocketConfig.successful_launches,
-                            totalLaunches: launchRocketConfig.total_launch_count,
-                            height: launchRocketConfig.length,
-                            diameter: launchRocketConfig.diameter,
-                            launchMass: launchRocketConfig.launch_mass,
-                            launchCost: launchRocketConfig.launch_cost,
-                            isReusable: launchRocketConfig.reusable,
-                            manufacturer: launchRocketConfig.manufacturer.name
-                        }
+                    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8;
+                    // If any data doesn't exist, set it to null
+                    var launchServiceProvider = (_a = launch === null || launch === void 0 ? void 0 : launch.launch_service_provider) !== null && _a !== void 0 ? _a : null;
+                    var launchRocketConfig = (_c = (_b = launch === null || launch === void 0 ? void 0 : launch.rocket) === null || _b === void 0 ? void 0 : _b.configuration) !== null && _c !== void 0 ? _c : null;
+                    return {
+                        id: (_d = launch === null || launch === void 0 ? void 0 : launch.id) !== null && _d !== void 0 ? _d : null,
+                        launchName: (_e = launch === null || launch === void 0 ? void 0 : launch.name) !== null && _e !== void 0 ? _e : null,
+                        imageURL: (_g = (_f = launch === null || launch === void 0 ? void 0 : launch.image) === null || _f === void 0 ? void 0 : _f.image_url) !== null && _g !== void 0 ? _g : null,
+                        launchStatus: (_j = (_h = launch === null || launch === void 0 ? void 0 : launch.status) === null || _h === void 0 ? void 0 : _h.abbrev) !== null && _j !== void 0 ? _j : null,
+                        launchDate: (launch === null || launch === void 0 ? void 0 : launch.window_start) == null ? "Not Launched Yet" : launch.window_start,
+                        location: (launch === null || launch === void 0 ? void 0 : launch.pad) ? {
+                            longitude: (_k = launch.pad.longitude) !== null && _k !== void 0 ? _k : null,
+                            latitude: (_l = launch.pad.latitude) !== null && _l !== void 0 ? _l : null
+                        } : null,
+                        pad: (launch === null || launch === void 0 ? void 0 : launch.pad) ? {
+                            name: (_m = launch.pad.name) !== null && _m !== void 0 ? _m : null,
+                            image: (_p = (_o = launch.pad.image) === null || _o === void 0 ? void 0 : _o.image_url) !== null && _p !== void 0 ? _p : null
+                        } : null,
+                        agency: launchServiceProvider ? {
+                            name: (_q = launchServiceProvider.name) !== null && _q !== void 0 ? _q : null,
+                            description: (_r = launchServiceProvider.description) !== null && _r !== void 0 ? _r : null,
+                            logo: (_t = (_s = launchServiceProvider.logo) === null || _s === void 0 ? void 0 : _s.image_url) !== null && _t !== void 0 ? _t : null,
+                            link: (_u = launchServiceProvider.info_url) !== null && _u !== void 0 ? _u : null
+                        } : null,
+                        launcherConfiguration: launchRocketConfig ? {
+                            name: (_v = launchRocketConfig.full_name) !== null && _v !== void 0 ? _v : null,
+                            image: (_x = (_w = launchRocketConfig.image) === null || _w === void 0 ? void 0 : _w.image_url) !== null && _x !== void 0 ? _x : null,
+                            infoURL: (_y = launchRocketConfig.info_url) !== null && _y !== void 0 ? _y : null,
+                            wikiURL: (_z = launchRocketConfig.wiki_url) !== null && _z !== void 0 ? _z : null,
+                            totalSuccessfulLaunches: (_0 = launchRocketConfig.successful_launches) !== null && _0 !== void 0 ? _0 : null,
+                            totalLaunches: (_1 = launchRocketConfig.total_launch_count) !== null && _1 !== void 0 ? _1 : null,
+                            height: (_2 = launchRocketConfig.length) !== null && _2 !== void 0 ? _2 : null,
+                            diameter: (_3 = launchRocketConfig.diameter) !== null && _3 !== void 0 ? _3 : null,
+                            launchMass: (_4 = launchRocketConfig.launch_mass) !== null && _4 !== void 0 ? _4 : null,
+                            launchCost: (_5 = launchRocketConfig.launch_cost) !== null && _5 !== void 0 ? _5 : null,
+                            isReusable: (_6 = launchRocketConfig.reusable) !== null && _6 !== void 0 ? _6 : null,
+                            manufacturer: (_8 = (_7 = launchRocketConfig.manufacturer) === null || _7 === void 0 ? void 0 : _7.name) !== null && _8 !== void 0 ? _8 : null
+                        } : null
                     };
-                    var filteredLaunchObject = setFieldsWithNoDataToNull(launchObject);
-                    return filteredLaunchObject;
                 });
-                return [2 /*return*/, detailedLaunchDataArray];
+                return [2 /*return*/, setFieldsWithNoDataToNull(detailedLaunchDataArray)];
         }
     });
 }); };
@@ -123,17 +104,6 @@ var getLaunchesAsList = function () {
     return detailedLaunchDataArray;
 };
 exports.getLaunchesAsList = getLaunchesAsList;
-// @returns Null if launch is not found.
-var getLaunchById = function (launchId) {
-    for (var _i = 0, detailedLaunchDataArray_1 = detailedLaunchDataArray; _i < detailedLaunchDataArray_1.length; _i++) {
-        var launch = detailedLaunchDataArray_1[_i];
-        if (launchId == launch.id) {
-            return launch;
-        }
-    }
-    return null;
-};
-exports.getLaunchById = getLaunchById;
 // Traverses all fields of the object, if any field is ('Unknown' or empty string or empty array), then set it to null,
 // if the field itself refers to an object, then check that object for 'Unknown'/empty string/empty array fields.
 // NOTE: This function is dependent on the Launch Library 2 /launches endpoint. May not work for other objects.
@@ -154,7 +124,7 @@ var setFieldsWithNoDataToNull = function (launchObject) {
                 setFieldsWithNoDataToNull(launchObject[key]);
             }
             else if (invalidPrimitives.includes(launchObject[key])) {
-                // field is a primitive 
+                // field is a primitive
                 launchObject[key] = null;
             }
         }
@@ -174,27 +144,19 @@ function extractBasicLaunchDataFromDetailedLaunchData(detailed) {
     });
 }
 var setLaunchData = function (launchSearchStartDate, launchSearchEndDate, setbasicLaunchData, setdetailedLaunchData) { return __awaiter(void 0, void 0, void 0, function () {
-    var ISOStartDate, ISOEndDate, newDetailedLaunchData, newBasicLaunchData, error_2;
+    var ISOStartDate, ISOEndDate, newDetailedLaunchData, newBasicLaunchData;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 ISOStartDate = launchSearchStartDate.toISOString();
                 ISOEndDate = launchSearchEndDate.toISOString();
-                _a.label = 1;
+                return [4 /*yield*/, (0, launches_controller_ts_1.loadLaunchesOverTimePeriod)(ISOStartDate, ISOEndDate)];
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, loadLaunchesOverTime(ISOStartDate, ISOEndDate)];
-            case 2:
                 newDetailedLaunchData = _a.sent();
                 setdetailedLaunchData(newDetailedLaunchData);
                 newBasicLaunchData = extractBasicLaunchDataFromDetailedLaunchData(newDetailedLaunchData);
                 setbasicLaunchData(newBasicLaunchData);
-                return [3 /*break*/, 4];
-            case 3:
-                error_2 = _a.sent();
-                console.log("error getting/setting new launch data", error_2);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [2 /*return*/];
         }
     });
 }); };

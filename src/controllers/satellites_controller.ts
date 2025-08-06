@@ -17,3 +17,9 @@ const getPositionsArrayFromTLEArray = (tleArray : satelliteTLEInterface[], time 
 const getSatellitePosition = (tle1 : string, tl2 : string, time : Date) => {
     return getSatellitePositionAtTime(tle1, tl2, time);
 }
+
+export { 
+    getSatellitesAsTLEArray, 
+    getPositionsArrayFromTLEArray, 
+    getSatellitePosition 
+}

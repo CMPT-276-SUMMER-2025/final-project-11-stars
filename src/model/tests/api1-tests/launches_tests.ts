@@ -1,31 +1,34 @@
-import dayjs from "dayjs";
-import { useState } from "react";
-import * as launchesC from "../../../controllers/launches_controller.ts";
-import type { basicLaunchDataInterface, detailedLaunchDataInterface } from "../../interfaces.ts";
 import * as launches from "../../launches.ts"
 import axios from "axios";
 // TODO - remove @ts-ignore and add proper typing
 
+// NOTE : The test function for setLaunchData is hard to implement because we 
+// cannot have react states outside of a react component as apparently that breaks a rule, 
+// and setLaunchData only accepts react states as arguments, therefore it would be difficult to 
+// implement a proper test function and due to time constraints we have decided not to write 
+// a test for it but we ensured it works.
+
 // File for unit testing model in relation to api-1-feature-1/2.
 
 
-// Test through controller.
-async function testLoadLaunchesOverTime(startDate: string, endDate: string) {
+// dates for launches
+const start = '2024-07-19T02:54:00Z';
+const end = '2024-08-04T15:02:53Z';
 
-    await launchesC.loadLaunchesOverTimePeriod(startDate, endDate);
+// Test through controller.
+async function testLoadLaunchesOverTime() {
 
     // data from model
-    let launchesFromModel = launchesC.getLaunches();
+    let launchesFromModel = await launches.loadLaunchesOverTime(start, end, true);
 
     // getting the data ourselves
-    let URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`;
+    let URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${start}&mode=detailed`;
     let result = await axios.get(URL);
     let launchesFromAPI = result.data.results;
 
     let errorMessage = "";
-
     if(launchesFromModel.length != launchesFromAPI.length) {
-        errorMessage = `FAIL, the number of feteched launches are not equal. Lengths were ${launchesFromModel.length} and ${launchesFromAPI.length}`;
+        errorMessage = `FAIL, the number of feteched launches are not equal. Lengths were model:${launchesFromModel.length} and api:${launchesFromAPI.length}`;
         console.log(errorMessage);
         return false;
     }
@@ -77,7 +80,7 @@ function testSetFieldsWithNoDataToNull(launchObject) {
 }
 
 async function testExtractBasicLaunchDataFromDetailedLaunchData() {
-    let launchesFromModel = await launchesC.getLaunches();
+    let launchesFromModel = await launches.loadLaunchesOverTime(start,end,true);
     const newBasicLaunchData = launches.extractBasicLaunchDataFromDetailedLaunchData(launchesFromModel);
     // check to make sure each object has the 4 basic required fields
     for(let i = 0; i < newBasicLaunchData.length; i++) {
@@ -95,126 +98,8 @@ async function testExtractBasicLaunchDataFromDetailedLaunchData() {
     return true;
 }
 
-async function testSetLaunchData() {
-    // LL2 doesn't guarantee that their data is immutable change, so if this function ever fails, take a look at whether the API returns 'correct' but slightly different data (e.g. a different URL to an image)
-    
-    // Hardcoded dates to maintain consistency - the return data for these dates is known to be good
-    const launchSearchStartDate = '2024-07-19T02:54:00Z';
-    const launchSearchEndDate = '2024-08-04T15:02:53Z';
-    // Cast both date strings to DayJS object, since that's what setLaunchData expects
-    const launchSearchStartDateAsDayJS = dayjs(launchSearchStartDate)
-    const launchSearchEndDateAsDayJS = dayjs(launchSearchEndDate)
-    // Create arrays with the expected data to compare the response data to
-    const expectedBasicLaunchDataArray = [
-  {
-    "id": "86139b24-aed8-47b0-a385-5ed28cca6409",
-    "name": "Falcon 9 Block 5",
-    "lng": -120.611,
-    "lat": 34.632,
-  },
-  {
-    "id": "59426ed2-57ff-4f61-8f62-9794b6dbb9ad",
-    "name": "Falcon 9 Block 5",
-    "lng": -80.57735736,
-    "lat": 28.56194122,
-    }
-]
-    const expectedDetailedLaunchDataArray = [
-  {
-    "id": "86139b24-aed8-47b0-a385-5ed28cca6409",
-    "launchName": "Falcon 9 Block 5 | Starlink Group 11-1",
-    "imageURL": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20221009234147.png",
-    "launchStatus": "Success",
-    "launchDate": "2024-08-04T07:24:00Z",
-    "location": {
-      "longitude": -120.611,
-      "latitude": 34.632
-    },
-    "pad": {
-      "name": "Space Launch Complex 4E",
-      "image": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon2520925_image_20231223073520.jpeg"
-    },
-    "agency": {
-      "name": "SpaceX",
-      "description": "Space Exploration Technologies Corp., known as SpaceX, is an American aerospace manufacturer and space transport services company headquartered in Hawthorne, California. It was founded in 2002 by entrepreneur Elon Musk with the goal of reducing space transportation costs and enabling the colonization of Mars. SpaceX operates from many pads, on the East Coast of the US they operate from SLC-40 at Cape Canaveral Space Force Station and historic LC-39A at Kennedy Space Center. They also operate from SLC-4E at Vandenberg Space Force Base, California, usually for polar launches. Another launch site is being developed at Boca Chica, Texas.",
-      "logo": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/spacex_logo_20220826094919.png",
-      "link": "https://www.spacex.com/"
-    },
-    "launcherConfiguration": {
-      "name": "Falcon 9 Block 5",
-      "image": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon_9_image_20230807133459.jpeg",
-      "infoURL": "https://www.spacex.com/vehicles/falcon-9/",
-      "wikiURL": "https://en.wikipedia.org/wiki/Falcon_9",
-      "totalSuccessfulLaunches": 452,
-      "totalLaunches": 453,
-      "height": 70,
-      "diameter": 3.65,
-      "launchMass": 549,
-      "launchCost": 52000000,
-      "isReusable": true,
-      "manufacturer": "SpaceX"
-    }
-  },
-  {
-    "id": "59426ed2-57ff-4f61-8f62-9794b6dbb9ad",
-    "launchName": "Falcon 9 Block 5 | Cygnus CRS-2 NG-21 (S.S. Francis R. “Dick” Scobee)",
-    "imageURL": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/f9_liftoff_from_image_20240804190439.jpeg",
-    "launchStatus": "Success",
-    "launchDate": "2024-08-04T15:02:53Z",
-    "location": {
-      "longitude": -80.57735736,
-      "latitude": 28.56194122
-    },
-    "pad": {
-      "name": "Space Launch Complex 40",
-      "image": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/f9_liftoff_from_image_20240621050513.jpeg"
-    },
-    "agency": {
-      "name": "SpaceX",
-      "description": "Space Exploration Technologies Corp., known as SpaceX, is an American aerospace manufacturer and space transport services company headquartered in Hawthorne, California. It was founded in 2002 by entrepreneur Elon Musk with the goal of reducing space transportation costs and enabling the colonization of Mars. SpaceX operates from many pads, on the East Coast of the US they operate from SLC-40 at Cape Canaveral Space Force Station and historic LC-39A at Kennedy Space Center. They also operate from SLC-4E at Vandenberg Space Force Base, California, usually for polar launches. Another launch site is being developed at Boca Chica, Texas.",
-      "logo": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/spacex_logo_20220826094919.png",
-      "link": "https://www.spacex.com/"
-    },
-    "launcherConfiguration": {
-      "name": "Falcon 9 Block 5",
-      "image": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon_9_image_20230807133459.jpeg",
-      "infoURL": "https://www.spacex.com/vehicles/falcon-9/",
-      "wikiURL": "https://en.wikipedia.org/wiki/Falcon_9",
-      "totalSuccessfulLaunches": 452,
-      "totalLaunches": 453,
-      "height": 70,
-      "diameter": 3.65,
-      "launchMass": 549,
-      "launchCost": 52000000,
-      "isReusable": true,
-      "manufacturer": "SpaceX"
-    }
-  }
-]
-    // States to mimic the functionality of how setLaunchData actually operates, storing the responses
-    const [responseBasicLaunchDataArray, setresponseBasicLaunchDataArray] = useState<basicLaunchDataInterface[]>([])
-    const [responseDetailedLaunchDataArray, setresponseDetailedLaunchDataArray] = useState<detailedLaunchDataInterface[]>([])
-    await launches.setLaunchData(launchSearchStartDateAsDayJS, launchSearchEndDateAsDayJS, setresponseBasicLaunchDataArray, setresponseDetailedLaunchDataArray).then(() => {
-        if (responseBasicLaunchDataArray != expectedBasicLaunchDataArray) {
-            return false // if the basic data doesn't match, fail
-        } else if (responseDetailedLaunchDataArray != expectedDetailedLaunchDataArray) {
-            return false // if the detailed data doesn't match, fail
-        } else {
-            return true // if both match, pass
-        }
-    })
-    // If literally anything goes wrong, return false
-    return false;
-}
-
-
 async function main () {
     console.log("launches tests");
-
-    // TEST : testLoadLaunchesOverTime
-    // dates for launches
-    const start = '2024-07-19T02:54:00Z';
-    const end = '2024-08-04T15:02:53Z';
 
     // TEST : testSetFieldsWithNoDataToNull
     // The possible ways (that I have seen) a field in Launch Library 2 can have "no data".
@@ -234,10 +119,9 @@ async function main () {
     }
 
     // each function returns T/F, can remove these print statements if necessary
-    console.log(await testLoadLaunchesOverTime(start,end));
+    console.log(await testLoadLaunchesOverTime());
     console.log(testSetFieldsWithNoDataToNull(objectWithUnwantedFields));
     console.log(await testExtractBasicLaunchDataFromDetailedLaunchData());
-    console.log(await testSetLaunchData());
 }
 
 main();
