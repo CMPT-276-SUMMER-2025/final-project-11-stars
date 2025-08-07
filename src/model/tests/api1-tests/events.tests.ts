@@ -3,33 +3,17 @@ import axios from "axios";
 
 describe("loadNewsFeedData", () => {
   test("should fetch events and match with API results", async () => {
-    const eventsFromModel = await eventsC.loadNewsFeedData();
+    const eventsFromModel = await eventsC.loadNewsFeedData(true);
 
     const URL = "https://lldev.thespacedevs.com/2.3.0/events/upcoming/?limit=3&?ordering=date";
-    const result = await axios.get(URL);
-    const eventsFromAPI = result.data.results;
+    const testingAPICallResponse = await axios.get(URL);
+    const eventsFromAPI = testingAPICallResponse.data.results;
 
-    // Length mismatch check with error message
-    if (eventsFromAPI.length !== eventsFromModel.length) {
-      fail(
-        `FAIL: The number of fetched events are not equal. Lengths were ${eventsFromModel.length} and ${eventsFromAPI.length}`
-      );
-    }
+    expect(eventsFromModel.length).toBe(eventsFromAPI.length);
 
-    // Check each event's headline/name
-    for (let i = 0; i < eventsFromModel.length; i++) {
-      const eventModel = eventsFromModel[i];
-      const eventAPI = eventsFromAPI[i];
-
-      if (eventModel.headline !== eventAPI.name) {
-  throw new Error(
-    `FAIL: The headlines of events do not match at index ${i}. Got "${eventModel.event.name}" from model and "${eventAPI.headline}" from API.`
-  );
-}
-
-    }
-
-    // Optional: If no failure occurred
-    expect(true).toBe(true);
+    eventsFromModel.forEach((eventFromModel: any, i: number) => {
+      const eventFromAPI = eventsFromAPI[i];
+      expect(eventFromModel.headline).toBe(eventFromAPI.name);
+    });
   });
 });
