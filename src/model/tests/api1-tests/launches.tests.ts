@@ -9,7 +9,7 @@ describe("Launches Model Tests", () => {
 
   test("loadLaunchesOverTime should fetch same number of launches as API", async () => {
     const launchesFromModel = await launches.loadLaunchesOverTime(start, end, true);
-    const URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${start}&window_start__lte=${end}&mode=detailed`;
+    const URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${start}&mode=detailed`;
     const result = await axios.get(URL);
     const launchesFromAPI = result.data.results;
 
