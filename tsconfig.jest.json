@@ -6,6 +6,8 @@
     "moduleResolution": "bundler",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": false,
+
     "verbatimModuleSyntax": false
   },
   "include": ["src"]
