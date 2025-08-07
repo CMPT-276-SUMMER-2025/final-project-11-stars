@@ -1,28 +1,23 @@
 import axios from 'axios';
 import type {basicLaunchDataInterface, detailedLaunchDataInterface} from './interfaces.ts';
-import {Dayjs as type_dayjs} from "dayjs";
+import type {Dayjs as type_dayjs} from "dayjs";
 import React from "react";
 import {loadLaunchesOverTimePeriod} from "../controllers/launches_controller.ts";
 
-/**
- * Handles business logic and access to data in relation to orbital launches.
- */
+// Handles business logic and access to data in relation to orbital launches.
 
 
 let detailedLaunchDataArray: detailedLaunchDataInterface[];
 
-/**
- * This method is expected to be called before any other method in this module.
- * @param startDate Expected to be ISO 8601 format.
- * @param endDate Expected to be ISO 8601 format.
- */
+// This method is expected to be called before any other method in this module.
+// startDate and endDate Expected to be ISO 8601 format.
 const loadLaunchesOverTime = async (startDate: string, endDate: string, isCalledForTesting: boolean = false) => {
     //"isCalledForTesting" is an optional boolean that defaults to false
     // it is used to account for the fact that this function is called
     // from both the user-facing code (real api) and testing code (dev api)
 
     // API URL variables are in ALLCAPS to signify their importance
-    const DEV_LAUNCHES_URL = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`; // Dev API with no rate-limiting
+    const DEV_LAUNCHES_URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&mode=detailed`; // Dev API with no rate-limiting
     const REAL_LAUNCHES_URL = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`; // Real API with rate-limiting
     const API_URL_TO_BE_USED = isCalledForTesting ? DEV_LAUNCHES_URL : REAL_LAUNCHES_URL; // if called for testing purposes, use dev api. else, use real api
 
@@ -31,7 +26,8 @@ const loadLaunchesOverTime = async (startDate: string, endDate: string, isCalled
         // If any data doesn't exist, set it to null
         let launchServiceProvider = launch?.launch_service_provider ?? null;
         let launchRocketConfig = launch?.rocket?.configuration ?? null;
-        return {
+
+        return setFieldsWithNoDataToNull({
             id: launch?.id ?? null,
             launchName: launch?.name ?? null,
             imageURL: launch?.image?.image_url ?? null,
@@ -73,20 +69,18 @@ const loadLaunchesOverTime = async (startDate: string, endDate: string, isCalled
 
                 manufacturer: launchRocketConfig.manufacturer?.name ?? null
             } : null
-        };
+        });
     })
-    return setFieldsWithNoDataToNull(detailedLaunchDataArray);
+    return detailedLaunchDataArray;
 }
 
 const getLaunchesAsList = () => {
     return detailedLaunchDataArray;
 }
 
-/**
- * Traverses all fields of the object, if any field is ('Unknown' or empty string or empty array), then set it to null,
- * if the field itself refers to an object, then check that object for 'Unknown'/empty string/empty array fields.
- * NOTE: This function is dependent on the Launch Library 2 /launches endpoint. May not work for other objects.
- */
+// Traverses all fields of the object, if any field is ('Unknown' or empty string or empty array), then set it to null,
+// if the field itself refers to an object, then check that object for 'Unknown'/empty string/empty array fields.
+// NOTE: This function is dependent on the Launch Library 2 /launches endpoint. May not work for other objects.
 const setFieldsWithNoDataToNull = (launchObject: any) => { //todo - set typing. maybe detailedLaunchDataInterface?
 
     let invalidPrimitives = [
@@ -100,9 +94,8 @@ const setFieldsWithNoDataToNull = (launchObject: any) => { //todo - set typing. 
                 if (launchObject[key].length == 0) {
                     launchObject[key] = null;
                 }
-
-            } else if (typeof launchObject[key] === "object") {
-                // if field is an object
+            } else if (typeof launchObject[key] === "object" && launchObject[key] != null) {
+                // if field is an object but not null
                 setFieldsWithNoDataToNull(launchObject[key])
 
             } else if (invalidPrimitives.includes(launchObject[key])) {

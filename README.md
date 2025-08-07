@@ -3,7 +3,8 @@ CELESTRAK's SSL Certificate for their API endpoints has been expired as of 5 PM,
 As the project is due at the end of the day, we are adding this note to inform the teaching team of the issue.\
 If the project needs to be viewed, and the top-left corner shows an API Error or Loading alert (the issue will also be 
 shown in the browser console as `ERR_CERT_COMMON_NAME_INVALID`), please go to your 
-browser settings and add CELESTRAK.org to your exception list, or disable invalid SSL certificate warnings entirely.
+browser settings and add CELESTRAK.org to your exception list, or disable invalid SSL certificate warnings entirely.\
+This is **completely out of our hands**, so if a member of the teaching team is reading this and requires more details, please contact Anton (PM).
 
 ---
 

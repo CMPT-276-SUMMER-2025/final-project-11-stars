@@ -7,7 +7,7 @@ const loadNewsFeedData = async (isCalledForTesting: boolean = false) => {
     // from both the user-facing code (real api) and testing code (dev api)
 
     // API URL variables are in ALLCAPS to signify their importance
-    const DEV_EVENTS_URL = `https://ll.thespacedevs.com/2.3.0/events/upcoming/?limit=3&?ordering=date`; // Dev API with no rate-limiting
+    const DEV_EVENTS_URL = `https://lldev.thespacedevs.com/2.3.0/events/upcoming/?limit=3&?ordering=date`; // Dev API with no rate-limiting
     const REAL_EVENTS_URL = `https://ll.thespacedevs.com/2.3.0/events/upcoming/?limit=3&?ordering=date`; // Real API with rate-limiting
     const API_URL_TO_BE_USED = isCalledForTesting ? DEV_EVENTS_URL : REAL_EVENTS_URL; // if called for testing purposes, use dev api. else, use real api
 
@@ -37,4 +37,6 @@ const loadNewsFeedData = async (isCalledForTesting: boolean = false) => {
     });
 }
 
-export {loadNewsFeedData}
+export {
+    loadNewsFeedData
+}

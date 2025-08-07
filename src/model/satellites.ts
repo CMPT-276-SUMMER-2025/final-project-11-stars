@@ -2,6 +2,8 @@ import axios from "axios";
 import type {satellitePositionInterface, satelliteTLEInterface} from "./interfaces.ts";
 import * as satellite from "satellite.js";
 
+// TLE is just a specifically formatted string of data that holds orbital information, it allows people to estimate past/future positions of anything orbiting the earth.
+// The TLE will be translated into longitude and latitude by getSatellitePositionAtTime.
 export function parseRawTLEStringIntoTLEObjectArray(
     rawTLEString: string
 ): satelliteTLEInterface[] {
@@ -68,19 +70,27 @@ export const getSatellitePositionAtTime = (
             const gmst = satellite.gstime(time); // Calculate Earth's rotation
             // Geodetic refers to the data being in relation to to the earth
             const geodetic = satellite.eciToGeodetic(positionAndVelocity.position, gmst); // Convert position to latitude, longitude and latitude
-            return {
+            let positionObject = {
                 lat: satellite.degreesLat(geodetic.latitude), // Convert latitude to degrees
                 lng: satellite.degreesLong(geodetic.longitude), // Convert longitude to degrees
                 alt: geodetic.height, // Altitude in kilometers
             };
+            // invalid lte(s) will result in the calculated values being NaN
+            if (Number.isNaN(positionObject.lat) || Number.isNaN(positionObject.lng || Number.isNaN(positionObject.alt))) {
+                return null;
+            } else {
+                // If position couldn't be calculated, drop the entry. This will cause GlobeGL to just ignore this satellite and not render it.
+                return positionObject;
+            }
         } else {
-            return null; // If position couldn't be calculated, drop the entry. This will cause GlobeGL to just ignore this satellite and not render it.
+            return null;
         }
     } catch {
         return null; // Safety net - shouldn't really need to be used unless the calculations somehow return garbage data.
     }
 };
-const deduplicateSatelliteNamesAndIDs = (
+
+export const deduplicateSatelliteNamesAndIDs = (
     satellites: satellitePositionInterface[]
 ) => {
     const nameCount: Record<string, number> = {};

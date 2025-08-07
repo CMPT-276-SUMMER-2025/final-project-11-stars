@@ -1,7 +1,7 @@
 import {
     loadLaunchesOverTime,
     getLaunchesAsList
-} from "../model/launches.js"
+} from "../model/launches.ts"
 
 
 /**
@@ -13,11 +13,14 @@ import {
  * therefore @getLaunch will return an empty list.
  */
 const loadLaunchesOverTimePeriod = async (startDate: string, endDate: string) => {
-    return await loadLaunchesOverTime(startDate, endDate);
+    return await loadLaunchesOverTime(startDate, endDate, false);
 }
 
 const getLaunches = () => {
     return getLaunchesAsList();
 }
 
-export {loadLaunchesOverTimePeriod, getLaunches}
+export {
+    loadLaunchesOverTimePeriod, 
+    getLaunches
+}
