@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "npm run test:js && npm run test:ts",
+    "test": "jest",
     "test:js": "node src/model/tests/api1-tests/events_tests.js && node src/model/tests/api1-tests/launches_tests.js",
     "test:ts": "ts-node src/model/tests/api1-tests/events_tests.ts && ts-node src/model/tests/api1-tests/launches_tests.ts && ts-node src/model/tests/api2-tests/satellites_tests.ts && ts-node src/model/tests/integration_tests.ts",
     "predeploy": "vite build",
