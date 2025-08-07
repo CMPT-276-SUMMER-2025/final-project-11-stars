@@ -50,9 +50,16 @@
     "@types/jest": "^29.0.0"
   },
   "jest": {
-    "testMatch": [
-      "**/src/model/tests/**/*.js",
-      "**/src/model/tests/**/*.ts"
-    ]
-  }
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  "testMatch": [
+    "**/src/model/tests/**/*.ts",
+    "**/src/model/tests/**/*.js"
+  ],
+  "moduleFileExtensions": ["ts", "js", "json", "node"]
+}
+
 }
