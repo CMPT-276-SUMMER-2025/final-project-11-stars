@@ -29,4 +29,6 @@ jobs:
         
       - name: Deploy to GitHub Pages
         run: |
+         git config user.name "github-actions[bot]"
+         git config user.email "github-actions[bot]@users.noreply.github.com"
          npx gh-pages -d dist -b prod-build -r https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/CMPT-276-SUMMER-2025/final-project-11-stars.git
