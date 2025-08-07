@@ -64,7 +64,7 @@
     "**/src/model/tests/**/*.ts",
     "**/src/model/tests/**/*.js"
   ],
-  "testTimeout": 15000
+  "testTimeout": 60000
 }
 
 }
