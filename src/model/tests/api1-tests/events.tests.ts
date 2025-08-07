@@ -5,7 +5,7 @@ describe("loadNewsFeedData", () => {
   test("should fetch events and match with API results", async () => {
     const eventsFromModel = await eventsC.loadNewsFeedData();
 
-    const URL = "https://ll.thespacedevs.com/2.3.0/events/?limit=3&ordering=-last_updated";
+    const URL = "https://lldev.thespacedevs.com/2.3.0/events/upcoming/?limit=3&?ordering=date";
     const result = await axios.get(URL);
     const eventsFromAPI = result.data.results;
 
@@ -20,9 +20,6 @@ describe("loadNewsFeedData", () => {
     for (let i = 0; i < eventsFromModel.length; i++) {
       const eventModel = eventsFromModel[i];
       const eventAPI = eventsFromAPI[i];
-
-      const modelHeadline = eventModel.headline || eventModel.event?.name;
-      const apiHeadline = eventAPI.name;
 
       if (eventModel.headline !== eventAPI.name) {
   throw new Error(

@@ -2,7 +2,6 @@ import * as launches from "../launches.ts";
 import * as satellites from "../satellites.ts";
 import axios from "axios";
 import deepEqual from "deep-equal";
-import type { satellitePositionInterface } from "../interfaces.ts";
 
 describe("Launches Tests", () => {
   const start = '2024-07-19T02:54:00Z';
@@ -10,7 +9,7 @@ describe("Launches Tests", () => {
 
   test("loadLaunchesOverTime matches API and data is sanitized", async () => {
     const launchesFromModel = await launches.loadLaunchesOverTime(start, end, true);
-    const url = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${start}&mode=detailed`;
+    const url = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${start}&window_start__lte=${end}&mode=detailed`;
     const result = await axios.get(url);
     const launchesFromAPI = result.data.results;
 
