@@ -11,7 +11,6 @@
     "test": "jest",
     "predeploy": "vite build",
     "deploy": "gh-pages -d dist -b prod-build"
-
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -50,10 +49,10 @@
     "ts-jest": "^29.0.0",
     "@types/jest": "^29.0.0"
   },
-    "jest": {
+  "jest": {
     "testMatch": [
       "**/src/model/tests/**/*.js",
       "**/src/model/tests/**/*.ts"
     ]
-  },
+  }
 }
