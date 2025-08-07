@@ -1,9 +1,17 @@
 import axios from "axios";
 import type {newsFeedDataInterface} from "./interfaces.ts";
 
-const loadNewsFeedData = async () => {
-    const EVENTS_URL = `https://ll.thespacedevs.com/2.3.0/events/upcoming/?limit=3&?ordering=date`; // Real API with rate-limiting
-    const response = await axios.get(EVENTS_URL);
+const loadNewsFeedData = async (isCalledForTesting: boolean = false) => {
+    //"isCalledForTesting" is an optional boolean that defaults to false
+    // it is used to account for the fact that this function is called
+    // from both the user-facing code (real api) and testing code (dev api)
+
+    // API URL variables are in ALLCAPS to signify their importance
+    const DEV_EVENTS_URL = `https://ll.thespacedevs.com/2.3.0/events/upcoming/?limit=3&?ordering=date`; // Dev API with no rate-limiting
+    const REAL_EVENTS_URL = `https://ll.thespacedevs.com/2.3.0/events/upcoming/?limit=3&?ordering=date`; // Real API with rate-limiting
+    const API_URL_TO_BE_USED = isCalledForTesting ? DEV_EVENTS_URL : REAL_EVENTS_URL; // if called for testing purposes, use dev api. else, use real api
+
+    const response = await axios.get(API_URL_TO_BE_USED);
     return response.data.results.map((event: any) => {
         let URL;
 

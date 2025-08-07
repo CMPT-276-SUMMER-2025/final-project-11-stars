@@ -61,6 +61,7 @@ const App = () => {
     });
 
     // API #2 Feature #1
+    const [isWaitingForCELESTRAKAPIResponse, setisWaitingForCELESTRAKAPIResponse] = useState<boolean>(true) // this stops the "Celestrak API error" alert from showing up while we're waiting for the call to finish
     const [satelliteTLEArray, setsatelliteTLEArray] = useState<satelliteTLEInterface[]>([]); // Stores the intermediate/TLE-based data for the satellite position calculations
     const [satellitePositions, setsatellitePositions] = useState<satellitePositionInterface[]>([]); // Stores the actual (latitude/longitude/altitude) data for the satellite position calculations
 
@@ -99,7 +100,8 @@ const App = () => {
                             satellitePositions,
                             setSelectedSatelliteForCentering,
                             globeRef,
-                            setlockGlobeDueToCenteredSatellite)}
+                            setlockGlobeDueToCenteredSatellite,
+                        isWaitingForCELESTRAKAPIResponse)}
                     </div>
                     <div style={{
                         display: "flex",
@@ -121,7 +123,8 @@ const App = () => {
                                 satelliteSeekMinuteOffset,
                                 selectedSatelliteForCentering,
                                 lockGlobeDueToCenteredSatellite,
-                                disableGlobeInterval
+                                disableGlobeInterval,
+                                setisWaitingForCELESTRAKAPIResponse
                             )}
                         </div>
                         <div style={{

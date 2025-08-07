@@ -1,4 +1,3 @@
-import type { satellitePositionInterface, satelliteTLEInterface } from "../interfaces.ts";
 import * as launches from "../launches.ts";
 import * as satellites from "../satellites.ts";
 import axios from "axios";

@@ -10,17 +10,18 @@ import {loadLaunchesOverTimePeriod} from "../controllers/launches_controller.ts"
 let detailedLaunchDataArray: detailedLaunchDataInterface[];
 
 // This method is expected to be called before any other method in this module.
-// @param startDate Expected to be ISO 8601 format.
-// @param endDate Expected to be ISO 8601 format.
-const loadLaunchesOverTime = async (startDate: string, endDate: string, isDev : boolean) => {
-    let launches_url = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`;
-    
-    if(isDev) {
-        launches_url = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&mode=detailed`
-    }
+// startDate and endDate Expected to be ISO 8601 format.
+const loadLaunchesOverTime = async (startDate: string, endDate: string, isCalledForTesting: boolean = false) => {
+    //"isCalledForTesting" is an optional boolean that defaults to false
+    // it is used to account for the fact that this function is called
+    // from both the user-facing code (real api) and testing code (dev api)
 
-    const response = await axios.get(launches_url);
+    // API URL variables are in ALLCAPS to signify their importance
+    const DEV_LAUNCHES_URL = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`; // Dev API with no rate-limiting
+    const REAL_LAUNCHES_URL = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`; // Real API with rate-limiting
+    const API_URL_TO_BE_USED = isCalledForTesting ? DEV_LAUNCHES_URL : REAL_LAUNCHES_URL; // if called for testing purposes, use dev api. else, use real api
 
+    const response = await axios.get(API_URL_TO_BE_USED);
     detailedLaunchDataArray = response.data.results.map((launch: any) => {
         // If any data doesn't exist, set it to null
         let launchServiceProvider = launch?.launch_service_provider ?? null;
@@ -118,7 +119,7 @@ function extractBasicLaunchDataFromDetailedLaunchData(
 
 const setLaunchData = async (
     launchSearchStartDate: type_dayjs,
-    launchSearchEndDate: type_dayjs, 
+    launchSearchEndDate: type_dayjs,
     setbasicLaunchData: React.Dispatch<React.SetStateAction<basicLaunchDataInterface[]>>,
     setdetailedLaunchData: React.Dispatch<React.SetStateAction<detailedLaunchDataInterface[]>>
 ) => {

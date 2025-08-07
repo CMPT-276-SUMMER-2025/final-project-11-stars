@@ -17,6 +17,52 @@ const APIErrorAlert = () => (
     </Alert>
 );
 
+const WaitingForAPIResponseAlert = () => (
+    // Alert for when there's some sort of error with the API during fetching/setting data that we can't do anything about.
+    // e.g. API server is down
+    <Alert severity="info"
+           style={{
+               // Centers the alert text and icon due to nonstandard height
+               display: "flex",
+               alignItems: "center"
+           }}>
+        Waiting on CELESTRAK API...
+    </Alert>
+);
+
+const satelliteSelectionUI = (
+    satellitePositions: satellitePositionInterface[],
+    isWaitingForCELESTRAKAPIResponse: boolean,
+    internalSelectedSatellite: satellitePositionInterface | null,
+    handleSatelliteChange: (newValue: satellitePositionInterface | null) => void
+) => {
+    // if the api call hasn't completed yet, show the "waiting" info alert
+    if (isWaitingForCELESTRAKAPIResponse) {
+        return WaitingForAPIResponseAlert();
+    }
+
+    // if the api call has completed already, but the data isn't valid, show the error alert
+    if (!satellitePositions || satellitePositions.length === 0) {
+        return APIErrorAlert();
+    }
+
+    // if the data has loaded, and is valid, show the dropdown menu
+    return (
+        <Autocomplete
+            options={satellitePositions}
+            getOptionLabel={(satellite) => satellite.name}
+            renderInput={(params) =>
+                <TextField {...params} label="Search For A Satellite To Center" variant="outlined"/>
+            }
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            style={{width: "25rem"}}
+            value={internalSelectedSatellite}
+            onChange={(_event, newValue) => handleSatelliteChange(newValue)}
+        />
+    );
+};
+
+
 export const centerGlobeToChosenSatellitePosition = (
     selectedSatelliteForCentering: satellitePositionInterface | null,
     //@ts-ignore - This ignores the typing issue for the useRef, which is a bug from the react-globegl library.
@@ -51,32 +97,42 @@ export const dropdownAndButtonForCenteringSatellite = (
     setSelectedSatelliteForCentering: React.Dispatch<React.SetStateAction<satellitePositionInterface | null>>,
     globeRef: RefObject<any>,
     setlockGlobeDueToCenteredSatellite: React.Dispatch<React.SetStateAction<boolean>>,
+    isWaitingForCELESTRAKAPIResponse: boolean
 ) => {
+    const [isCurrentlyLockedToSatellite, setisCurrentlyLockedToSatellite] = React.useState<boolean>(false);
     const [internalSelectedSatellite, setinternalSelectedSatellite] = React.useState<satellitePositionInterface | null>(null);
 
-    const handleSatelliteChange = (
-        newValue: satellitePositionInterface | null
-    ) => {
-        setinternalSelectedSatellite(newValue);
-        if (newValue === null) {
-            // handle the user using the built-in "x" to clear the value instead of the dedicated button
-            handleDeselectSatellite()
-        }
+    const deselectAndClearChosenSatellite = () => {
+        setlockGlobeDueToCenteredSatellite(false); // unlock the globe
+        setisCurrentlyLockedToSatellite(false); // tell the rest of the app that the globe isn't locked
+        setinternalSelectedSatellite(null); // clear internal state
+        setSelectedSatelliteForCentering(null); // clear external state
+        setisCurrentlyLockedToSatellite(false); // unlock setter button
     };
 
-    const handleLockToSatellite = () => {
+    const changeSatelliteInternalValue = (
+        newValue: satellitePositionInterface | null
+    ) => {
+        if (newValue === null) {
+            // handle the user using the built-in "x" to clear the value instead of the dedicated button
+            deselectAndClearChosenSatellite() // deselect and unlock the current satellite
+        } else if (newValue != internalSelectedSatellite) {
+            // if the new value is a valid and different satellite, set it and unlock the globe
+            deselectAndClearChosenSatellite(); // deselect and unlock the current satellite
+            setinternalSelectedSatellite(newValue); // set to current satellite, wait for user to lock themselves
+        }
+        // else do nothing - this part should never be reached, but for the if/if else structure is intentionally kept for safety
+    };
+
+    const lockToChosenSatellite = () => {
         if (internalSelectedSatellite) {
             setlockGlobeDueToCenteredSatellite(true); // Lock the globe
-            setSelectedSatelliteForCentering(internalSelectedSatellite); // Update the globally use variable for the selected satellite
+            setisCurrentlyLockedToSatellite(true);
+            setSelectedSatelliteForCentering(internalSelectedSatellite); // Update the globally used variable for the selected satellite
             centerGlobeToChosenSatellitePosition(internalSelectedSatellite, globeRef, satellitePositions, true); // Force a visual update
         }
     };
 
-    const handleDeselectSatellite = () => {
-        setlockGlobeDueToCenteredSatellite(false);
-        setinternalSelectedSatellite(null);
-        setSelectedSatelliteForCentering(null);
-    };
 
     return (
 
@@ -90,36 +146,23 @@ export const dropdownAndButtonForCenteringSatellite = (
             height: "3.5rem",
             pointerEvents: "auto", //Re-enable interaction for this specific section
         }}>
-
-            {!satellitePositions || satellitePositions.length === 0 ? (
-                APIErrorAlert()
-            ) : (
-                <Autocomplete
-                    options={satellitePositions}
-                    getOptionLabel={(satellite) => satellite.name}
-                    renderInput={(params) =>
-                        <TextField {...params} label="Search For A Satellite To Center" variant="outlined"/>
-                    }
-                    isOptionEqualToValue={(option, value) => option.id === value.id}
-                    style={{width: "25rem"}}
-                    value={internalSelectedSatellite}
-                    onChange={(_event, newValue) => handleSatelliteChange(newValue)} // The underscore means that the variable's existance is required, but that its value isnt read
-                />
-            )}
+            {satelliteSelectionUI(satellitePositions, isWaitingForCELESTRAKAPIResponse, internalSelectedSatellite, changeSatelliteInternalValue)}
             <Button
                 variant="contained"
-                disabled={internalSelectedSatellite === null} // if there isn't a picked satellite, then don't let the user click the button
+                // if there isn't a picked satellite OR the satellite is already locked on to, then don't let the user click the button
+                disabled={internalSelectedSatellite === null || isCurrentlyLockedToSatellite}
                 onClick={() =>
-                    handleLockToSatellite()
+                    lockToChosenSatellite()
                 }
+                style={{width: "12.5rem"}} // keep width constant with different texts
             >
-                Lock to Satellite
+                {isCurrentlyLockedToSatellite ? "Currently Locked" : "Lock to Satellite"}
             </Button>
             <Button
                 variant="contained"
                 disabled={internalSelectedSatellite === null} // if there isn't a picked satellite, then don't let the user click the button to avoid re-seting null to null
                 onClick={() =>
-                    handleDeselectSatellite()
+                    deselectAndClearChosenSatellite()
                 }
             >
                 Deselect Satellite & Unlock Globe
