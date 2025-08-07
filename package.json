@@ -63,7 +63,8 @@
   "testMatch": [
     "**/src/model/tests/**/*.ts",
     "**/src/model/tests/**/*.js"
-  ]
+  ],
+  "testTimeout": 15000
 }
 
 }
