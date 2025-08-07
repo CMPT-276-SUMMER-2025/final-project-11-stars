@@ -25,10 +25,11 @@ describe("loadNewsFeedData", () => {
       const apiHeadline = eventAPI.name;
 
       if (modelHeadline !== apiHeadline) {
-        fail(
-          `FAIL: The headlines of events do not match at index ${i}. Got "${modelHeadline}" from model and "${apiHeadline}" from API.`
-        );
-      }
+  throw new Error(
+    `FAIL: The headlines of events do not match at index ${i}. Got "${modelHeadline}" from model and "${apiHeadline}" from API.`
+  );
+}
+
     }
 
     // Optional: If no failure occurred
