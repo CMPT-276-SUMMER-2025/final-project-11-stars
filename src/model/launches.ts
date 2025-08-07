@@ -2,11 +2,8 @@ import axios from 'axios';
 import type {basicLaunchDataInterface, detailedLaunchDataInterface} from './interfaces.ts';
 import type {Dayjs as type_dayjs} from "dayjs";
 import React from "react";
-import {loadLaunchesOverTimePeriod} from "../controllers/launches_controller.ts";
 
 // Handles business logic and access to data in relation to orbital launches.
-
-
 let detailedLaunchDataArray: detailedLaunchDataInterface[];
 
 // This method is expected to be called before any other method in this module.
@@ -17,7 +14,7 @@ const loadLaunchesOverTime = async (startDate: string, endDate: string, isCalled
     // from both the user-facing code (real api) and testing code (dev api)
 
     // API URL variables are in ALLCAPS to signify their importance
-    const DEV_LAUNCHES_URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&mode=detailed`; // Dev API with no rate-limiting
+    const DEV_LAUNCHES_URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&mode=detailed`; // Dev API with no rate-limiting and no support for end dates
     const REAL_LAUNCHES_URL = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`; // Real API with rate-limiting
     const API_URL_TO_BE_USED = isCalledForTesting ? DEV_LAUNCHES_URL : REAL_LAUNCHES_URL; // if called for testing purposes, use dev api. else, use real api
 
@@ -74,14 +71,10 @@ const loadLaunchesOverTime = async (startDate: string, endDate: string, isCalled
     return detailedLaunchDataArray;
 }
 
-const getLaunchesAsList = () => {
-    return detailedLaunchDataArray;
-}
-
 // Traverses all fields of the object, if any field is ('Unknown' or empty string or empty array), then set it to null,
 // if the field itself refers to an object, then check that object for 'Unknown'/empty string/empty array fields.
 // NOTE: This function is dependent on the Launch Library 2 /launches endpoint. May not work for other objects.
-const setFieldsWithNoDataToNull = (launchObject: any) => { //todo - set typing. maybe detailedLaunchDataInterface?
+const setFieldsWithNoDataToNull = (launchObject: any) => {
 
     let invalidPrimitives = [
         "Unknown", undefined, ""
@@ -128,7 +121,7 @@ const setLaunchData = async (
     const ISOStartDate = launchSearchStartDate.toISOString();
     const ISOEndDate = launchSearchEndDate.toISOString();
     // Make launches API call with date range parameters and set detailed data (parsed to cut out unimportant data, but not mutated)
-    const newDetailedLaunchData = await loadLaunchesOverTimePeriod(ISOStartDate, ISOEndDate); //
+    const newDetailedLaunchData = await loadLaunchesOverTime(ISOStartDate, ISOEndDate); //
     setdetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]);
     // Extract and set basic data relevent for globe display (not mutated either)
     const newBasicLaunchData = extractBasicLaunchDataFromDetailedLaunchData(newDetailedLaunchData as detailedLaunchDataInterface[]); //
@@ -137,7 +130,6 @@ const setLaunchData = async (
 
 export {
     loadLaunchesOverTime,
-    getLaunchesAsList,
     setFieldsWithNoDataToNull,
     extractBasicLaunchDataFromDetailedLaunchData,
     setLaunchData
