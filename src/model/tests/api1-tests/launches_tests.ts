@@ -22,7 +22,7 @@ async function testLoadLaunchesOverTime() {
     let launchesFromModel = await launches.loadLaunchesOverTime(start, end, true);
 
     // getting the data ourselves
-    let URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${start}&mode=detailed`;
+    let URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${start}&window_start__lte=${end}&mode=detailed`; // Dev API with no rate-limiting
     let result = await axios.get(URL);
     let launchesFromAPI = result.data.results;
 

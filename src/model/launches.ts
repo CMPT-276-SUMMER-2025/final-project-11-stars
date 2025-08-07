@@ -17,7 +17,7 @@ const loadLaunchesOverTime = async (startDate: string, endDate: string, isCalled
     // from both the user-facing code (real api) and testing code (dev api)
 
     // API URL variables are in ALLCAPS to signify their importance
-    const DEV_LAUNCHES_URL = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`; // Dev API with no rate-limiting
+    const DEV_LAUNCHES_URL = `https://lldev.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`; // Dev API with no rate-limiting
     const REAL_LAUNCHES_URL = `https://ll.thespacedevs.com/2.3.0/launches/?window_start__gte=${startDate}&window_start__lte=${endDate}&mode=detailed`; // Real API with rate-limiting
     const API_URL_TO_BE_USED = isCalledForTesting ? DEV_LAUNCHES_URL : REAL_LAUNCHES_URL; // if called for testing purposes, use dev api. else, use real api
 

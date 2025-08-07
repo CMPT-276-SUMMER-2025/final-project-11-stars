@@ -4,7 +4,7 @@ import axios from "axios";
 async function testLoadNews() {
     let eventsFromModel = await eventsC.loadNewsFeedData();
 
-    let URL = "https://ll.thespacedevs.com/2.3.0/events/?limit=3&?ordering=-last_updated";
+    let URL = "https://lldev.thespacedevs.com/2.3.0/events/?limit=3&?ordering=-last_updated";
     let result = (await axios.get(URL))
     let eventsFromAPI = result.data.results;
 
