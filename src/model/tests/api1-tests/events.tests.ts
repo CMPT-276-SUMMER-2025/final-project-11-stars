@@ -1,40 +1,37 @@
 import * as eventsC from "../../events.ts";
 import axios from "axios";
 
-async function testLoadNews() {
-    let eventsFromModel = await eventsC.loadNewsFeedData();
+describe("loadNewsFeedData", () => {
+  test("should fetch events and match with API results", async () => {
+    const eventsFromModel = await eventsC.loadNewsFeedData();
 
-    let URL = "https://ll.thespacedevs.com/2.3.0/events/?limit=3&?ordering=-last_updated";
-    let result = (await axios.get(URL))
-    let eventsFromAPI = result.data.results;
+    const URL = "https://ll.thespacedevs.com/2.3.0/events/?limit=3&ordering=-last_updated";
+    const result = await axios.get(URL);
+    const eventsFromAPI = result.data.results;
 
-    let errorMessage = "";
-
-    if(eventsFromAPI.length != eventsFromModel.length) {
-        errorMessage = `FAIL, the number of feteched events are not equal. Lengths were ${eventsFromModel.length} and ${eventsFromAPI.length}`;
-        console.log(errorMessage);
-        return false;
+    // Length mismatch check with error message
+    if (eventsFromAPI.length !== eventsFromModel.length) {
+      fail(
+        `FAIL: The number of fetched events are not equal. Lengths were ${eventsFromModel.length} and ${eventsFromAPI.length}`
+      );
     }
 
-    for(let i = 0; i < eventsFromModel.length; i++) {
-        let eventModel = eventsFromModel[i];
-        let eventAPI = eventsFromAPI[i];
-        if(eventModel.headline != eventAPI.name) {
-            errorMessage = `The headlines of events do not match. Headlines were "${eventModel.event.name}" and "${eventAPI.headline}"`;
-            console.log(errorMessage);
-            return false;
-        }
+    // Check each event's headline/name
+    for (let i = 0; i < eventsFromModel.length; i++) {
+      const eventModel = eventsFromModel[i];
+      const eventAPI = eventsFromAPI[i];
+
+      const modelHeadline = eventModel.headline || eventModel.event?.name;
+      const apiHeadline = eventAPI.name;
+
+      if (modelHeadline !== apiHeadline) {
+        fail(
+          `FAIL: The headlines of events do not match at index ${i}. Got "${modelHeadline}" from model and "${apiHeadline}" from API.`
+        );
+      }
     }
-    return true;
-}
 
-async function main() {
-    console.log("events tests");
-
-    // each function returns T/F, can remove these print statements if necessary
-    console.log(await testLoadNews());
-}
-
-main();
-
-
+    // Optional: If no failure occurred
+    expect(true).toBe(true);
+  });
+});
