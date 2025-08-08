@@ -1,3 +1,13 @@
+# Emergency Note
+CELESTRAK's SSL Certificate for their API endpoints has been expired as of 5 PM, August 6th, 2025. \
+As the project is due at the end of the day, we are adding this note to inform the teaching team of the issue.\
+If the project needs to be viewed, and the top-left corner shows an API Error or Loading alert (the issue will also be 
+shown in the browser console as `ERR_CERT_COMMON_NAME_INVALID`), please go to your 
+browser settings and add CELESTRAK.org to your exception list, or disable invalid SSL certificate warnings entirely.\
+This is **completely out of our hands**, so if a member of the teaching team is reading this and requires more details, please contact Anton (PM).
+
+---
+
 # Space Exploration Hub
 
 A web-based visualization tool for displaying satellite locations and rocket launch data in real-time.\
@@ -98,13 +108,14 @@ Built with React, MaterialUI, Vite, and Three.js via the react-globe.gl library.
    ```
 
 6. **Go to the website**\
-	In your IDE console, you will see a message similar to the onme shown below.	
+    In your IDE console, you will see a message similar to the onme shown below.	
     ```
-  	➜  Local:   http://localhost:<...>
-  	➜  Network: use --host to expose
-  	➜  press h + enter to show help
+   ➜  Local:   http://localhost:<...>/<___>
+   ➜  Network: use --host to expose
+   ➜  press h + enter to show help
     ```
-   Copy the `http://localhost:<...>` line of text, where `...` represents a **3-5 digit sequence of numbers**.
+   Copy the `http://localhost:<...>` line of text, where `...` represents a **3-5 digit sequence of numbers** and `___` represents a (potentially-present) string. \
+   Usually, it will appear as `http://localhost:5173/final-project-11-stars`, but make sure to copy the link shown in **YOUR** IDE!
 
 7. Open up your preferred web browser, paste it into the search bar and press enter.
 

@@ -1,4 +1,4 @@
-import {Footer} from "./backend/view/footer.tsx"
+import {Footer} from "./view/footer.tsx"
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {CssBaseline, Divider} from "@mui/material";
 import {LocalizationProvider} from "@mui/x-date-pickers";
@@ -9,15 +9,15 @@ import type {
     detailedLaunchDataInterface,
     newsFeedDataInterface, newsOrLaunchDataSidePanelDataInterface, satellitePositionInterface,
     satelliteTLEInterface
-} from "./backend/model/interfaces.ts";
+} from "./model/interfaces.ts";
 import dayjs, {Dayjs as type_dayjs} from "dayjs"
-import {GlobeContainer} from "./backend/view/globe/globe_component.tsx";
-import {LaunchDateRangePicker} from "./backend/view/side_panel/launches/launch_date_picker.tsx";
-import {NewsOrLaunchDetailsSidePanel} from "./backend/view/side_panel/news_or_launch_details_side_panel.tsx"
+import {GlobeContainer} from "./view/globe/globe_component.tsx";
+import {LaunchDateRangePicker} from "./view/side_panel/launches/launch_date_picker.tsx";
+import {NewsOrLaunchDetailsSidePanel} from "./view/side_panel/news-feed/news_or_launch_details_side_panel.tsx"
 import {
     dropdownAndButtonForCenteringSatellite
-} from "./backend/view/satellite_controls/dropdown_and_button_to_center_satellite.tsx";
-import {satelliteTimeDeltaSlider} from "./backend/view/satellite_controls/satellite_time_delta_slider.tsx";
+} from "./view/satellite_controls/dropdown_and_button_to_center_satellite.tsx";
+import {satelliteTimeDeltaSlider} from "./view/satellite_controls/satellite_time_delta_slider.tsx";
 import Globe from "react-globe.gl";
 
 
@@ -61,6 +61,7 @@ const App = () => {
     });
 
     // API #2 Feature #1
+    const [isWaitingForCELESTRAKAPIResponse, setisWaitingForCELESTRAKAPIResponse] = useState<boolean>(true) // this stops the "Celestrak API error" alert from showing up while we're waiting for the call to finish
     const [satelliteTLEArray, setsatelliteTLEArray] = useState<satelliteTLEInterface[]>([]); // Stores the intermediate/TLE-based data for the satellite position calculations
     const [satellitePositions, setsatellitePositions] = useState<satellitePositionInterface[]>([]); // Stores the actual (latitude/longitude/altitude) data for the satellite position calculations
 
@@ -99,7 +100,8 @@ const App = () => {
                             satellitePositions,
                             setSelectedSatelliteForCentering,
                             globeRef,
-                            setlockGlobeDueToCenteredSatellite)}
+                            setlockGlobeDueToCenteredSatellite,
+                        isWaitingForCELESTRAKAPIResponse)}
                     </div>
                     <div style={{
                         display: "flex",
@@ -121,7 +123,8 @@ const App = () => {
                                 satelliteSeekMinuteOffset,
                                 selectedSatelliteForCentering,
                                 lockGlobeDueToCenteredSatellite,
-                                disableGlobeInterval
+                                disableGlobeInterval,
+                                setisWaitingForCELESTRAKAPIResponse
                             )}
                         </div>
                         <div style={{

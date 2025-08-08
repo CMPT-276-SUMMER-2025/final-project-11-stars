@@ -1,0 +1,38 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build project
+        run: npm run build
+
+      - name: Configure Git user
+        run: |
+          git config user.name "your-name-here"
+          git config user.email "your-email@example.com"
+
+      - name: Deploy using gh-pages and PAT
+        run: |
+          npx gh-pages -d dist -b prod-build -r https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/CMPT-276-SUMMER-2025/final-project-11-stars.git
+
