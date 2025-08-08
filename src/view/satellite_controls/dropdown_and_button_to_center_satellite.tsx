@@ -13,7 +13,7 @@ const APIErrorAlert = () => (
                display: "flex",
                alignItems: "center"
            }}>
-        CELESTRAK API unavailable.
+        CELESTRAK Rate Limit Reached.
     </Alert>
 );
 
