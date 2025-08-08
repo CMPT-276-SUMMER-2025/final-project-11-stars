@@ -14,7 +14,7 @@ const APIErrorAlert = () => (
     // Alert for when there's some sort of error with the API during fetching/setting data that we can't do anything about.
     // e.g. API server is down
     <Alert severity="error" style={{width: "45%"}}>
-        LL2 API unavailable.
+        LL2 API Rate Limit Reached.
     </Alert>
 );
 
